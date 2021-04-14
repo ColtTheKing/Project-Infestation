@@ -29,4 +29,5 @@ public:
 	void InitGame(const FString& mapName, const FString& options, FString& errorMessage) override;
 
 	// Level logic
+	void CompleteLevel();
 };

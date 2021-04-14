@@ -11,3 +11,7 @@ void AInfestationGameMode::InitGame(const FString& mapName, const FString& optio
 	// Generate map class
 	// TODO: Call function from MapGenerator class to generate level map
 }
+
+void AInfestationGameMode::CompleteLevel()
+{
+}
