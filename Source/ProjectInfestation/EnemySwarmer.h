@@ -3,41 +3,27 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
-
-#include "Components/CapsuleComponent.h"
-
+#include "EnemyCharacter.h"
 #include "EnemySwarmer.generated.h"
 
+/**
+ * 
+ */
 UCLASS()
-class PROJECTINFESTATION_API AEnemySwarmer : public ACharacter
+class PROJECTINFESTATION_API AEnemySwarmer : public AEnemyCharacter
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere)
-		float damage;
-
-	UFUNCTION()
-		void OnOverlapBegin(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
-	UFUNCTION()
-		void OnOverlapEnd(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-
 public:
-	// Sets default values for this character's properties
+	// Default constructor
 	AEnemySwarmer();
 
-	void TakeDamage(float damageTaken);
-
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	// Called on level load
+	void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	void Tick(float DeltaTime) override;
 
 };
