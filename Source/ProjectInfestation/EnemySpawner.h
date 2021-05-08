@@ -4,12 +4,21 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+
+#include "EnemyCharacter.h"
+#include "Components/BoxComponent.h"
+
 #include "EnemySpawner.generated.h"
 
 UCLASS()
 class PROJECTINFESTATION_API AEnemySpawner : public AActor
 {
 	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<AEnemyCharacter> enemyCharacterBP;
+
+	UBoxComponent* spawnArea;
 	
 public:	
 	// Sets default values for this actor's properties
