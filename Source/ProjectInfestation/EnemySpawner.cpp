@@ -51,17 +51,27 @@ void AEnemySpawner::SpawnEnemy(TSubclassOf<AEnemyCharacter> enemyBP)
 	FTransform localToWorld = FTransform(GetActorLocation());
 	FBoxSphereBounds spawnBounds = spawnArea->CalcBounds(localToWorld);
 	FBox boundingBox = spawnBounds.GetBox();
+	
+	// TODO: Possible performance issue as if there is too many enemies it might turn into a infinite loop
+	// Loop until found place to spawn
+	while (true)
+	{
+		// Calculate random location in bounding box
+		FVector randomLocation;
+		randomLocation = boundingBox.Min;
+		randomLocation.X += FGenericPlatformMath::FRand() * (boundingBox.Max.X - boundingBox.Min.X);
+		randomLocation.Y += FGenericPlatformMath::FRand() * (boundingBox.Max.Y - boundingBox.Min.Y);
+		randomLocation.Z += FGenericPlatformMath::FRand() * (boundingBox.Max.Z - boundingBox.Min.Z);
 
-	// Calculate random location in bounding box
-	FVector randomLocation;
-	randomLocation = boundingBox.Min;
-	randomLocation.X += FGenericPlatformMath::FRand() * (boundingBox.Max.X - boundingBox.Min.X);
-	randomLocation.Y += FGenericPlatformMath::FRand() * (boundingBox.Max.Y - boundingBox.Min.Y);
-	randomLocation.Z += FGenericPlatformMath::FRand() * (boundingBox.Max.Z - boundingBox.Min.Z);
+		// Spawn a enemy
+		FRotator spawnRotation = FRotator(0.0f, 0.0f, 0.0f);
+		AActor* spawnedEnemy = GetWorld()->SpawnActor(enemyBP, &randomLocation, &spawnRotation);
 
-	// Spawn a enemy
-	FRotator spawnRotation = FRotator(0.0f, 0.0f, 0.0f);
-	GetWorld()->SpawnActor(enemyBP, &randomLocation, &spawnRotation);
+		if (IsValid(spawnedEnemy))
+		{
+			break;
+		}
+	}
 }
 
 
