@@ -36,7 +36,7 @@ void AEnemySpawner::BeginPlay()
 	
 	// Spawn a enemy
 	FRotator spawnRotation = FRotator(0.0f, 0.0f, 0.0f);
-	GetWorld()->SpawnActor(enemyCharacterBP, &randomLocation, &spawnRotation);
+	GetWorld()->SpawnActor(enemies[0].enemyCharacterBP, &randomLocation, &spawnRotation);
 }
 
 // Called every frame

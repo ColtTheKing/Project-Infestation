@@ -10,13 +10,28 @@
 
 #include "EnemySpawner.generated.h"
 
+USTRUCT()
+struct FEnemy
+{
+	GENERATED_USTRUCT_BODY()
+	
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<AEnemyCharacter> enemyCharacterBP;
+	
+	UPROPERTY(EditAnywhere)
+		int spawn_limit;
+	
+	UPROPERTY(EditAnywhere)
+		float respawn_timer;
+};
+
 UCLASS()
 class PROJECTINFESTATION_API AEnemySpawner : public AActor
 {
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere)
-		TSubclassOf<AEnemyCharacter> enemyCharacterBP;
+		TArray<struct FEnemy> enemies;
 
 	UBoxComponent* spawnArea;
 	
