@@ -32,6 +32,10 @@ void AEnemySpawner::BeginPlay()
 			i++;
 		}
 	}
+
+	// Respawn test
+	FName enemyToRespawnTag = FName(TEXT("Swarmer"));
+	RespawnEnemy(enemyToRespawnTag);
 }
 
 // Called every frame
@@ -60,3 +64,24 @@ void AEnemySpawner::SpawnEnemy(TSubclassOf<AEnemyCharacter> enemyBP)
 	GetWorld()->SpawnActor(enemyBP, &randomLocation, &spawnRotation);
 }
 
+
+void AEnemySpawner::RespawnEnemy(FName enemyTag)
+{
+	FEnemy enemyToSpawn;
+	bool foundEnemyTag = false;
+	for (auto& enemy : enemies)
+	{
+		if (enemy.enemyCharacterBP.GetDefaultObject()->ActorHasTag(enemyTag))
+		{
+			enemyToSpawn = enemy;
+			foundEnemyTag = true;
+			break;
+		}
+	}
+
+	if (!foundEnemyTag) 
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Unable to find enemy of tag %s"), *enemyTag.ToString());
+		return;
+	}
+}

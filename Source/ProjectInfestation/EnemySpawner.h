@@ -7,6 +7,9 @@
 
 #include "EnemyCharacter.h"
 #include "Components/BoxComponent.h"
+#include "Components/ActorComponent.h"
+
+#include <string>
 
 #include "EnemySpawner.generated.h"
 
@@ -42,7 +45,8 @@ public:
 	// Sets default values for this actor's properties
 	AEnemySpawner();
 
-	void CreateSpawnDelay();
+	// Respawns enemy of specific tag
+	void RespawnEnemy(FName enemyTag);
 
 protected:
 	// Called when the game starts or when spawned
