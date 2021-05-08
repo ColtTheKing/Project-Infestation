@@ -22,10 +22,10 @@ struct FEnemy
 		TSubclassOf<AEnemyCharacter> enemyCharacterBP;
 	
 	UPROPERTY(EditAnywhere)
-		int spawn_limit;
+		int spawnLimit;
 	
 	UPROPERTY(EditAnywhere)
-		float respawn_timer;
+		float respawnTimer;
 };
 
 UCLASS()

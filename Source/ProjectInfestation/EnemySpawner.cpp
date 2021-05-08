@@ -26,7 +26,7 @@ void AEnemySpawner::BeginPlay()
 	for (auto& enemy : enemies)
 	{
 		int i = 0;
-		while (i < enemy.spawn_limit)
+		while (i < enemy.spawnLimit)
 		{
 			SpawnEnemy(enemy.enemyCharacterBP);
 			i++;
@@ -34,8 +34,8 @@ void AEnemySpawner::BeginPlay()
 	}
 
 	// Respawn test
-	FName enemyToRespawnTag = FName(TEXT("Swarmer"));
-	RespawnEnemy(enemyToRespawnTag);
+	// FName enemyToRespawnTag = FName(TEXT("Swarmer"));
+	// RespawnEnemy(enemyToRespawnTag);
 }
 
 // Called every frame
@@ -84,4 +84,10 @@ void AEnemySpawner::RespawnEnemy(FName enemyTag)
 		UE_LOG(LogTemp, Warning, TEXT("Unable to find enemy of tag %s"), *enemyTag.ToString());
 		return;
 	}
+	
+	FTimerDelegate TimerDel;
+	FTimerHandle TimerHandle;
+
+	TimerDel.BindUFunction(this, FName("SpawnEnemy"), enemyToSpawn.enemyCharacterBP);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, enemyToSpawn.respawnTimer, false);
 }
