@@ -33,11 +33,16 @@ class PROJECTINFESTATION_API AEnemySpawner : public AActor
 	UPROPERTY(EditAnywhere)
 		TArray<struct FEnemy> enemies;
 
+	UFUNCTION()
+		void SpawnEnemy(TSubclassOf<AEnemyCharacter> enemyBP);
+
 	UBoxComponent* spawnArea;
 	
 public:	
 	// Sets default values for this actor's properties
 	AEnemySpawner();
+
+	void CreateSpawnDelay();
 
 protected:
 	// Called when the game starts or when spawned
