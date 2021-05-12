@@ -36,6 +36,8 @@ void UHealthComponent::TakeDamage(int damage)
 {
 	int newShieldHp = shieldHp - damage;
 
+	UE_LOG(LogTemp, Warning, TEXT("Player took damage of %d"), damage);
+
 	//if shield broke or wasn't there
 	if (newShieldHp <= 0)
 	{
