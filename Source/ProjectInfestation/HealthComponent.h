@@ -7,7 +7,7 @@
 #include "HealthComponent.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECTINFESTATION_API UHealthComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -18,8 +18,12 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
 		int currentHp;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
 		int shieldHp;
+
+	UFUNCTION(BlueprintCallable, Category = "TakeDamage")
+		void TakeDamage(int damage);
 
 protected:
 	// Called when the game starts
@@ -29,5 +33,4 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	void TakeDamage(int damage);
 };

@@ -15,6 +15,10 @@ class PROJECTINFESTATION_API AEnemySwarmer : public AEnemyCharacter
 	GENERATED_BODY()
 
 public:
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+		int meleeDamage;
+
 	// Default constructor
 	AEnemySwarmer();
 
