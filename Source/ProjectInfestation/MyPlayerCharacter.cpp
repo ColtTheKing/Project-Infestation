@@ -53,6 +53,8 @@ void AMyPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMyPlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMyPlayerCharacter::MoveRight);
+
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMyPlayerCharacter::Interact);
 }
 
 void AMyPlayerCharacter::MoveForward(float axis)
@@ -71,4 +73,36 @@ void AMyPlayerCharacter::MoveRight(float axis)
 
 	const FVector direction = FRotationMatrix(yawRotation).GetUnitAxis(EAxis::Y);
 	AddMovementInput(direction, axis);
+}
+
+void AMyPlayerCharacter::Interact()
+{
+	FHitResult rayHit = ShootRay(interactRange);
+	AInteractableActor* hitActor = Cast<AInteractableActor>(rayHit.Actor);
+
+	if (hitActor)
+	{
+		hitActor->Interact();
+	}
+}
+
+FHitResult AMyPlayerCharacter::ShootRay(float length)
+{
+	FVector rayLocation;
+	FRotator rayRotation;
+	FVector endRay = FVector::ZeroVector;
+
+	APlayerController* const playerController = GetWorld()->GetFirstPlayerController();
+	if (playerController)
+	{
+		playerController->GetPlayerViewPoint(rayLocation, rayRotation);
+		endRay = rayLocation + (rayRotation.Vector() * length);
+	}
+
+	//LEARN HOW THIS STUFF WORKS
+	FCollisionQueryParams rayParams(SCENE_QUERY_STAT(ShootRay), true, this);
+	FHitResult hit(ForceInit);
+	GetWorld()->LineTraceSingleByChannel(hit, rayLocation, endRay, ECC_Visibility, rayParams);
+
+	return hit;
 }
