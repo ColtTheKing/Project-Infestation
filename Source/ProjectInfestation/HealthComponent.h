@@ -16,10 +16,10 @@ public:
 	// Sets default values for this component's properties
 	UHealthComponent();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Health)
 		int currentHp;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Health)
 		int shieldHp;
 
 	UFUNCTION(BlueprintCallable, Category = "TakeDamage")
