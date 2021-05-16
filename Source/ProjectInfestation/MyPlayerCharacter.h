@@ -7,9 +7,11 @@
 #include "Camera/CameraComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/InputComponent.h"
+#include "Components/ChildActorComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include <ProjectInfestation/InteractableActor.h>
+#include <ProjectInfestation/Gun.h>
 
 #include "MyPlayerCharacter.generated.h"
 
@@ -31,6 +33,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Mesh)
 		USkeletalMeshComponent* playerArms;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Gun)
+		UChildActorComponent* heldGun;
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -40,6 +45,7 @@ public:
 	void MoveForward(float axis);
 	void MoveRight(float axis);
 	void Interact();
+	void FireWeapon();
 
 protected:
 	// Called when the game starts or when spawned

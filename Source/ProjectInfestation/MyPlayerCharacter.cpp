@@ -22,8 +22,11 @@ AMyPlayerCharacter::AMyPlayerCharacter()
 	playerCamera->SetupAttachment(GetRootComponent());
 	playerCamera->bUsePawnControlRotation = true;
 
-	playerArms = CreateDefaultSubobject < USkeletalMeshComponent > (TEXT("PlayerArms"));
+	playerArms = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("PlayerArms"));
 	playerArms->SetupAttachment(playerCamera);
+
+	heldGun = CreateDefaultSubobject<UChildActorComponent>(TEXT("HeldGun"));
+	heldGun->SetupAttachment(playerArms);
 }
 
 // Called when the game starts or when spawned
@@ -55,6 +58,7 @@ void AMyPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMyPlayerCharacter::MoveRight);
 
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMyPlayerCharacter::Interact);
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AMyPlayerCharacter::FireWeapon);
 }
 
 void AMyPlayerCharacter::MoveForward(float axis)
@@ -86,6 +90,27 @@ void AMyPlayerCharacter::Interact()
 	}
 }
 
+void AMyPlayerCharacter::FireWeapon()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Attempting to fire weapon"));
+	AActor* gunActor = heldGun->GetChildActor();
+	AGun* myGun = Cast<AGun>(gunActor);
+
+	if (myGun)
+	{
+		FVector rayLocation;
+		FRotator rayRotation;
+
+		APlayerController* const playerController = GetWorld()->GetFirstPlayerController();
+		if (playerController)
+		{
+			playerController->GetPlayerViewPoint(rayLocation, rayRotation);
+			UE_LOG(LogTemp, Warning, TEXT("Got player view data. Start:(%f, %f, %f)"), rayLocation.X, rayLocation.Y, rayLocation.Z);
+			myGun->FireGun(rayLocation, rayRotation);
+		}
+	}
+}
+
 FHitResult AMyPlayerCharacter::ShootRay(float length)
 {
 	FVector rayLocation;
@@ -96,6 +121,7 @@ FHitResult AMyPlayerCharacter::ShootRay(float length)
 	if (playerController)
 	{
 		playerController->GetPlayerViewPoint(rayLocation, rayRotation);
+		UE_LOG(LogTemp, Warning, TEXT("Interacting. Start:(%f, %f, %f)"), rayLocation.X, rayLocation.Y, rayLocation.Z);
 		endRay = rayLocation + (rayRotation.Vector() * length);
 	}
 
