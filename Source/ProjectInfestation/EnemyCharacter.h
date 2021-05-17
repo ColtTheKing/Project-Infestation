@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 
 #include "Components/CapsuleComponent.h"
+#include <ProjectInfestation/HealthComponent.h>
 
 #include "EnemyCharacter.generated.h"
 
@@ -21,6 +22,10 @@ class PROJECTINFESTATION_API AEnemyCharacter : public ACharacter
 		void OnOverlapEnd(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 public:
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
+		UHealthComponent* health;
+
 	// Sets default values for this character's properties
 	AEnemyCharacter();
 

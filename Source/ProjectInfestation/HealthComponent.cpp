@@ -20,7 +20,7 @@ void UHealthComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
+	myActor = GetOwner();
 }
 
 
@@ -36,7 +36,7 @@ void UHealthComponent::TakeDamage(int damage)
 {
 	int newShieldHp = shieldHp - damage;
 
-	UE_LOG(LogTemp, Warning, TEXT("Player took damage of %d"), damage);
+	UE_LOG(LogTemp, Warning, TEXT("Character took damage of %d"), damage);
 
 	//if shield broke or wasn't there
 	if (newShieldHp <= 0)
@@ -44,8 +44,10 @@ void UHealthComponent::TakeDamage(int damage)
 		currentHp -= damage - shieldHp;
 		shieldHp = 0;
 
-		if (currentHp < 0)
-			currentHp = 0;
+		if (currentHp <= 0)
+		{
+			myActor->Destroy();
+		}
 	}
 	else
 	{

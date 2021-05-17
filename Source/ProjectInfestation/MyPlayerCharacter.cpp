@@ -22,8 +22,13 @@ AMyPlayerCharacter::AMyPlayerCharacter()
 	playerCamera->SetupAttachment(GetRootComponent());
 	playerCamera->bUsePawnControlRotation = true;
 
-	playerArms = CreateDefaultSubobject < USkeletalMeshComponent > (TEXT("PlayerArms"));
+	playerArms = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("PlayerArms"));
 	playerArms->SetupAttachment(playerCamera);
+
+	heldGun = CreateDefaultSubobject<UChildActorComponent>(TEXT("HeldGun"));
+	heldGun->SetupAttachment(playerArms);
+
+	health = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
 }
 
 // Called when the game starts or when spawned
@@ -55,6 +60,7 @@ void AMyPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMyPlayerCharacter::MoveRight);
 
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMyPlayerCharacter::Interact);
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AMyPlayerCharacter::FireWeapon);
 }
 
 void AMyPlayerCharacter::MoveForward(float axis)
@@ -86,6 +92,23 @@ void AMyPlayerCharacter::Interact()
 	}
 }
 
+void AMyPlayerCharacter::FireWeapon()
+{
+	if (heldGun)
+	{
+		AActor* gunActor = heldGun->GetChildActor();
+		AGun* myGun = Cast<AGun>(gunActor);
+
+		if (myGun)
+		{
+			//use a very long ray so it's "infinite" for all intents and purposes
+			FHitResult hit = ShootRay(1000000000);
+
+			myGun->FireGun(hit);
+		}
+	}
+}
+
 FHitResult AMyPlayerCharacter::ShootRay(float length)
 {
 	FVector rayLocation;
@@ -96,6 +119,7 @@ FHitResult AMyPlayerCharacter::ShootRay(float length)
 	if (playerController)
 	{
 		playerController->GetPlayerViewPoint(rayLocation, rayRotation);
+		
 		endRay = rayLocation + (rayRotation.Vector() * length);
 	}
 

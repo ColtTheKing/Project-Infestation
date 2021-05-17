@@ -7,9 +7,12 @@
 #include "Camera/CameraComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/InputComponent.h"
+#include "Components/ChildActorComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include <ProjectInfestation/InteractableActor.h>
+#include <ProjectInfestation/Gun.h>
+#include <ProjectInfestation/HealthComponent.h>
 
 #include "MyPlayerCharacter.generated.h"
 
@@ -22,14 +25,20 @@ public:
 	// Sets default values for this character's properties
 	AMyPlayerCharacter();
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = PlayerSpecs)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = PlayerSpecs)
 		float interactRange;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 		UCameraComponent* playerCamera;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Mesh)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
 		USkeletalMeshComponent* playerArms;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gun)
+		UChildActorComponent* heldGun;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
+		UHealthComponent* health;
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -40,6 +49,7 @@ public:
 	void MoveForward(float axis);
 	void MoveRight(float axis);
 	void Interact();
+	void FireWeapon();
 
 protected:
 	// Called when the game starts or when spawned

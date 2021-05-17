@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+
+
 #include "HealthComponent.generated.h"
 
 
@@ -28,6 +30,9 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+
+private:
+	AActor* myActor;
 
 public:	
 	// Called every frame
