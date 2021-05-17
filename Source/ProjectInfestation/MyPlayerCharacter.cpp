@@ -27,6 +27,8 @@ AMyPlayerCharacter::AMyPlayerCharacter()
 
 	heldGun = CreateDefaultSubobject<UChildActorComponent>(TEXT("HeldGun"));
 	heldGun->SetupAttachment(playerArms);
+
+	health = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
 }
 
 // Called when the game starts or when spawned
@@ -93,20 +95,24 @@ void AMyPlayerCharacter::Interact()
 void AMyPlayerCharacter::FireWeapon()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Attempting to fire weapon"));
-	AActor* gunActor = heldGun->GetChildActor();
-	AGun* myGun = Cast<AGun>(gunActor);
 
-	if (myGun)
+	if (heldGun)
 	{
-		FVector rayLocation;
-		FRotator rayRotation;
+		AActor* gunActor = heldGun->GetChildActor();
+		AGun* myGun = Cast<AGun>(gunActor);
 
-		APlayerController* const playerController = GetWorld()->GetFirstPlayerController();
-		if (playerController)
+		if (myGun)
 		{
-			playerController->GetPlayerViewPoint(rayLocation, rayRotation);
-			UE_LOG(LogTemp, Warning, TEXT("Got player view data. Start:(%f, %f, %f)"), rayLocation.X, rayLocation.Y, rayLocation.Z);
-			myGun->FireGun(rayLocation, rayRotation);
+			FVector rayLocation;
+			FRotator rayRotation;
+
+			APlayerController* const playerController = GetWorld()->GetFirstPlayerController();
+			if (playerController)
+			{
+				playerController->GetPlayerViewPoint(rayLocation, rayRotation);
+				UE_LOG(LogTemp, Warning, TEXT("Got player view data. Start:(%f, %f, %f)"), rayLocation.X, rayLocation.Y, rayLocation.Z);
+				myGun->FireGun(rayLocation, rayRotation);
+			}
 		}
 	}
 }
