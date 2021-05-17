@@ -19,7 +19,7 @@ void AHitscanGun::FireGun(FVector bulletStart, FRotator gunRotation)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Hit enemy"));
 
-		UHealthComponent* hitHealth = hitActor->FindComponentByClass<UHealthComponent>();
+		UHealthComponent* hitHealth = hitActor->health;
 
 		if (hitHealth)
 		{
