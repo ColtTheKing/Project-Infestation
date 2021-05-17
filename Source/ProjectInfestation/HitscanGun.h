@@ -20,8 +20,5 @@ class PROJECTINFESTATION_API AHitscanGun : public AGun
 public:
 	AHitscanGun();
 
-	void FireGun(FVector bulletStart, FRotator gunRotation) override;
-
-private:
-	FHitResult ShootRay(FVector rayLocation, FRotator rayRotation);
+	void FireGun(FHitResult rayHit) override;
 };

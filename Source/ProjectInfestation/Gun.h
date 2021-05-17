@@ -30,7 +30,7 @@ public:
 	// Sets default values for this actor's properties
 	AGun();
 
-	virtual void FireGun(FVector bulletStart, FRotator gunRotation) PURE_VIRTUAL(AGun::FireGun, ;);
+	virtual void FireGun(FHitResult rayHit) PURE_VIRTUAL(AGun::FireGun, ;);
 
 protected:
 	// Called when the game starts or when spawned

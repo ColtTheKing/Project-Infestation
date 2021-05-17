@@ -94,8 +94,6 @@ void AMyPlayerCharacter::Interact()
 
 void AMyPlayerCharacter::FireWeapon()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Attempting to fire weapon"));
-
 	if (heldGun)
 	{
 		AActor* gunActor = heldGun->GetChildActor();
@@ -103,16 +101,10 @@ void AMyPlayerCharacter::FireWeapon()
 
 		if (myGun)
 		{
-			FVector rayLocation;
-			FRotator rayRotation;
+			//use a very long ray so it's "infinite" for all intents and purposes
+			FHitResult hit = ShootRay(1000000000);
 
-			APlayerController* const playerController = GetWorld()->GetFirstPlayerController();
-			if (playerController)
-			{
-				playerController->GetPlayerViewPoint(rayLocation, rayRotation);
-				UE_LOG(LogTemp, Warning, TEXT("Got player view data. Start:(%f, %f, %f)"), rayLocation.X, rayLocation.Y, rayLocation.Z);
-				myGun->FireGun(rayLocation, rayRotation);
-			}
+			myGun->FireGun(hit);
 		}
 	}
 }
@@ -127,7 +119,7 @@ FHitResult AMyPlayerCharacter::ShootRay(float length)
 	if (playerController)
 	{
 		playerController->GetPlayerViewPoint(rayLocation, rayRotation);
-		UE_LOG(LogTemp, Warning, TEXT("Interacting. Start:(%f, %f, %f)"), rayLocation.X, rayLocation.Y, rayLocation.Z);
+		
 		endRay = rayLocation + (rayRotation.Vector() * length);
 	}
 
