@@ -11,8 +11,8 @@ void AHitscanGun::FireGun(FHitResult rayHit)
 
 	AEnemyCharacter* hitActor = Cast<AEnemyCharacter>(rayHit.Actor);
 
-	FVector temp = rayHit.Actor.Get()->GetActorLocation();
-	UE_LOG(LogTemp, Warning, TEXT("Object hit is at:(%f, %f, %f)"), temp.X, temp.Y, temp.Z);
+	//FVector temp = rayHit.Actor.Get()->GetActorLocation();
+	//UE_LOG(LogTemp, Warning, TEXT("Object hit is at:(%f, %f, %f)"), temp.X, temp.Y, temp.Z);
 
 	if (hitActor)
 	{

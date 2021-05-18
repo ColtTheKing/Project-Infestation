@@ -47,11 +47,13 @@ void AEnemySpawner::Tick(float DeltaTime)
 
 void AEnemySpawner::SpawnEnemy(TSubclassOf<AEnemyCharacter> enemyBP)
 {
+	if (!enemyBP)
+		return;
+
 	// Calculate bounding box
 	FTransform localToWorld = FTransform(GetActorLocation());
-	FBoxSphereBounds spawnBounds = spawnArea->CalcBounds(localToWorld);
-	FBox boundingBox = spawnBounds.GetBox();
-	
+	FBox boundingBox = FBox::BuildAABB(localToWorld.GetLocation(), spawnArea->GetScaledBoxExtent());
+
 	// TODO: Possible performance issue as if there is too many enemies it might turn into a infinite loop
 	// Loop until found place to spawn
 	while (true)
