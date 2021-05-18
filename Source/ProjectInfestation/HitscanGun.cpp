@@ -4,4 +4,3 @@
 #include "HitscanGun.h"
 
 AHitscanGun::AHitscanGun() : AGun() {}
-
