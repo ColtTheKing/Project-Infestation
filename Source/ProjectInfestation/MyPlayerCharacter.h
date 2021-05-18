@@ -40,6 +40,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
 		UHealthComponent* health;
 
+	UFUNCTION(BlueprintCallable, Category = Damage)
+		void TakeDamage(float damage);
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

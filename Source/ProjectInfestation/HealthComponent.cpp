@@ -43,11 +43,6 @@ void UHealthComponent::TakeDamage(int damage)
 	{
 		currentHp -= damage - shieldHp;
 		shieldHp = 0;
-
-		if (currentHp <= 0)
-		{
-			myActor->Destroy();
-		}
 	}
 	else
 	{
