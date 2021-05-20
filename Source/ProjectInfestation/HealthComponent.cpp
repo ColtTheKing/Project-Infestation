@@ -20,7 +20,8 @@ void UHealthComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	myActor = GetOwner();
+	currentHp = maxHp;
+	currentShieldHp = maxShieldHp;
 }
 
 
@@ -34,18 +35,26 @@ void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 void UHealthComponent::TakeDamage(int damage)
 {
-	int newShieldHp = shieldHp - damage;
+	int newShieldHp = currentShieldHp - damage;
 
 	UE_LOG(LogTemp, Warning, TEXT("Character took damage of %d"), damage);
 
 	//if shield broke or wasn't there
 	if (newShieldHp <= 0)
 	{
-		currentHp -= damage - shieldHp;
-		shieldHp = 0;
+		currentHp -= damage - currentShieldHp;
+		currentShieldHp = 0;
 	}
 	else
 	{
-		shieldHp = newShieldHp;
+		currentShieldHp = newShieldHp;
 	}
+}
+
+void UHealthComponent::RestoreHp(int hp)
+{
+	if (maxHp < (hp + currentHp))
+		currentHp = maxHp;
+	else
+		currentHp += hp;
 }
