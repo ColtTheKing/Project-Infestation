@@ -2,6 +2,9 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=unrealengine,visualstudio
 
 ### UnrealEngine ###
+# Dumb stuff
+Content/StarterContent/*
+
 # Visual Studio 2015 user specific files
 .vs/
 
