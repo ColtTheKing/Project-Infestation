@@ -2,8 +2,6 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=unrealengine,visualstudio
 
 ### UnrealEngine ###
-# Dumb stuff
-Content/StarterContent/Architecture/Floor_400x400.uasset
 
 # Visual Studio 2015 user specific files
 .vs/
