@@ -31,7 +31,7 @@ public:
 	AEnemyCharacter();
 
 	UFUNCTION(BlueprintCallable, Category = Damage)
-		virtual void TakeDamage(float damage);
+		virtual void TakeDamage(int damage);
 
 protected:
 	// Called when the game starts or when spawned

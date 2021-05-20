@@ -41,7 +41,10 @@ public:
 		UHealthComponent* health;
 
 	UFUNCTION(BlueprintCallable, Category = Damage)
-		void TakeDamage(float damage);
+		void TakeDamage(int damage);
+
+	UFUNCTION(BlueprintCallable, Category = Damage)
+		void RestoreHp(int hp);
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

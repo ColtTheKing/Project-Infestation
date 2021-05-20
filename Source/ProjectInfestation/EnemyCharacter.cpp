@@ -37,13 +37,13 @@ void AEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	// Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
-void AEnemyCharacter::TakeDamage(float damage)
+void AEnemyCharacter::TakeDamage(int damage)
 {
 	//Could pass in a damage type later so the actor can respond differently
 
 	health->TakeDamage(damage);
 
-	if (health->currentHp <= 0)
+	if (health->GetCurrentHp() <= 0)
 	{
 		Destroy();
 	}
