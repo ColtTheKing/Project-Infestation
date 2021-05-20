@@ -24,8 +24,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Health)
 		int shieldHp;
 
-	UFUNCTION(BlueprintCallable, Category = "TakeDamage")
-		void TakeDamage(int damage);
+	void TakeDamage(int damage);
 
 protected:
 	// Called when the game starts

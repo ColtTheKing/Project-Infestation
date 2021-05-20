@@ -20,5 +20,6 @@ class PROJECTINFESTATION_API AHitscanGun : public AGun
 public:
 	AHitscanGun();
 
-	void FireGun(FHitResult rayHit) override;
+	UFUNCTION(BlueprintImplementableEvent, Category = Shoot)
+		void FireGun(FHitResult rayHit) override;
 };

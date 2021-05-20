@@ -18,9 +18,10 @@ void AEnemyCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	// Set up collision
-	// TODO: Change so that collision is mapped to specific attack, not just the character's model 
-	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AEnemyCharacter::OnOverlapBegin);
-	GetCapsuleComponent()->OnComponentEndOverlap.AddDynamic(this, &AEnemyCharacter::OnOverlapEnd);
+	// TODO: Change so that collision is mapped to specific attack, not just the character's model
+
+	//GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AEnemyCharacter::OnOverlapBegin);
+	//GetCapsuleComponent()->OnComponentEndOverlap.AddDynamic(this, &AEnemyCharacter::OnOverlapEnd);
 }
 
 // Called every frame
@@ -38,13 +39,16 @@ void AEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 void AEnemyCharacter::TakeDamage(float damage)
 {
-}
+	//Could pass in a damage type later so the actor can respond differently
 
-void AEnemyCharacter::OnOverlapBegin(class UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
+	health->TakeDamage(damage);
 
-}
-
-void AEnemyCharacter::OnOverlapEnd(class UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
-{
+	if (health->currentHp <= 0)
+	{
+		Destroy();
+	}
+	else
+	{
+		//Do any code for when the character gets hit
+	}
 }

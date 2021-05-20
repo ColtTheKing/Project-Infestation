@@ -130,3 +130,20 @@ FHitResult AMyPlayerCharacter::ShootRay(float length)
 
 	return hit;
 }
+
+void AMyPlayerCharacter::TakeDamage(float damage)
+{
+	//Could pass in a damage type later so the actor can respond differently
+
+	health->TakeDamage(damage);
+
+	if (health->currentHp <= 0)
+	{
+		//End the game
+		UE_LOG(LogTemp, Warning, TEXT("OH NO THE PLAYER DIED. HOW TRAGIC!"));
+	}
+	else
+	{
+		//Do any code for when the character gets hit
+	}
+}

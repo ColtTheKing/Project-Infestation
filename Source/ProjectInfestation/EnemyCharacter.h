@@ -15,11 +15,12 @@ class PROJECTINFESTATION_API AEnemyCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
-	UFUNCTION()
+	//Can be used for having enemies interact with stuff in future, but are currently unnecessary
+	/*UFUNCTION()
 		void OnOverlapBegin(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	UFUNCTION()
-		void OnOverlapEnd(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+		void OnOverlapEnd(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);*/
 
 public:
 
@@ -29,7 +30,8 @@ public:
 	// Sets default values for this character's properties
 	AEnemyCharacter();
 
-	virtual void TakeDamage(float damage);
+	UFUNCTION(BlueprintCallable, Category = Damage)
+		virtual void TakeDamage(float damage);
 
 protected:
 	// Called when the game starts or when spawned
