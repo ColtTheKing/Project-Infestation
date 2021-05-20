@@ -3,7 +3,7 @@
 
 ### UnrealEngine ###
 # Dumb stuff
-Content/StarterContent/*
+Content/StarterContent/Architecture/Floor_400x400.uasset
 
 # Visual Studio 2015 user specific files
 .vs/
