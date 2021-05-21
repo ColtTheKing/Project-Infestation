@@ -131,13 +131,13 @@ FHitResult AMyPlayerCharacter::ShootRay(float length)
 	return hit;
 }
 
-void AMyPlayerCharacter::TakeDamage(float damage)
+void AMyPlayerCharacter::TakeDamage(int damage)
 {
 	//Could pass in a damage type later so the actor can respond differently
 
 	health->TakeDamage(damage);
 
-	if (health->currentHp <= 0)
+	if (health->GetCurrentHp() <= 0)
 	{
 		//End the game
 		UE_LOG(LogTemp, Warning, TEXT("OH NO THE PLAYER DIED. HOW TRAGIC!"));
@@ -146,4 +146,13 @@ void AMyPlayerCharacter::TakeDamage(float damage)
 	{
 		//Do any code for when the character gets hit
 	}
+}
+
+void AMyPlayerCharacter::RestoreHp(int hp)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Current HP Before Heal: %d"), health->GetCurrentHp());
+
+	health->RestoreHp(hp);
+
+	UE_LOG(LogTemp, Warning, TEXT("Current HP After Heal: %d"), health->GetCurrentHp());
 }

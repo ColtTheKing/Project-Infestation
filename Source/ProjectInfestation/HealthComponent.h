@@ -19,22 +19,26 @@ public:
 	UHealthComponent();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Health)
-		int currentHp;
+		int maxHp;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Health)
-		int shieldHp;
+		int maxShieldHp;
 
 	void TakeDamage(int damage);
+	void RestoreHp(int hp);
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 private:
-	AActor* myActor;
+	int currentHp;
+	int currentShieldHp;
 
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	inline int GetCurrentHp() { return currentHp; }
+	inline int GetCurrentShieldHp() { return currentShieldHp;  }
 };
