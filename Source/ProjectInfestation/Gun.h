@@ -31,6 +31,10 @@ public:
 	AGun();
 
 	virtual void FireGun(FHitResult rayHit) PURE_VIRTUAL(AGun::FireGun, ;);
+	void RestoreAmmo(int ammo);
+
+private:
+	int currentAmmo;
 
 protected:
 	// Called when the game starts or when spawned
