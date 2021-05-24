@@ -156,3 +156,10 @@ void AMyPlayerCharacter::RestoreHp(int hp)
 
 	UE_LOG(LogTemp, Warning, TEXT("Current HP After Heal: %d"), health->GetCurrentHp());
 }
+
+void AMyPlayerCharacter::RestoreAmmo(int ammo)
+{
+	AActor* gunActor = heldGun->GetChildActor();
+	AGun* myGun = Cast<AGun>(gunActor);
+	myGun->RestoreAmmo(ammo);
+}

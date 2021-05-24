@@ -25,3 +25,14 @@ void AGun::Tick(float DeltaTime)
 
 }
 
+void AGun::RestoreAmmo(int ammo)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Current Ammo Before Reload: %d"), currentAmmo);
+	
+	if (clipSize < (ammo + currentAmmo))
+		currentAmmo = clipSize;
+	else
+		currentAmmo += ammo;
+
+	UE_LOG(LogTemp, Warning, TEXT("Current Ammo After Reload: %d"), currentAmmo);
+}

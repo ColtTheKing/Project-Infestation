@@ -46,6 +46,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Damage)
 		void RestoreHp(int hp);
 
+	UFUNCTION(BlueprintCallable, Category = Damage)
+		void RestoreAmmo(int ammo);
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
