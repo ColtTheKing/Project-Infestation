@@ -3,3 +3,7 @@
 
 #include "Lootbox.h"
 
+ALootbox::ALootbox()
+{
+
+}
