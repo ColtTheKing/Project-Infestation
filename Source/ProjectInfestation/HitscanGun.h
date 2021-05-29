@@ -21,5 +21,11 @@ public:
 	AHitscanGun();
 
 	UFUNCTION(BlueprintImplementableEvent, Category = Shoot)
-		void FireGun(FHitResult rayHit) override;
+		void FireGun() override;
+
+protected:
+	UFUNCTION(BlueprintCallable, Category = Shoot)
+		FHitResult ShootRay(float length, float angleFromCenter = 0, float angleAround = 0);
+
+	//put in function(s) to calculate angles and make them blueprint callable
 };

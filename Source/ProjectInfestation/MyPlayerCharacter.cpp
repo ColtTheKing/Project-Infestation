@@ -61,6 +61,7 @@ void AMyPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMyPlayerCharacter::Interact);
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AMyPlayerCharacter::FireWeapon);
+	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &AMyPlayerCharacter::ReloadWeapon);
 }
 
 void AMyPlayerCharacter::MoveForward(float axis)
@@ -101,10 +102,21 @@ void AMyPlayerCharacter::FireWeapon()
 
 		if (myGun)
 		{
-			//use a very long ray so it's "infinite" for all intents and purposes
-			FHitResult hit = ShootRay(1000000000);
+			myGun->FireGun();
+		}
+	}
+}
 
-			myGun->FireGun(hit);
+void AMyPlayerCharacter::ReloadWeapon()
+{
+	if (heldGun)
+	{
+		AActor* gunActor = heldGun->GetChildActor();
+		AGun* myGun = Cast<AGun>(gunActor);
+
+		if (myGun && myGun->ClipCanReload())
+		{
+			myGun->ReloadClip();
 		}
 	}
 }
@@ -123,7 +135,7 @@ FHitResult AMyPlayerCharacter::ShootRay(float length)
 		endRay = rayLocation + (rayRotation.Vector() * length);
 	}
 
-	//LEARN HOW THIS STUFF WORKS
+	//Params are a tag for debugging, whether to use complex collision, and which object to ignore
 	FCollisionQueryParams rayParams(SCENE_QUERY_STAT(ShootRay), true, this);
 	FHitResult hit(ForceInit);
 	GetWorld()->LineTraceSingleByChannel(hit, rayLocation, endRay, ECC_Visibility, rayParams);
