@@ -5,7 +5,7 @@
 
 AHitscanGun::AHitscanGun() : AGun() {}
 
-FHitResult AHitscanGun::ShootRay(float length, float angleFromCenter, float angleAround)
+FHitResult AHitscanGun::ShootRay(const AActor* actor, float length, float angleFromCenter, float angleAround)
 {
 	FVector rayLocation;
 	FRotator rayRotation;
@@ -20,7 +20,7 @@ FHitResult AHitscanGun::ShootRay(float length, float angleFromCenter, float angl
 	}
 
 	//Params are a tag for debugging, whether to use complex collision, and which object to ignore
-	FCollisionQueryParams rayParams(SCENE_QUERY_STAT(ShootRay), true, this);
+	FCollisionQueryParams rayParams(SCENE_QUERY_STAT(ShootRay), true, actor);
 	FHitResult hit(ForceInit);
 	GetWorld()->LineTraceSingleByChannel(hit, rayLocation, endRay, ECC_Visibility, rayParams);
 

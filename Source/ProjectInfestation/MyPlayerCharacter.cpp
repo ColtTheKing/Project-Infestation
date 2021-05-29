@@ -102,7 +102,7 @@ void AMyPlayerCharacter::FireWeapon()
 
 		if (myGun)
 		{
-			myGun->FireGun();
+			myGun->FireGun(this);
 		}
 	}
 }

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+
 #include "Gun.generated.h"
 
 UCLASS()
@@ -33,7 +34,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void FireGun() PURE_VIRTUAL(AGun::FireGun, ;);
+	virtual void FireGun(const AActor* actor) PURE_VIRTUAL(AGun::FireGun, ;);
 
 	void RestoreAmmo(int ammo);
 
