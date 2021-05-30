@@ -8,6 +8,21 @@
 
 #include "Lootbox.generated.h"
 
+USTRUCT()
+struct FLoot
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<AActor> lootBP;
+
+	UPROPERTY(EditAnywhere, Category = "Loot", meta = (ClampMin = "0.0", ClampMax = "1.0"))
+		float spawnChance;
+
+	UPROPERTY(EditAnywhere)
+		unsigned int spawnLimit;
+};
+
 /**
  * 
  */
@@ -23,15 +38,9 @@ class PROJECTINFESTATION_API ALootbox : public AInteractableActor
 public:
 	// Default constuctor
 	ALootbox();
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Loot", meta = (ClampMin = "0.0", ClampMax = "1.0"))
-		float healthSpawnChance;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Loot", meta = (ClampMin = "0.0", ClampMax = "1.0"))
-		float ammoSpawnChance;
-
-	UPROPERTY(EditAnywhere, Category = "Loot")
-		TSubclassOf<AActor> healthBP;
+	UPROPERTY(EditAnywhere)
+		TArray<struct FLoot> loots;
 
 	UFUNCTION(BlueprintCallable)
 		void SpawnLoot();

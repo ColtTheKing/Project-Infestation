@@ -25,7 +25,7 @@ void AEnemySpawner::BeginPlay()
 	// Spawn enemies
 	for (auto& enemy : enemies)
 	{
-		int i = 0;
+		unsigned int i = 0;
 		while (i < enemy.spawnLimit)
 		{
 			SpawnEnemy(enemy.enemyCharacterBP);
