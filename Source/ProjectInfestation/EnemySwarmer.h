@@ -22,12 +22,11 @@ public:
 	// Default constructor
 	AEnemySwarmer();
 
+	// Called every frame
+	void Tick(float DeltaTime) override;
+
 protected:
 	// Called on level load
 	void BeginPlay() override;
-
-public:
-	// Called every frame
-	void Tick(float DeltaTime) override;
 
 };

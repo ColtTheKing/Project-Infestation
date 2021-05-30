@@ -11,15 +11,13 @@ void AHitscanGun::FireGun(AActor* actor)
 	{
 		ConsumeAmmo(1);
 
-		UE_LOG(LogTemp, Warning, TEXT("Trying this is code"));
-
 		FHitResult hit = ShootRay(actor, 10000000000, 0, 0);
 
 		AEnemyCharacter* hitActor = Cast<AEnemyCharacter>(hit.Actor);
 
 		if (hitActor)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Shot enemy in code"));
+			UE_LOG(LogTemp, Warning, TEXT("Shot enemy"));
 
 			hitActor->TakeDamage(damagePerPellet);
 		}
