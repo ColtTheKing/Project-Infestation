@@ -34,7 +34,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void FireGun(const AActor* actor) PURE_VIRTUAL(AGun::FireGun, ;);
+	virtual void FireGun(AActor* actor) PURE_VIRTUAL(AGun::FireGun, ;);
 
 	void RestoreAmmo(int ammo);
 

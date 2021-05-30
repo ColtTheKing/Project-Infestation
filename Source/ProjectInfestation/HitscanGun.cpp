@@ -5,7 +5,28 @@
 
 AHitscanGun::AHitscanGun() : AGun() {}
 
-FHitResult AHitscanGun::ShootRay(const AActor* actor, float length, float angleFromCenter, float angleAround)
+void AHitscanGun::FireGun(AActor* actor)
+{
+	if (ClipHasAmmo(1))
+	{
+		ConsumeAmmo(1);
+
+		UE_LOG(LogTemp, Warning, TEXT("Trying this is code"));
+
+		FHitResult hit = ShootRay(actor, 10000000000, 0, 0);
+
+		AEnemyCharacter* hitActor = Cast<AEnemyCharacter>(hit.Actor);
+
+		if (hitActor)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Shot enemy in code"));
+
+			hitActor->TakeDamage(damagePerPellet);
+		}
+	}
+}
+
+FHitResult AHitscanGun::ShootRay(AActor* actor, float length, float angleFromCenter, float angleAround)
 {
 	FVector rayLocation;
 	FRotator rayRotation;
