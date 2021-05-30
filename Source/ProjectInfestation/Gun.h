@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+
 #include "Gun.generated.h"
 
 UCLASS()
@@ -30,18 +31,28 @@ public:
 	// Sets default values for this actor's properties
 	AGun();
 
-	virtual void FireGun(FHitResult rayHit) PURE_VIRTUAL(AGun::FireGun, ;);
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	virtual void FireGun(AActor* actor) PURE_VIRTUAL(AGun::FireGun, ;);
+
 	void RestoreAmmo(int ammo);
 
-private:
-	int currentAmmo;
+	void ReloadClip();
+
+	UFUNCTION(BlueprintCallable, Category = Ammo)
+		void ConsumeAmmo(int ammo);
+
+	UFUNCTION(BlueprintCallable, Category = Ammo)
+		bool ClipHasAmmo(int ammo);
+
+	UFUNCTION(BlueprintCallable, Category = Ammo)
+		bool ClipCanReload();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
+private:
+	int reserveAmmo, ammoInClip;
 };

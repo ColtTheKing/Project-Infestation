@@ -40,13 +40,13 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
 		UHealthComponent* health;
 
-	UFUNCTION(BlueprintCallable, Category = Damage)
+	UFUNCTION(BlueprintCallable, Category = Health)
 		void TakeDamage(int damage);
 
-	UFUNCTION(BlueprintCallable, Category = Damage)
+	UFUNCTION(BlueprintCallable, Category = Health)
 		void RestoreHp(int hp);
 
-	UFUNCTION(BlueprintCallable, Category = Damage)
+	UFUNCTION(BlueprintCallable, Category = Ammo)
 		void RestoreAmmo(int ammo);
 
 	// Called every frame
@@ -59,6 +59,7 @@ public:
 	void MoveRight(float axis);
 	void Interact();
 	void FireWeapon();
+	void ReloadWeapon();
 
 protected:
 	// Called when the game starts or when spawned
