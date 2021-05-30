@@ -31,7 +31,7 @@ void ALootbox::SpawnLoot()
 		unsigned int i = 0;
 		while (i < loot.spawnLimit)
 		{
-			if (!(FGenericPlatformMath::FRand() < loot.spawnChance))
+			if (i != 0 && !(FGenericPlatformMath::FRand() < loot.spawnChance))
 				break;
 			
 			// Calculate bounding box
