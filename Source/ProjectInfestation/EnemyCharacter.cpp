@@ -43,6 +43,8 @@ void AEnemyCharacter::TakeDamage(int damage)
 
 	health->TakeDamage(damage);
 
+	UE_LOG(LogTemp, Warning, TEXT("Enemy took %d damage, %d health remaining"), damage, health->GetCurrentHp());
+
 	if (health->GetCurrentHp() <= 0)
 	{
 		Destroy();
