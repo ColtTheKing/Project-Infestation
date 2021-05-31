@@ -5,25 +5,6 @@
 
 AHitscanGun::AHitscanGun() : AGun() {}
 
-void AHitscanGun::FireGun(AActor* actor)
-{
-	if (ClipHasAmmo(1))
-	{
-		ConsumeAmmo(1);
-
-		FHitResult hit = ShootRay(actor, 10000000000, 0, 0);
-
-		AEnemyCharacter* hitActor = Cast<AEnemyCharacter>(hit.Actor);
-
-		if (hitActor)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Shot enemy"));
-
-			hitActor->TakeDamage(damagePerPellet);
-		}
-	}
-}
-
 FHitResult AHitscanGun::ShootRay(AActor* actor, float length, float angleFromCenter, float angleAround)
 {
 	FVector rayLocation;

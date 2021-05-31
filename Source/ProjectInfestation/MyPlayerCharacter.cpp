@@ -114,7 +114,7 @@ void AMyPlayerCharacter::ReloadWeapon()
 		AActor* gunActor = heldGun->GetChildActor();
 		AGun* myGun = Cast<AGun>(gunActor);
 
-		if (myGun && myGun->ClipCanReload())
+		if (myGun)
 		{
 			myGun->ReloadClip();
 		}
