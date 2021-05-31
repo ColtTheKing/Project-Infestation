@@ -57,7 +57,7 @@ bool AGun::ClipCanReload()
 void AGun::ReloadClip()
 {
 	//Don't bother reloading if the clip is full or there is no more reserve ammo
-	if (ammoInClip != clipSize && reserveAmmo != 0)
+	if (ClipCanReload())
 	{
 		int neededAmmo = clipSize - ammoInClip;
 

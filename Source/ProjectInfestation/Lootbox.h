@@ -31,13 +31,15 @@ class PROJECTINFESTATION_API ALootbox : public AInteractableActor
 {
 	GENERATED_BODY()
 
+private:
 	UBoxComponent* spawnArea;
-
-	bool opened;
 
 public:
 	// Default constuctor
 	ALootbox();
+
+	UPROPERTY(BlueprintReadWrite)
+		bool opened;
 
 	UPROPERTY(EditAnywhere)
 		TArray<struct FLoot> loots;

@@ -19,12 +19,6 @@ void ALootbox::BeginPlay()
 
 void ALootbox::SpawnLoot() 
 {
-	// Check if opened
-	if (opened)
-		return;
-
-	opened = true;
-
 	// Spawn Loot
 	for (auto& loot : loots)
 	{

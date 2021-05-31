@@ -20,7 +20,7 @@ class PROJECTINFESTATION_API AHitscanGun : public AGun
 public:
 	AHitscanGun();
 
-	//UFUNCTION(BlueprintImplementableEvent, Category = Shoot)
+	UFUNCTION(BlueprintImplementableEvent, Category = Shoot)
 		void FireGun(AActor* actor) override;
 
 protected:

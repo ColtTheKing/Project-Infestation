@@ -17,7 +17,10 @@ public:
 		int spreadAngle;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
-		int bulletsPerShot;
+		int pelletsPerShot;											
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
+		int ammoConsumedPerShot;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
 		float fireRate;
