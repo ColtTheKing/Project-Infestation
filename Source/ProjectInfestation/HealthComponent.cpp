@@ -58,3 +58,13 @@ void UHealthComponent::RestoreHp(int hp)
 	else
 		currentHp += hp;
 }
+
+int UHealthComponent::GetCurrentHp()
+{
+	return currentHp;
+}
+
+int UHealthComponent::GetCurrentShieldHp()
+{
+	return currentShieldHp;
+}
