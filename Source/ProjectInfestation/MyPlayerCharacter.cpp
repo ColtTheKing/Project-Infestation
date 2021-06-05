@@ -29,6 +29,7 @@ AMyPlayerCharacter::AMyPlayerCharacter()
 	heldGun->SetupAttachment(playerArms);
 
 	health = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
+	messageLog = CreateDefaultSubobject<UMessageLogComponent>(TEXT("MessageLog"));
 }
 
 // Called when the game starts or when spawned
