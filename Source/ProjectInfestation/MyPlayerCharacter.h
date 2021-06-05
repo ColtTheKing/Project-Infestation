@@ -13,6 +13,7 @@
 #include <ProjectInfestation/InteractableActor.h>
 #include <ProjectInfestation/Gun.h>
 #include <ProjectInfestation/HealthComponent.h>
+#include <ProjectInfestation/MessageLogComponent.h>
 
 #include "MyPlayerCharacter.generated.h"
 
@@ -40,6 +41,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
 		UHealthComponent* health;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Messages)
+		UMessageLogComponent* messageLog;
+
 	UFUNCTION(BlueprintCallable, Category = Health)
 		void TakeDamage(int damage);
 
@@ -61,10 +65,13 @@ public:
 	void FireWeapon();
 	void ReloadWeapon();
 
+	UFUNCTION(BlueprintCallable, Category = Shoot)
+		FHitResult ShootRay(float length);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-private:	
-	FHitResult ShootRay(float length);
+private:
+	
 };

@@ -40,11 +40,14 @@ void AGun::ConsumeAmmo(int ammo)
 	UE_LOG(LogTemp, Warning, TEXT("Clip After Consumption: %d / %d"), ammoInClip, clipSize);
 }
 
-bool AGun::ClipHasAmmo(int ammo)
+int AGun::GetAmmoInClip()
 {
-	if (ammoInClip >= ammo)
-		return true;
-	return false;
+	return ammoInClip;
+}
+
+int AGun::GetReserveAmmo()
+{
+	return reserveAmmo;
 }
 
 bool AGun::ClipCanReload()

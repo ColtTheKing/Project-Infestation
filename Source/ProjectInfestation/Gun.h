@@ -47,7 +47,10 @@ public:
 		void ConsumeAmmo(int ammo);
 
 	UFUNCTION(BlueprintCallable, Category = Ammo)
-		bool ClipHasAmmo(int ammo);
+		int GetAmmoInClip();
+
+	UFUNCTION(BlueprintCallable, Category = Ammo)
+		int GetReserveAmmo();
 
 	UFUNCTION(BlueprintCallable, Category = Ammo)
 		bool ClipCanReload();
