@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "GameFramework/Character.h"
+#include "HealthComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "InfestationGameMode.generated.h"
 
 /**
@@ -17,8 +20,8 @@ private:
 	GENERATED_BODY()
 
 	// Class variables
-	// TODO: Add map variable
 	float timePlayed;
+	ACharacter* playerCharacter;
 
 public:
 
@@ -29,5 +32,9 @@ public:
 	void InitGame(const FString& mapName, const FString& options, FString& errorMessage) override;
 
 	// Level logic
-	void CompleteLevel();
+	UFUNCTION(BlueprintCallable)
+		void RestartGame();
+
+	UFUNCTION(BlueprintCallable)
+		void EndGame();
 };

@@ -4,23 +4,21 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-
 #include "Components/CapsuleComponent.h"
-#include <ProjectInfestation/HealthComponent.h>
+
+#include "HealthComponent.h"
 
 #include "EnemyCharacter.generated.h"
+
+class AEnemySpawner;
 
 UCLASS()
 class PROJECTINFESTATION_API AEnemyCharacter : public ACharacter
 {
+private:
 	GENERATED_BODY()
 
-	//Can be used for having enemies interact with stuff in future, but are currently unnecessary
-	/*UFUNCTION()
-		void OnOverlapBegin(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
-	UFUNCTION()
-		void OnOverlapEnd(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);*/
+	AEnemySpawner* enemySpawner;
 
 public:
 
@@ -29,6 +27,8 @@ public:
 
 	// Sets default values for this character's properties
 	AEnemyCharacter();
+
+	void SetEnemySpawner(AEnemySpawner* aEnemySpawner);
 
 	UFUNCTION(BlueprintCallable, Category = Damage)
 		virtual void TakeDamage(int damage);
