@@ -4,12 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-
-#include "EnemyCharacter.h"
 #include "Components/BoxComponent.h"
 #include "Components/ActorComponent.h"
 
-#include <string>
+#include <queue>
+
+#include "EnemyCharacter.h"
 
 #include "EnemySpawner.generated.h"
 
@@ -31,6 +31,7 @@ struct FEnemy
 UCLASS()
 class PROJECTINFESTATION_API AEnemySpawner : public AActor
 {
+private:
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere)
@@ -38,15 +39,19 @@ class PROJECTINFESTATION_API AEnemySpawner : public AActor
 
 	UFUNCTION()
 		void SpawnEnemy(TSubclassOf<AEnemyCharacter> enemyBP);
-
-	UBoxComponent* spawnArea;
 	
+	UBoxComponent* spawnArea;
+	std::queue<FName> respawnQueue;
+	bool enemyRespawning;
+
+	// Respawns enemy of specific tag
+	void RespawnEnemy(FName enemyTag);
+
 public:	
 	// Sets default values for this actor's properties
 	AEnemySpawner();
 
-	// Respawns enemy of specific tag
-	void RespawnEnemy(FName enemyTag);
+	void AddEnemyToRespawnQueue(FName enemyTag);
 
 protected:
 	// Called when the game starts or when spawned

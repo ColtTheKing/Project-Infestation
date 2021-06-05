@@ -8,10 +8,28 @@ void AInfestationGameMode::InitGame(const FString& mapName, const FString& optio
 	// Call super class to init systems
 	AGameModeBase::InitGame(mapName, options, errorMessage);
 
+	// Init Variables
+	timePlayed = 0;
+	playerCharacter = UGameplayStatics::GetPlayerCharacter(this, 0);
+
 	// Generate map class
 	// TODO: Call function from MapGenerator class to generate level map
 }
 
-void AInfestationGameMode::CompleteLevel()
+void AInfestationGameMode::RestartGame()
 {
+	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
+}
+
+void AInfestationGameMode::EndGame()
+{
+	UHealthComponent* playerHealth = playerCharacter->FindComponentByClass<UHealthComponent>();
+	if (playerHealth->GetCurrentHp() <= 0)
+	{
+		// Load Game Over screen
+	}
+	else
+	{
+		// Load Victory screen
+	}
 }

@@ -19,8 +19,9 @@ void AEnemySpawner::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	// Get reference to spawn area
+	// Init variables
 	spawnArea = FindComponentByClass<UBoxComponent>();
+	enemyRespawning = false;
 
 	// Spawn enemies
 	for (auto& enemy : enemies)
@@ -43,10 +44,20 @@ void AEnemySpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (!respawnQueue.empty() && !enemyRespawning) 
+	{
+		enemyRespawning = true;
+		FName enemyToRespawnTag = respawnQueue.front();
+		respawnQueue.pop();
+		RespawnEnemy(enemyToRespawnTag);
+	}
 }
 
 void AEnemySpawner::SpawnEnemy(TSubclassOf<AEnemyCharacter> enemyBP)
 {
+	// Enemy is no longer queued to respawn
+	enemyRespawning = false;
+	
 	if (!enemyBP)
 		return;
 
@@ -67,15 +78,15 @@ void AEnemySpawner::SpawnEnemy(TSubclassOf<AEnemyCharacter> enemyBP)
 
 		// Spawn a enemy
 		FRotator spawnRotation = FRotator(0.0f, 0.0f, 0.0f);
-		AActor* spawnedEnemy = GetWorld()->SpawnActor(enemyBP, &randomLocation, &spawnRotation);
+		AEnemyCharacter* spawnedEnemy = Cast<AEnemyCharacter>(GetWorld()->SpawnActor(enemyBP, &randomLocation, &spawnRotation));
 
 		if (IsValid(spawnedEnemy))
 		{
+			spawnedEnemy->SetEnemySpawner(this);
 			break;
 		}
 	}
 }
-
 
 void AEnemySpawner::RespawnEnemy(FName enemyTag)
 {
@@ -94,6 +105,7 @@ void AEnemySpawner::RespawnEnemy(FName enemyTag)
 	if (!foundEnemyTag) 
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Unable to find enemy of tag %s"), *enemyTag.ToString());
+		enemyRespawning = false;
 		return;
 	}
 	
@@ -102,4 +114,10 @@ void AEnemySpawner::RespawnEnemy(FName enemyTag)
 
 	TimerDel.BindUFunction(this, FName("SpawnEnemy"), enemyToSpawn.enemyCharacterBP);
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, enemyToSpawn.respawnTimer, false);
+}
+
+void AEnemySpawner::AddEnemyToRespawnQueue(FName enemyTag)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Enemy added to respawn queue"));
+	respawnQueue.push(enemyTag);
 }

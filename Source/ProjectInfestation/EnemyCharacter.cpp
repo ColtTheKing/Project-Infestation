@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "EnemyCharacter.h"
+
+#include "EnemySpawner.h"
 
 // Sets default values
 AEnemyCharacter::AEnemyCharacter()
@@ -12,16 +13,18 @@ AEnemyCharacter::AEnemyCharacter()
 	health = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
 }
 
+void AEnemyCharacter::SetEnemySpawner(AEnemySpawner* aEnemySpawner)
+{
+	enemySpawner = aEnemySpawner;
+}
+
 // Called when the game starts or when spawned
 void AEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
 	// Set up collision
-	// TODO: Change so that collision is mapped to specific attack, not just the character's model
-
-	//GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AEnemyCharacter::OnOverlapBegin);
-	//GetCapsuleComponent()->OnComponentEndOverlap.AddDynamic(this, &AEnemyCharacter::OnOverlapEnd);
+	
 }
 
 // Called every frame
@@ -47,6 +50,9 @@ void AEnemyCharacter::TakeDamage(int damage)
 
 	if (health->GetCurrentHp() <= 0)
 	{
+		// TODO: This means every enemy will respawn as a swarmer, should change to get enemy type tag.
+		FName enemyToRespawnTag = FName(TEXT("Swarmer"));
+		enemySpawner->AddEnemyToRespawnQueue(enemyToRespawnTag);
 		Destroy();
 	}
 	else
