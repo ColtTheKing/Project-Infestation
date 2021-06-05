@@ -50,9 +50,10 @@ void AEnemyCharacter::TakeDamage(int damage)
 
 	if (health->GetCurrentHp() <= 0)
 	{
-		// TODO: This means every enemy will respawn as a swarmer, should change to get enemy type tag.
-		FName enemyToRespawnTag = FName(TEXT("Swarmer"));
+		// TODO: Always assumes that the enemy type tag is in the second position
+		FName enemyToRespawnTag = this->Tags[1];
 		enemySpawner->AddEnemyToRespawnQueue(enemyToRespawnTag);
+
 		Destroy();
 	}
 	else
