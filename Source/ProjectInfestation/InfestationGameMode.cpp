@@ -20,16 +20,3 @@ void AInfestationGameMode::RestartGame()
 {
 	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 }
-
-void AInfestationGameMode::EndGame()
-{
-	UHealthComponent* playerHealth = playerCharacter->FindComponentByClass<UHealthComponent>();
-	if (playerHealth->GetCurrentHp() <= 0)
-	{
-		// Load Game Over screen
-	}
-	else
-	{
-		// Load Victory screen
-	}
-}

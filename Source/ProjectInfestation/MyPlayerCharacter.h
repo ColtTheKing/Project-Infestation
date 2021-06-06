@@ -53,6 +53,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Ammo)
 		void RestoreAmmo(int ammo);
 
+	UFUNCTION(BlueprintImplementableEvent, Category = Death)
+		void KillPlayer();
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

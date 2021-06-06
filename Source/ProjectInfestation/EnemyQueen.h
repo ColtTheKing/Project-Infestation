@@ -21,6 +21,11 @@ public:
 	// Called every frame
 	void Tick(float DeltaTime) override;
 
+	void TakeDamage(int damage) override;
+
+	UFUNCTION(BlueprintImplementableEvent, Category = Death)
+		void KillQueen();
+
 protected:
 	// Called on level load
 	void BeginPlay() override;

@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EnemyCharacter.h"
+#include "BasicEnemy.h"
 #include "EnemySwarmer.generated.h"
 
 /**
  *
  */
 UCLASS()
-class PROJECTINFESTATION_API AEnemySwarmer : public AEnemyCharacter
+class PROJECTINFESTATION_API AEnemySwarmer : public ABasicEnemy
 {
 	GENERATED_BODY()
 

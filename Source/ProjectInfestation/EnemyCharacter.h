@@ -15,33 +15,31 @@ class AEnemySpawner;
 UCLASS()
 class PROJECTINFESTATION_API AEnemyCharacter : public ACharacter
 {
-private:
 	GENERATED_BODY()
 
-	AEnemySpawner* enemySpawner;
-
 public:
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
 		UHealthComponent* health;
 
 	// Sets default values for this character's properties
 	AEnemyCharacter();
 
-	void SetEnemySpawner(AEnemySpawner* aEnemySpawner);
-
-	UFUNCTION(BlueprintCallable, Category = Damage)
-		virtual void TakeDamage(int damage);
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	void SetEnemySpawner(AEnemySpawner* aEnemySpawner);
+
+	UFUNCTION(BlueprintCallable, Category = Damage)
+		virtual void TakeDamage(int damage) PURE_VIRTUAL(AEnemyCharacter::TakeDamage, ;);
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+	AEnemySpawner* enemySpawner;
+private:
+	
 };

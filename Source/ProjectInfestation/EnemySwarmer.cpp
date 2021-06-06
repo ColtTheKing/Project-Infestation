@@ -19,5 +19,3 @@ void AEnemySwarmer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
-
-
