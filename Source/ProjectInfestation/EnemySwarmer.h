@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EnemyCharacter.h"
+#include "BasicEnemy.h"
 #include "EnemySwarmer.generated.h"
 
 /**
  *
  */
 UCLASS()
-class PROJECTINFESTATION_API AEnemySwarmer : public AEnemyCharacter
+class PROJECTINFESTATION_API AEnemySwarmer : public ABasicEnemy
 {
 	GENERATED_BODY()
 
@@ -24,8 +24,6 @@ public:
 
 	// Called every frame
 	void Tick(float DeltaTime) override;
-
-	void TakeDamage(int damage) override;
 
 protected:
 	// Called on level load

@@ -14,4 +14,16 @@ class PROJECTINFESTATION_API ABasicEnemy : public AEnemyCharacter
 {
 	GENERATED_BODY()
 	
+public:	
+	ABasicEnemy();
+
+	void TakeDamage(int damage) override;
+
+	// Called every frame
+	void Tick(float DeltaTime) override;
+
+protected:
+	// Called on level load
+	void BeginPlay() override;
+
 };

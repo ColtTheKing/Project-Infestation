@@ -35,9 +35,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void RestartGame();
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void WinGame();
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void LoseGame();
 };

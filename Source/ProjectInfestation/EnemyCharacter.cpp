@@ -2,8 +2,6 @@
 
 #include "EnemyCharacter.h"
 
-#include "EnemySpawner.h"
-
 // Sets default values
 AEnemyCharacter::AEnemyCharacter()
 {
