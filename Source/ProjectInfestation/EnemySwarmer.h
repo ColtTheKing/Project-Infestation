@@ -25,6 +25,8 @@ public:
 	// Called every frame
 	void Tick(float DeltaTime) override;
 
+	void TakeDamage(int damage) override;
+
 protected:
 	// Called on level load
 	void BeginPlay() override;
