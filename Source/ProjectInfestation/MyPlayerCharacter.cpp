@@ -16,7 +16,7 @@ AMyPlayerCharacter::AMyPlayerCharacter()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f);
 	GetCharacterMovement()->JumpZVelocity = 600.0f;
-	GetCharacterMovement()->AirControl = 0.2f;
+	GetCharacterMovement()->AirControl = 0.0f;
 
 	playerCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("PlayerCamera"));
 	playerCamera->SetupAttachment(GetRootComponent());
