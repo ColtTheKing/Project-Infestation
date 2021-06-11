@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/StaticMeshComponent.h"
 
 #include "Gun.generated.h"
 
@@ -13,6 +14,9 @@ class PROJECTINFESTATION_API AGun : public AActor
 	GENERATED_BODY()
 	
 public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
+		UStaticMeshComponent* gunMesh;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
 		int spreadAngle;
 
