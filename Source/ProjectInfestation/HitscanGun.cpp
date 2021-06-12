@@ -3,7 +3,7 @@
 
 #include "HitscanGun.h"
 
-AHitscanGun::AHitscanGun() : AGun() {}
+AHitscanGun::AHitscanGun() : Super() {}
 
 FHitResult AHitscanGun::ShootRay(AActor* actor, float length, float angleFromCenter, float angleAround)
 {
