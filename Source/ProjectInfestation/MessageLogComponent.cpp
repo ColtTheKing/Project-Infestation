@@ -47,13 +47,13 @@ void UMessageLogComponent::AddMessage(FText message)
 	// If the log is already full just bump the oldest one out
 	if (messages.size() == maxMessages)
 	{
-		messages.erase(messages.begin());
-		messageTimers.erase(messageTimers.begin());
+		messages.erase(std::prev(messages.end()));
+		messageTimers.erase(std::prev(messageTimers.begin()));
 	}
 
 	// Add a new message that will exist in the log for the message duration
-	messages.push_back(message);
-	messageTimers.push_back(messageDuration);
+	messages.insert(messages.begin(), message);
+	messageTimers.insert(messageTimers.begin(), messageDuration);
 }
 
 FText UMessageLogComponent::GetMessageAt(int index)

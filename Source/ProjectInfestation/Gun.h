@@ -14,8 +14,11 @@ class PROJECTINFESTATION_API AGun : public AActor
 	GENERATED_BODY()
 	
 public:
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Mesh, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Mesh)
 		UStaticMeshComponent* gunMesh;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
+		UStaticMeshComponent* shotPosition;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
 		int spreadAngle;
