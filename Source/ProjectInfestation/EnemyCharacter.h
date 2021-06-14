@@ -30,8 +30,6 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	void SetEnemySpawner(AEnemySpawner* aEnemySpawner);
-
 	UFUNCTION(BlueprintCallable, Category = Damage)
 		virtual void TakeDamage(int damage) PURE_VIRTUAL(AEnemyCharacter::TakeDamage, ;);
 
@@ -39,7 +37,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	AEnemySpawner* enemySpawner;
 private:
 	
 };

@@ -11,11 +11,6 @@ AEnemyCharacter::AEnemyCharacter()
 	health = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
 }
 
-void AEnemyCharacter::SetEnemySpawner(AEnemySpawner* aEnemySpawner)
-{
-	enemySpawner = aEnemySpawner;
-}
-
 // Called when the game starts or when spawned
 void AEnemyCharacter::BeginPlay()
 {

@@ -9,7 +9,7 @@
 
 #include <queue>
 
-#include "EnemyCharacter.h"
+#include "BasicEnemy.h"
 
 #include "EnemySpawner.generated.h"
 

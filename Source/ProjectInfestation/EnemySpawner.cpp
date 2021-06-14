@@ -78,7 +78,7 @@ void AEnemySpawner::SpawnEnemy(TSubclassOf<AEnemyCharacter> enemyBP)
 
 		// Spawn a enemy
 		FRotator spawnRotation = FRotator(0.0f, 0.0f, 0.0f);
-		AEnemyCharacter* spawnedEnemy = Cast<AEnemyCharacter>(GetWorld()->SpawnActor(enemyBP, &randomLocation, &spawnRotation));
+		ABasicEnemy* spawnedEnemy = Cast<ABasicEnemy>(GetWorld()->SpawnActor(enemyBP, &randomLocation, &spawnRotation));
 
 		if (IsValid(spawnedEnemy))
 		{

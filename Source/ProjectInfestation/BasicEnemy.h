@@ -19,11 +19,16 @@ public:
 
 	void TakeDamage(int damage) override;
 
+	void SetEnemySpawner(AEnemySpawner* aEnemySpawner);
+
 	// Called every frame
 	void Tick(float DeltaTime) override;
 
 protected:
 	// Called on level load
 	void BeginPlay() override;
+
+private:
+	AEnemySpawner* enemySpawner;
 
 };

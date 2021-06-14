@@ -21,11 +21,18 @@ void ABasicEnemy::TakeDamage(int damage)
 	if (health->GetCurrentHp() <= 0)
 	{
 		// TODO: Always assumes that the enemy type tag is in the second position
-		FName enemyToRespawnTag = this->Tags[1];
-		enemySpawner->AddEnemyToRespawnQueue(enemyToRespawnTag);
+		if (IsValid(enemySpawner)) {
+			FName enemyToRespawnTag = this->Tags[1];
+			enemySpawner->AddEnemyToRespawnQueue(enemyToRespawnTag);
+		}
 
 		Destroy();
 	}
+}
+
+void ABasicEnemy::SetEnemySpawner(AEnemySpawner* aEnemySpawner)
+{
+	enemySpawner = aEnemySpawner;
 }
 
 // Called every frame
