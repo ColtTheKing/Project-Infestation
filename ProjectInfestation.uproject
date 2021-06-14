@@ -24,5 +24,9 @@
 				"Mac"
 			]
 		}
+	],
+	"TargetPlatforms": [
+		"WindowsNoEditor",
+		"WindowsNoEditorWin32"
 	]
 }
