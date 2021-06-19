@@ -20,12 +20,9 @@ struct FEnemy
 	
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<AEnemyCharacter> enemyCharacterBP;
-	
+
 	UPROPERTY(EditAnywhere)
-		unsigned int spawnLimit;
-	
-	UPROPERTY(EditAnywhere)
-		float respawnTimer;
+		float respawnChance;
 };
 
 UCLASS()
@@ -37,21 +34,27 @@ private:
 	UPROPERTY(EditAnywhere)
 		TArray<struct FEnemy> enemies;
 
+	UPROPERTY(EditAnywhere)
+		unsigned int spawnLimit;
+
+	UPROPERTY(EditAnywhere)
+		float respawnRate;
+
 	UFUNCTION()
-		void SpawnEnemy(TSubclassOf<AEnemyCharacter> enemyBP);
+		void SpawnEnemy();
 	
 	UBoxComponent* spawnArea;
-	std::queue<FName> respawnQueue;
-	bool enemyRespawning;
+	size_t enemiesSpawned;
+	float respawnTimer;
 
 	// Respawns enemy of specific tag
-	void RespawnEnemy(FName enemyTag);
+	FEnemy* GetRandomEnemy();
 
 public:	
 	// Sets default values for this actor's properties
 	AEnemySpawner();
 
-	void AddEnemyToRespawnQueue(FName enemyTag);
+	void HandleEnemyDespawn();
 
 protected:
 	// Called when the game starts or when spawned
