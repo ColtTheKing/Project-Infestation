@@ -10,7 +10,6 @@ void AInfestationGameMode::InitGame(const FString& mapName, const FString& optio
 
 	// Init Variables
 	timePlayed = 0;
-	playerCharacter = UGameplayStatics::GetPlayerCharacter(this, 0);
 
 	// Generate map class
 	// TODO: Call function from MapGenerator class to generate level map
@@ -18,5 +17,6 @@ void AInfestationGameMode::InitGame(const FString& mapName, const FString& optio
 
 void AInfestationGameMode::RestartGame()
 {
+	GetWorld()->ForceGarbageCollection(true);
 	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 }
