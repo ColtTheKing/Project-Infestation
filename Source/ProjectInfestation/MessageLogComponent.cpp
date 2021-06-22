@@ -48,7 +48,7 @@ void UMessageLogComponent::AddMessage(FText message)
 	if (messages.size() == maxMessages)
 	{
 		messages.erase(std::prev(messages.end()));
-		messageTimers.erase(std::prev(messageTimers.begin()));
+		messageTimers.erase(std::prev(messageTimers.end()));
 	}
 
 	// Add a new message that will exist in the log for the message duration
