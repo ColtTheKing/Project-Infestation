@@ -17,6 +17,6 @@ void AInfestationGameMode::InitGame(const FString& mapName, const FString& optio
 
 void AInfestationGameMode::RestartGame()
 {
-	GetWorld()->ForceGarbageCollection(true);
+	//GetWorld()->ForceGarbageCollection(true);
 	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 }
