@@ -6,8 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Components/BoxComponent.h"
 #include "Components/ActorComponent.h"
-
-#include <queue>
+#include "Templates/SharedPointer.h"
 
 #include "BasicEnemy.h"
 
@@ -43,7 +42,7 @@ private:
 	UFUNCTION()
 		void SpawnEnemy();
 	
-	UBoxComponent* spawnArea;
+	TWeakObjectPtr<UBoxComponent> spawnArea;
 	size_t enemiesSpawned;
 	float respawnTimer;
 

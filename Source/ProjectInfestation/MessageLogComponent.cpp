@@ -47,8 +47,14 @@ void UMessageLogComponent::AddMessage(FText message)
 	// If the log is already full just bump the oldest one out
 	if (messages.size() == maxMessages)
 	{
+		if (maxMessages == 0)
+		{
+			UE_LOG(LogTemp, Error, TEXT("Ammo In Clip At Start: %d"));
+			return;
+		}
+
 		messages.erase(std::prev(messages.end()));
-		messageTimers.erase(std::prev(messageTimers.begin()));
+		messageTimers.erase(std::prev(messageTimers.end()));
 	}
 
 	// Add a new message that will exist in the log for the message duration

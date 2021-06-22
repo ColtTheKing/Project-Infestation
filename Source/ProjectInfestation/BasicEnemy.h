@@ -22,6 +22,9 @@ public:
 
 	void SetEnemySpawner(TWeakObjectPtr<AEnemySpawner> aEnemySpawner);
 
+	UFUNCTION(BlueprintImplementableEvent, Category = Death)
+		void KillBasicEnemy();
+
 	// Called every frame
 	void Tick(float DeltaTime) override;
 
