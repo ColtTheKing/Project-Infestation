@@ -49,7 +49,7 @@ void UMessageLogComponent::AddMessage(FText message)
 	{
 		if (maxMessages == 0)
 		{
-			UE_LOG(LogTemp, Error, TEXT("Ammo In Clip At Start: %d"));
+			UE_LOG(LogTemp, Error, TEXT("MessageLogComponent::AddMessage(): Message log has zero capacity"));
 			return;
 		}
 

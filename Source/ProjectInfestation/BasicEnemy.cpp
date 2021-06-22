@@ -23,7 +23,6 @@ void ABasicEnemy::TakeDamage(int damage)
 		if (enemySpawner.IsValid())
 			enemySpawner->HandleEnemyDespawn();
 
-		// Destroy();
 		KillBasicEnemy();
 	}
 }
