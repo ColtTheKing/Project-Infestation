@@ -20,17 +20,14 @@ void ABasicEnemy::TakeDamage(int damage)
 
 	if (health->GetCurrentHp() <= 0)
 	{
-		// TODO: Always assumes that the enemy type tag is in the second position
-		if (IsValid(enemySpawner)) {
-			FName enemyToRespawnTag = this->Tags[1];
-			enemySpawner->AddEnemyToRespawnQueue(enemyToRespawnTag);
-		}
+		if (enemySpawner.IsValid())
+			enemySpawner->HandleEnemyDespawn();
 
-		Destroy();
+		KillBasicEnemy();
 	}
 }
 
-void ABasicEnemy::SetEnemySpawner(AEnemySpawner* aEnemySpawner)
+void ABasicEnemy::SetEnemySpawner(TWeakObjectPtr<AEnemySpawner> aEnemySpawner)
 {
 	enemySpawner = aEnemySpawner;
 }

@@ -21,7 +21,6 @@ private:
 
 	// Class variables
 	float timePlayed;
-	ACharacter* playerCharacter;
 
 public:
 

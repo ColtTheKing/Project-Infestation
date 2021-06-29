@@ -11,7 +11,6 @@ AEnemySpawner::AEnemySpawner()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 // Called when the game starts or when spawned
@@ -21,44 +20,32 @@ void AEnemySpawner::BeginPlay()
 	
 	// Init variables
 	spawnArea = FindComponentByClass<UBoxComponent>();
-	enemyRespawning = false;
+	enemiesSpawned = 0;
+	respawnTimer = respawnRate;
 
 	// Spawn enemies
-	for (auto& enemy : enemies)
+	while (enemiesSpawned < spawnLimit) 
 	{
-		unsigned int i = 0;
-		while (i < enemy.spawnLimit)
-		{
-			SpawnEnemy(enemy.enemyCharacterBP);
-			i++;
-		}
+		SpawnEnemy();
 	}
-
-	// Respawn test
-	// FName enemyToRespawnTag = FName(TEXT("Swarmer"));
-	// RespawnEnemy(enemyToRespawnTag);
 }
 
 // Called every frame
-void AEnemySpawner::Tick(float DeltaTime)
+void AEnemySpawner::Tick(float deltaTime)
 {
-	Super::Tick(DeltaTime);
+	Super::Tick(deltaTime);
 
-	if (!respawnQueue.empty() && !enemyRespawning) 
+	respawnTimer -= deltaTime;
+	if (enemiesSpawned < spawnLimit && respawnTimer <= 0)
 	{
-		enemyRespawning = true;
-		FName enemyToRespawnTag = respawnQueue.front();
-		respawnQueue.pop();
-		RespawnEnemy(enemyToRespawnTag);
+		SpawnEnemy();
 	}
 }
 
-void AEnemySpawner::SpawnEnemy(TSubclassOf<AEnemyCharacter> enemyBP)
+void AEnemySpawner::SpawnEnemy()
 {
-	// Enemy is no longer queued to respawn
-	enemyRespawning = false;
-	
-	if (!enemyBP)
+	FEnemy* enemy = GetRandomEnemy();
+	if (enemy == nullptr)
 		return;
 
 	// Calculate bounding box
@@ -78,46 +65,40 @@ void AEnemySpawner::SpawnEnemy(TSubclassOf<AEnemyCharacter> enemyBP)
 
 		// Spawn a enemy
 		FRotator spawnRotation = FRotator(0.0f, 0.0f, 0.0f);
-		ABasicEnemy* spawnedEnemy = Cast<ABasicEnemy>(GetWorld()->SpawnActor(enemyBP, &randomLocation, &spawnRotation));
+		TWeakObjectPtr<ABasicEnemy> spawnedEnemy = Cast<ABasicEnemy>(GetWorld()->SpawnActor(enemy->enemyCharacterBP, &randomLocation, &spawnRotation));
 
-		if (IsValid(spawnedEnemy))
+		if (spawnedEnemy != nullptr)
 		{
 			spawnedEnemy->SetEnemySpawner(this);
+			enemiesSpawned++;
+			respawnTimer = respawnRate;
 			break;
 		}
 	}
 }
 
-void AEnemySpawner::RespawnEnemy(FName enemyTag)
+FEnemy* AEnemySpawner::GetRandomEnemy() 
 {
-	FEnemy enemyToSpawn;
-	bool foundEnemyTag = false;
+	float count = 0;
+	float randNum = FGenericPlatformMath::FRand();
 	for (auto& enemy : enemies)
 	{
-		if (enemy.enemyCharacterBP.GetDefaultObject()->ActorHasTag(enemyTag))
+		count += enemy.respawnChance;
+		if (enemy.respawnChance != 0 && randNum <= enemy.respawnChance)
 		{
-			enemyToSpawn = enemy;
-			foundEnemyTag = true;
-			break;
+			return &enemy;
 		}
 	}
-
-	if (!foundEnemyTag) 
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Unable to find enemy of tag %s"), *enemyTag.ToString());
-		enemyRespawning = false;
-		return;
-	}
-	
-	FTimerDelegate TimerDel;
-	FTimerHandle TimerHandle;
-
-	TimerDel.BindUFunction(this, FName("SpawnEnemy"), enemyToSpawn.enemyCharacterBP);
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, enemyToSpawn.respawnTimer, false);
+	return nullptr;
 }
 
-void AEnemySpawner::AddEnemyToRespawnQueue(FName enemyTag)
+void AEnemySpawner::HandleEnemyDespawn()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Enemy added to respawn queue"));
-	respawnQueue.push(enemyTag);
+	if (enemiesSpawned - 1 <= 0) 
+		return;
+
+	if (enemiesSpawned < spawnLimit)
+		respawnTimer = respawnRate;
+	
+	enemiesSpawned--;
 }

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "EnemyCharacter.h"
+#include "Templates/SharedPointer.h"
 #include "BasicEnemy.generated.h"
 
 /**
@@ -19,7 +20,10 @@ public:
 
 	void TakeDamage(int damage) override;
 
-	void SetEnemySpawner(AEnemySpawner* aEnemySpawner);
+	void SetEnemySpawner(TWeakObjectPtr<AEnemySpawner> aEnemySpawner);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = Death)
+		void KillBasicEnemy();
 
 	// Called every frame
 	void Tick(float DeltaTime) override;
@@ -29,6 +33,6 @@ protected:
 	void BeginPlay() override;
 
 private:
-	AEnemySpawner* enemySpawner;
+	TWeakObjectPtr<AEnemySpawner> enemySpawner;
 
 };

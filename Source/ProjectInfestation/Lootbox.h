@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "InteractableActor.h"
 #include "Components/BoxComponent.h"
+#include "Templates/SharedPointer.h"
 
 #include "Lootbox.generated.h"
 
@@ -32,7 +33,7 @@ class PROJECTINFESTATION_API ALootbox : public AInteractableActor
 	GENERATED_BODY()
 
 private:
-	UBoxComponent* spawnArea;
+	TWeakObjectPtr<UBoxComponent> spawnArea;
 
 public:
 	// Default constuctor
