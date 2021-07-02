@@ -8,6 +8,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/InputComponent.h"
 #include "Components/ChildActorComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include <ProjectInfestation/InteractableActor.h>
@@ -64,6 +65,8 @@ public:
 
 	void MoveForward(float axis);
 	void MoveRight(float axis);
+	void StartCrouching();
+	void StopCrouching();
 	void Interact();
 	void FireWeapon();
 	void ReloadWeapon();
