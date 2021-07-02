@@ -45,4 +45,7 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void PauseGame();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+		void UnpauseGame();
 };

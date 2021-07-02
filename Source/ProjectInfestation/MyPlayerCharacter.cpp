@@ -126,8 +126,16 @@ void AMyPlayerCharacter::ReloadWeapon()
 void AMyPlayerCharacter::PauseGame()
 {
 	AInfestationGameMode* infestationGameMode = Cast<AInfestationGameMode>(GetWorld()->GetAuthGameMode());
-	if (infestationGameMode)
+	if (infestationGameMode && !infestationGameMode->IsPaused())
+	{
+		// Valid and game isn't already paused
 		infestationGameMode->PauseGame();
+	}
+	else if (infestationGameMode)
+	{
+		// Valid and the game isn't paused
+		infestationGameMode->UnpauseGame();
+	}
 }
 
 FHitResult AMyPlayerCharacter::ShootRay(float length)
