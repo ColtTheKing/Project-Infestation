@@ -15,6 +15,7 @@
 #include <ProjectInfestation/Gun.h>
 #include <ProjectInfestation/HealthComponent.h>
 #include <ProjectInfestation/MessageLogComponent.h>
+#include <ProjectInfestation/InfestationGameMode.h>
 
 #include "MyPlayerCharacter.generated.h"
 
@@ -70,6 +71,7 @@ public:
 	void Interact();
 	void FireWeapon();
 	void ReloadWeapon();
+	void PauseGame();
 
 	UFUNCTION(BlueprintCallable, Category = Shoot)
 		FHitResult ShootRay(float length);

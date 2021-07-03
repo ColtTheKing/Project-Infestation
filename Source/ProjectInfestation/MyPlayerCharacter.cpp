@@ -66,6 +66,7 @@ void AMyPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMyPlayerCharacter::Interact);
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AMyPlayerCharacter::FireWeapon);
 	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &AMyPlayerCharacter::ReloadWeapon);
+	PlayerInputComponent->BindAction("Pause", IE_Pressed, this, &AMyPlayerCharacter::PauseGame).bExecuteWhenPaused = true;
 }
 
 void AMyPlayerCharacter::MoveForward(float axis)
@@ -142,6 +143,21 @@ void AMyPlayerCharacter::ReloadWeapon()
 		{
 			myGun->ReloadClip();
 		}
+	}
+}
+
+void AMyPlayerCharacter::PauseGame()
+{
+	AInfestationGameMode* infestationGameMode = Cast<AInfestationGameMode>(GetWorld()->GetAuthGameMode());
+	if (infestationGameMode && !infestationGameMode->IsPaused())
+	{
+		// Valid and game isn't already paused
+		infestationGameMode->PauseGame();
+	}
+	else if (infestationGameMode)
+	{
+		// Valid and the game isn't paused
+		infestationGameMode->UnpauseGame();
 	}
 }
 

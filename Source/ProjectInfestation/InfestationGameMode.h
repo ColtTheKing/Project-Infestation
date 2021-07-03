@@ -31,6 +31,9 @@ public:
 	void InitGame(const FString& mapName, const FString& options, FString& errorMessage) override;
 
 	// Level logic
+	UPROPERTY(BlueprintReadWrite)
+		bool gameEnded;
+
 	UFUNCTION(BlueprintCallable)
 		void RestartGame();
 
@@ -39,4 +42,10 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void LoseGame();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+		void PauseGame();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+		void UnpauseGame();
 };
