@@ -57,6 +57,9 @@ void AMyPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
+	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &AMyPlayerCharacter::StartCrouching);
+	PlayerInputComponent->BindAction("Crouch", IE_Released, this, &AMyPlayerCharacter::StopCrouching);
+
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMyPlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMyPlayerCharacter::MoveRight);
 
@@ -81,6 +84,26 @@ void AMyPlayerCharacter::MoveRight(float axis)
 
 	const FVector direction = FRotationMatrix(yawRotation).GetUnitAxis(EAxis::Y);
 	AddMovementInput(direction, axis);
+}
+
+void AMyPlayerCharacter::StartCrouching()
+{
+	if (!bIsCrouched)
+		Crouch();
+
+	/*GetCapsuleComponent()->SetCapsuleHalfHeight(44.0f, true);
+	SetActorLocation(GetActorLocation() + FVector(0, 0, -44.0f));
+	playerCamera->SetRelativeLocation(playerCamera->GetRelativeLocation() + FVector(0, 0, -44.0f));*/
+}
+
+void AMyPlayerCharacter::StopCrouching()
+{
+	if (bIsCrouched)
+		UnCrouch();
+
+	/*GetCapsuleComponent()->SetCapsuleHalfHeight(88.0f, true);
+	SetActorLocation(GetActorLocation() + FVector(0, 0, 44.0f));
+	playerCamera->SetRelativeLocation(playerCamera->GetRelativeLocation() + FVector(0, 0, 44.0f));*/
 }
 
 void AMyPlayerCharacter::Interact()
