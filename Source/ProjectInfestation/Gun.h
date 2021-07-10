@@ -38,6 +38,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
 		int damagePerPellet;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
+		bool enabledForPlayer;
+
 	// Sets default values for this actor's properties
 	AGun();
 
