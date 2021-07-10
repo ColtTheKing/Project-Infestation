@@ -22,7 +22,8 @@ void UArsenalComponent::BeginPlay()
 	for (size_t i = 0; i < weaponList.Num(); i++)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Added weapon"));
-		weapons.Add(TSharedPtr<AGun>(Cast<AGun>(GetWorld()->SpawnActor(weaponList[i].weapon))));
+		
+		weapons.Add(TWeakObjectPtr<AGun>(Cast<AGun>(GetWorld()->SpawnActor(weaponList[i].weapon))));
 	}
 
 	activeWeapon = 0;
@@ -61,13 +62,13 @@ void UArsenalComponent::AddAmmo(FName ammoType, int numAmmo)
 	}
 }
 
-TSharedPtr<AGun> UArsenalComponent::GetActiveWeapon()
+TWeakObjectPtr<AGun> UArsenalComponent::GetActiveWeapon()
 {
 	if (weapons.IsValidIndex(activeWeapon))
 	{
 		return weapons[activeWeapon];
 	}
-	return TSharedPtr<AGun>(nullptr);
+	return TWeakObjectPtr<AGun>(nullptr);
 }
 
 void UArsenalComponent::ActivatePrevious()

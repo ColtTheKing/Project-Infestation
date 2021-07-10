@@ -35,7 +35,7 @@ public:
 
 	void AddAmmo(FName ammoType, int numAmmo);
 
-	TSharedPtr<AGun> GetActiveWeapon();
+	TWeakObjectPtr<AGun> GetActiveWeapon();
 
 	void ActivatePrevious();
 	void ActivateNext();
@@ -49,7 +49,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = Arsenal)
 		TArray<FWeapon> weaponList;
 
-	TArray<TSharedPtr<AGun>> weapons;
+	TArray<TWeakObjectPtr<AGun>> weapons;
 	size_t activeWeapon;
 
 };
