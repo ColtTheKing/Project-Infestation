@@ -82,19 +82,21 @@ FWeapon UArsenalComponent::GetActiveWeapon()
 
 void UArsenalComponent::ActivatePrevious()
 {
-	activeWeapon--;
-	if (activeWeapon < 0)
+	if (activeWeapon < 1)
 		activeWeapon = weaponList.Num() - 1;
+	else
+		activeWeapon--;
 
 	if (!weaponList.IsValidIndex(activeWeapon))
 		return;
 
 	//Keep cycling through weapons until you reach one that is enabled
-	while (weaponList[activeWeapon].enabledForPlayer)
+	while (!weaponList[activeWeapon].enabledForPlayer)
 	{
-		activeWeapon--;
-		if (activeWeapon < 0)
+		if (activeWeapon < 1)
 			activeWeapon = weaponList.Num() - 1;
+		else
+			activeWeapon--;
 
 		if (!weaponList.IsValidIndex(activeWeapon))
 			return;
