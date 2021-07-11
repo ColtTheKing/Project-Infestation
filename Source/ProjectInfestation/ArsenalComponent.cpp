@@ -8,6 +8,8 @@ UArsenalComponent::UArsenalComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
+
+	activeWeapon = 0;
 }
 
 
@@ -15,18 +17,18 @@ UArsenalComponent::UArsenalComponent()
 void UArsenalComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	if (weaponList.Num() == 0)
-		UE_LOG(LogTemp, Error, TEXT("NO WEAPONS IN WEAPON LIST!!!"));
-
-	for (size_t i = 0; i < weaponList.Num(); i++)
+	
+	for (FWeapon& weapon : weaponList)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Added weapon"));
-		
-		weapons.Add(TWeakObjectPtr<AGun>(Cast<AGun>(GetWorld()->SpawnActor(weaponList[i].weapon))));
-	}
+		weapon.ammoName = weapon.gunSubclass.GetDefaultObject()->ammoName;
+		weapon.clipSize = weapon.gunSubclass.GetDefaultObject()->clipSize;
+		weapon.enabledForPlayer = weapon.gunSubclass.GetDefaultObject()->enabledForPlayer;
 
-	activeWeapon = 0;
+		weapon.reserveAmmo = 0;
+		weapon.ammoInClip = weapon.clipSize;
+
+		UE_LOG(LogTemp, Warning, TEXT("Clip Size %d"), weapon.clipSize);
+	}
 }
 
 
@@ -42,52 +44,59 @@ void UArsenalComponent::AddAmmo(FName ammoType, int numAmmo)
 	{
 		if (ammoType.Compare(weaponList[i].ammoName) == 0)
 		{
-			if (!weapons.IsValidIndex(i))
+			if (!weaponList[i].enabledForPlayer)
 			{
-				UE_LOG(LogTemp, Warning, TEXT("Invalid index"));
-				return;
+				weaponList[i].enabledForPlayer = true;
+
+				//Add ammo to the clip first if this is the first ammo for this weapon
+				int excess = numAmmo - weaponList[i].clipSize;
+				
+				if (excess > 0)
+				{
+					weaponList[i].reserveAmmo = excess;
+					weaponList[i].ammoInClip = weaponList[i].clipSize;
+				}
+				else
+				{
+					weaponList[i].ammoInClip = numAmmo;
+				}
 			}
-			if (!weapons[i].IsValid())
+			else
 			{
-				UE_LOG(LogTemp, Warning, TEXT("Invalid pointer"));
-				return;
+				weaponList[i].reserveAmmo += numAmmo;
 			}
 
-			if (!weapons[i]->enabledForPlayer)
-				weapons[i]->enabledForPlayer = true;
-
-			weapons[i]->RestoreAmmo(numAmmo);
 			break;
 		}
 	}
 }
 
-TWeakObjectPtr<AGun> UArsenalComponent::GetActiveWeapon()
+FWeapon UArsenalComponent::GetActiveWeapon()
 {
-	if (weapons.IsValidIndex(activeWeapon))
+	if (!weaponList.IsValidIndex(activeWeapon))
 	{
-		return weapons[activeWeapon];
+		UE_LOG(LogTemp, Fatal, TEXT("Active weapon is not a valid index!"));
 	}
-	return TWeakObjectPtr<AGun>(nullptr);
+	return weaponList[activeWeapon];
 }
 
 void UArsenalComponent::ActivatePrevious()
 {
 	activeWeapon--;
 	if (activeWeapon < 0)
-		activeWeapon = weapons.Num() - 1;
+		activeWeapon = weaponList.Num() - 1;
 
-	if (!weapons.IsValidIndex(activeWeapon))
+	if (!weaponList.IsValidIndex(activeWeapon))
 		return;
 
 	//Keep cycling through weapons until you reach one that is enabled
-	while (weapons[activeWeapon].Get()->enabledForPlayer)
+	while (weaponList[activeWeapon].enabledForPlayer)
 	{
 		activeWeapon--;
 		if (activeWeapon < 0)
-			activeWeapon = weapons.Num() - 1;
+			activeWeapon = weaponList.Num() - 1;
 
-		if (!weapons.IsValidIndex(activeWeapon))
+		if (!weaponList.IsValidIndex(activeWeapon))
 			return;
 	}
 }
@@ -95,26 +104,26 @@ void UArsenalComponent::ActivatePrevious()
 void UArsenalComponent::ActivateNext()
 {
 	activeWeapon++;
-	if (activeWeapon >= weapons.Num())
+	if (activeWeapon >= weaponList.Num())
 		activeWeapon = 0;
 
-	if (!weapons.IsValidIndex(activeWeapon))
+	if (!weaponList.IsValidIndex(activeWeapon))
 		return;
 
 	//Keep cycling through weapons until you reach one that is enabled
-	while (!weapons[activeWeapon].Get()->enabledForPlayer)
+	while (!weaponList[activeWeapon].enabledForPlayer)
 	{
 		activeWeapon++;
-		if (activeWeapon >= weapons.Num())
+		if (activeWeapon >= weaponList.Num())
 			activeWeapon = 0;
 
-		if (!weapons.IsValidIndex(activeWeapon))
+		if (!weaponList.IsValidIndex(activeWeapon))
 			return;
 	}
 }
 
 void UArsenalComponent::ActivateIndex(size_t index)
 {
-	if (weapons.IsValidIndex(index))
+	if (weaponList.IsValidIndex(index))
 		activeWeapon = index;
 }

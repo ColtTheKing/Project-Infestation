@@ -14,11 +14,12 @@ struct FWeapon
 {
 	GENERATED_USTRUCT_BODY()
 
-	UPROPERTY(EditDefaultsOnly, Category = Weapons)
-		TSubclassOf<AGun> weapon;
+	UPROPERTY(EditDefaultsOnly, Category = Class)
+		TSubclassOf<AGun> gunSubclass;
 
-	UPROPERTY(EditDefaultsOnly, Category = Weapons)
-		FName ammoName;
+	FName ammoName;
+	int reserveAmmo, ammoInClip, clipSize;
+	bool enabledForPlayer;
 };
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
@@ -35,7 +36,7 @@ public:
 
 	void AddAmmo(FName ammoType, int numAmmo);
 
-	TWeakObjectPtr<AGun> GetActiveWeapon();
+	FWeapon GetActiveWeapon();
 
 	void ActivatePrevious();
 	void ActivateNext();
@@ -49,7 +50,6 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = Arsenal)
 		TArray<FWeapon> weaponList;
 
-	TArray<TWeakObjectPtr<AGun>> weapons;
 	size_t activeWeapon;
 
 };

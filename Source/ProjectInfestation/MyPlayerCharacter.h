@@ -17,6 +17,7 @@
 #include <ProjectInfestation/MessageLogComponent.h>
 #include <ProjectInfestation/ArsenalComponent.h>
 #include <ProjectInfestation/InfestationGameMode.h>
+#include "Templates/SharedPointer.h"
 
 #include "MyPlayerCharacter.generated.h"
 
@@ -86,6 +87,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-private:
+	void SetActiveWeapon(FWeapon weapon);
 
+private:
+	bool setGunYet;
 };

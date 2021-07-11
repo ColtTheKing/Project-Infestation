@@ -31,13 +31,14 @@ AMyPlayerCharacter::AMyPlayerCharacter()
 	health = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
 	messageLog = CreateDefaultSubobject<UMessageLogComponent>(TEXT("MessageLog"));
 	weaponArsenal = CreateDefaultSubobject<UArsenalComponent>(TEXT("WeaponArsenal"));
+
+	setGunYet = false;
 }
 
 // Called when the game starts or when spawned
 void AMyPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
 
 // Called every frame
@@ -45,6 +46,11 @@ void AMyPlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (!setGunYet)
+	{
+		SetActiveWeapon(weaponArsenal->GetActiveWeapon());
+		setGunYet = true;
+	}
 }
 
 // Called to bind functionality to input
@@ -153,12 +159,34 @@ void AMyPlayerCharacter::ReloadWeapon()
 
 void AMyPlayerCharacter::PreviousWeapon()
 {
-
+	weaponArsenal->ActivatePrevious();
+	SetActiveWeapon(weaponArsenal->GetActiveWeapon());
 }
 
 void AMyPlayerCharacter::NextWeapon()
 {
+	weaponArsenal->ActivateNext();
+	SetActiveWeapon(weaponArsenal->GetActiveWeapon());
+}
 
+void AMyPlayerCharacter::SetActiveWeapon(FWeapon weapon)
+{
+	if (heldGun)
+	{
+		//heldGun->DestroyChildActor();
+		heldGun->SetChildActorClass(weapon.gunSubclass);
+		//heldGun->CreateChildActor();
+		
+		AActor* gunActor = heldGun->GetChildActor();
+		AGun* myGun = Cast<AGun>(gunActor);
+
+		if (myGun)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Before set ammo %d"), weapon.ammoInClip);
+			myGun->SetReserveAmmo(weapon.reserveAmmo);
+			myGun->SetAmmoInClip(weapon.ammoInClip);
+		}
+	}
 }
 
 void AMyPlayerCharacter::PauseGame()
@@ -222,5 +250,19 @@ void AMyPlayerCharacter::RestoreHp(int hp)
 
 void AMyPlayerCharacter::RestoreAmmo(FName ammoType, int ammo)
 {
-	weaponArsenal->AddAmmo(ammoType, ammo);
+	if (heldGun)
+	{
+		AActor* gunActor = heldGun->GetChildActor();
+		AGun* myGun = Cast<AGun>(gunActor);
+
+		//If the ammo is for the current weapon, just add it to this weapon
+		if (myGun && myGun->ammoName.Compare(ammoType) == 0)
+		{
+			myGun->RestoreAmmo(ammo);
+		}
+		else //Otherwise put it into the correct gun in the arsenal
+		{
+			weaponArsenal->AddAmmo(ammoType, ammo);
+		}
+	}
 }
