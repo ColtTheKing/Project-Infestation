@@ -41,6 +41,7 @@ public:
 	void ActivatePrevious();
 	void ActivateNext();
 	void ActivateIndex(size_t index);
+	void ActivateGrenade();
 
 protected:
 	// Called when the game starts
@@ -49,7 +50,9 @@ protected:
 private:
 	UPROPERTY(EditDefaultsOnly, Category = Arsenal)
 		TArray<FWeapon> weaponList;
+	UPROPERTY(EditDefaultsOnly, Category = Arsenal)
+		FWeapon grenade;
 
 	size_t activeWeapon;
-
+	bool grenadeActive;
 };

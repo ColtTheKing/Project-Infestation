@@ -198,20 +198,23 @@ void AMyPlayerCharacter::SwitchWeapon4()
 	SetActiveWeapon(weaponArsenal->GetActiveWeapon());
 }
 
+void AMyPlayerCharacter::SwitchGrenade()
+{
+	weaponArsenal->ActivateGrenade();
+	SetActiveWeapon(weaponArsenal->GetActiveWeapon());
+}
+
 void AMyPlayerCharacter::SetActiveWeapon(FWeapon weapon)
 {
 	if (heldGun)
 	{
-		//heldGun->DestroyChildActor();
 		heldGun->SetChildActorClass(weapon.gunSubclass);
-		//heldGun->CreateChildActor();
 		
 		AActor* gunActor = heldGun->GetChildActor();
 		AGun* myGun = Cast<AGun>(gunActor);
 
 		if (myGun)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Before set ammo %d"), weapon.ammoInClip);
 			myGun->SetReserveAmmo(weapon.reserveAmmo);
 			myGun->SetAmmoInClip(weapon.ammoInClip);
 		}

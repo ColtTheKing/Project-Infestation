@@ -10,6 +10,7 @@ UArsenalComponent::UArsenalComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	activeWeapon = 0;
+	grenadeActive = false;
 }
 
 
@@ -73,6 +74,9 @@ void UArsenalComponent::AddAmmo(FName ammoType, int numAmmo)
 
 FWeapon UArsenalComponent::GetActiveWeapon()
 {
+	if (grenadeActive)
+		return grenade;
+
 	if (!weaponList.IsValidIndex(activeWeapon))
 	{
 		UE_LOG(LogTemp, Fatal, TEXT("Active weapon is not a valid index!"));
@@ -82,6 +86,9 @@ FWeapon UArsenalComponent::GetActiveWeapon()
 
 void UArsenalComponent::ActivatePrevious()
 {
+	if (grenadeActive)
+		grenadeActive = false;
+
 	if (activeWeapon < 1)
 		activeWeapon = weaponList.Num() - 1;
 	else
@@ -105,6 +112,9 @@ void UArsenalComponent::ActivatePrevious()
 
 void UArsenalComponent::ActivateNext()
 {
+	if (grenadeActive)
+		grenadeActive = false;
+
 	activeWeapon++;
 	if (activeWeapon >= weaponList.Num())
 		activeWeapon = 0;
@@ -126,6 +136,14 @@ void UArsenalComponent::ActivateNext()
 
 void UArsenalComponent::ActivateIndex(size_t index)
 {
+	grenadeActive = false;
+
 	if (weaponList.IsValidIndex(index))
 		activeWeapon = index;
+}
+
+void UArsenalComponent::ActivateGrenade()
+{
+	if (grenade.enabledForPlayer)
+		grenadeActive = true;
 }

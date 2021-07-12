@@ -81,6 +81,7 @@ public:
 	void SwitchWeapon2();
 	void SwitchWeapon3();
 	void SwitchWeapon4();
+	void SwitchGrenade();
 	void NextWeapon();
 	void PauseGame();
 
