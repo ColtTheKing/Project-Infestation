@@ -38,6 +38,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
 		int damagePerPellet;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
+		bool enabledForPlayer;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
+		FName ammoName;
+
 	// Sets default values for this actor's properties
 	AGun();
 
@@ -61,6 +67,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Ammo)
 		bool ClipCanReload();
+
+	void SetAmmoInClip(int ammo);
+	void SetReserveAmmo(int ammo);
 
 protected:
 	// Called when the game starts or when spawned

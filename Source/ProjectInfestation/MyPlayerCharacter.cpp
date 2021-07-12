@@ -6,7 +6,7 @@
 // Sets default values
 AMyPlayerCharacter::AMyPlayerCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	bUseControllerRotationPitch = false;
@@ -30,13 +30,15 @@ AMyPlayerCharacter::AMyPlayerCharacter()
 
 	health = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
 	messageLog = CreateDefaultSubobject<UMessageLogComponent>(TEXT("MessageLog"));
+	weaponArsenal = CreateDefaultSubobject<UArsenalComponent>(TEXT("WeaponArsenal"));
+
+	setGunYet = false;
 }
 
 // Called when the game starts or when spawned
 void AMyPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -44,6 +46,11 @@ void AMyPlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (!setGunYet)
+	{
+		SetActiveWeapon(weaponArsenal->GetActiveWeapon());
+		setGunYet = true;
+	}
 }
 
 // Called to bind functionality to input
@@ -66,6 +73,15 @@ void AMyPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMyPlayerCharacter::Interact);
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AMyPlayerCharacter::FireWeapon);
 	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &AMyPlayerCharacter::ReloadWeapon);
+
+	PlayerInputComponent->BindAction("PreviousWeapon", IE_Pressed, this, &AMyPlayerCharacter::PreviousWeapon);
+	PlayerInputComponent->BindAction("NextWeapon", IE_Pressed, this, &AMyPlayerCharacter::NextWeapon);
+
+	PlayerInputComponent->BindAction("SwitchWeapon1", IE_Pressed, this, &AMyPlayerCharacter::SwitchWeapon1);
+	PlayerInputComponent->BindAction("SwitchWeapon2", IE_Pressed, this, &AMyPlayerCharacter::SwitchWeapon2);
+	PlayerInputComponent->BindAction("SwitchWeapon3", IE_Pressed, this, &AMyPlayerCharacter::SwitchWeapon3);
+	PlayerInputComponent->BindAction("SwitchWeapon4", IE_Pressed, this, &AMyPlayerCharacter::SwitchWeapon4);
+
 	PlayerInputComponent->BindAction("Pause", IE_Pressed, this, &AMyPlayerCharacter::PauseGame).bExecuteWhenPaused = true;
 }
 
@@ -146,6 +162,62 @@ void AMyPlayerCharacter::ReloadWeapon()
 	}
 }
 
+void AMyPlayerCharacter::PreviousWeapon()
+{
+	weaponArsenal->ActivatePrevious();
+	SetActiveWeapon(weaponArsenal->GetActiveWeapon());
+}
+
+void AMyPlayerCharacter::NextWeapon()
+{
+	weaponArsenal->ActivateNext();
+	SetActiveWeapon(weaponArsenal->GetActiveWeapon());
+}
+
+void AMyPlayerCharacter::SwitchWeapon1()
+{
+	weaponArsenal->ActivateIndex(0);
+	SetActiveWeapon(weaponArsenal->GetActiveWeapon());
+}
+
+void AMyPlayerCharacter::SwitchWeapon2()
+{
+	weaponArsenal->ActivateIndex(1);
+	SetActiveWeapon(weaponArsenal->GetActiveWeapon());
+}
+
+void AMyPlayerCharacter::SwitchWeapon3()
+{
+	weaponArsenal->ActivateIndex(2);
+	SetActiveWeapon(weaponArsenal->GetActiveWeapon());
+}
+
+void AMyPlayerCharacter::SwitchWeapon4()
+{
+	weaponArsenal->ActivateIndex(3);
+	SetActiveWeapon(weaponArsenal->GetActiveWeapon());
+}
+
+void AMyPlayerCharacter::SetActiveWeapon(FWeapon weapon)
+{
+	if (heldGun)
+	{
+		//heldGun->DestroyChildActor();
+		heldGun->SetChildActorClass(weapon.gunSubclass);
+		//heldGun->CreateChildActor();
+		
+		AActor* gunActor = heldGun->GetChildActor();
+		AGun* myGun = Cast<AGun>(gunActor);
+
+		if (myGun)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Before set ammo %d"), weapon.ammoInClip);
+			myGun->SetReserveAmmo(weapon.reserveAmmo);
+			myGun->SetAmmoInClip(weapon.ammoInClip);
+		}
+	}
+}
+
 void AMyPlayerCharacter::PauseGame()
 {
 	AInfestationGameMode* infestationGameMode = Cast<AInfestationGameMode>(GetWorld()->GetAuthGameMode());
@@ -171,7 +243,7 @@ FHitResult AMyPlayerCharacter::ShootRay(float length)
 	if (playerController)
 	{
 		playerController->GetPlayerViewPoint(rayLocation, rayRotation);
-		
+
 		endRay = rayLocation + (rayRotation.Vector() * length);
 	}
 
@@ -205,9 +277,21 @@ void AMyPlayerCharacter::RestoreHp(int hp)
 	UE_LOG(LogTemp, Warning, TEXT("Current HP After Heal: %d"), health->GetCurrentHp());
 }
 
-void AMyPlayerCharacter::RestoreAmmo(int ammo)
+void AMyPlayerCharacter::RestoreAmmo(FName ammoType, int ammo)
 {
-	AActor* gunActor = heldGun->GetChildActor();
-	AGun* myGun = Cast<AGun>(gunActor);
-	myGun->RestoreAmmo(ammo);
+	if (heldGun)
+	{
+		AActor* gunActor = heldGun->GetChildActor();
+		AGun* myGun = Cast<AGun>(gunActor);
+
+		//If the ammo is for the current weapon, just add it to this weapon
+		if (myGun && myGun->ammoName.Compare(ammoType) == 0)
+		{
+			myGun->RestoreAmmo(ammo);
+		}
+		else //Otherwise put it into the correct gun in the arsenal
+		{
+			weaponArsenal->AddAmmo(ammoType, ammo);
+		}
+	}
 }

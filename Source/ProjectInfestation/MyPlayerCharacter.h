@@ -15,7 +15,9 @@
 #include <ProjectInfestation/Gun.h>
 #include <ProjectInfestation/HealthComponent.h>
 #include <ProjectInfestation/MessageLogComponent.h>
+#include <ProjectInfestation/ArsenalComponent.h>
 #include <ProjectInfestation/InfestationGameMode.h>
+#include "Templates/SharedPointer.h"
 
 #include "MyPlayerCharacter.generated.h"
 
@@ -46,6 +48,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Messages)
 		UMessageLogComponent* messageLog;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Arsenal)
+		UArsenalComponent* weaponArsenal;
+
 	UFUNCTION(BlueprintCallable, Category = Health)
 		void TakeDamage(int damage);
 
@@ -53,7 +58,7 @@ public:
 		void RestoreHp(int hp);
 
 	UFUNCTION(BlueprintCallable, Category = Ammo)
-		void RestoreAmmo(int ammo);
+		void RestoreAmmo(FName ammoType, int ammo);
 
 	UFUNCTION(BlueprintImplementableEvent, Category = Death)
 		void KillPlayer();
@@ -71,6 +76,12 @@ public:
 	void Interact();
 	void FireWeapon();
 	void ReloadWeapon();
+	void PreviousWeapon();
+	void SwitchWeapon1();
+	void SwitchWeapon2();
+	void SwitchWeapon3();
+	void SwitchWeapon4();
+	void NextWeapon();
 	void PauseGame();
 
 	UFUNCTION(BlueprintCallable, Category = Shoot)
@@ -80,6 +91,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	void SetActiveWeapon(FWeapon weapon);
+
 private:
-	
+	bool setGunYet;
 };

@@ -63,6 +63,16 @@ int AGun::GetReserveAmmo()
 	return reserveAmmo;
 }
 
+void AGun::SetAmmoInClip(int ammo)
+{
+	ammoInClip = ammo;
+}
+
+void AGun::SetReserveAmmo(int ammo)
+{
+	reserveAmmo = ammo;
+}
+
 bool AGun::ClipCanReload()
 {
 	if (ammoInClip == clipSize || reserveAmmo == 0)
