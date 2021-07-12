@@ -77,6 +77,11 @@ void AMyPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAction("PreviousWeapon", IE_Pressed, this, &AMyPlayerCharacter::PreviousWeapon);
 	PlayerInputComponent->BindAction("NextWeapon", IE_Pressed, this, &AMyPlayerCharacter::NextWeapon);
 
+	PlayerInputComponent->BindAction("SwitchWeapon1", IE_Pressed, this, &AMyPlayerCharacter::SwitchWeapon1);
+	PlayerInputComponent->BindAction("SwitchWeapon2", IE_Pressed, this, &AMyPlayerCharacter::SwitchWeapon2);
+	PlayerInputComponent->BindAction("SwitchWeapon3", IE_Pressed, this, &AMyPlayerCharacter::SwitchWeapon3);
+	PlayerInputComponent->BindAction("SwitchWeapon4", IE_Pressed, this, &AMyPlayerCharacter::SwitchWeapon4);
+
 	PlayerInputComponent->BindAction("Pause", IE_Pressed, this, &AMyPlayerCharacter::PauseGame).bExecuteWhenPaused = true;
 }
 
@@ -166,6 +171,30 @@ void AMyPlayerCharacter::PreviousWeapon()
 void AMyPlayerCharacter::NextWeapon()
 {
 	weaponArsenal->ActivateNext();
+	SetActiveWeapon(weaponArsenal->GetActiveWeapon());
+}
+
+void AMyPlayerCharacter::SwitchWeapon1()
+{
+	weaponArsenal->ActivateIndex(0);
+	SetActiveWeapon(weaponArsenal->GetActiveWeapon());
+}
+
+void AMyPlayerCharacter::SwitchWeapon2()
+{
+	weaponArsenal->ActivateIndex(1);
+	SetActiveWeapon(weaponArsenal->GetActiveWeapon());
+}
+
+void AMyPlayerCharacter::SwitchWeapon3()
+{
+	weaponArsenal->ActivateIndex(2);
+	SetActiveWeapon(weaponArsenal->GetActiveWeapon());
+}
+
+void AMyPlayerCharacter::SwitchWeapon4()
+{
+	weaponArsenal->ActivateIndex(3);
 	SetActiveWeapon(weaponArsenal->GetActiveWeapon());
 }
 

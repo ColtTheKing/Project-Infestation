@@ -77,6 +77,10 @@ public:
 	void FireWeapon();
 	void ReloadWeapon();
 	void PreviousWeapon();
+	void SwitchWeapon1();
+	void SwitchWeapon2();
+	void SwitchWeapon3();
+	void SwitchWeapon4();
 	void NextWeapon();
 	void PauseGame();
 
