@@ -11,16 +11,53 @@ class PROJECTINFESTATION_API AWeapon : public AActor
 {
 	GENERATED_BODY()
 	
-public:	
+public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
+		int clipSize;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
+		bool enabledForPlayer;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
+		FName ammoName;
+
 	// Sets default values for this actor's properties
 	AWeapon();
+
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	virtual void UseWeapon(AActor* actor) PURE_VIRTUAL(AGun::UseWeapon, ;);
+
+	void RestoreReserveAmmo(int ammo);
+
+	UFUNCTION(BlueprintCallable, Category = Ammo)
+		virtual void ConsumeAmmo(int ammo) PURE_VIRTUAL(AGun::ConsumeAmmo, ;);
+
+	UFUNCTION(BlueprintCallable, Category = Ammo)
+		int GetAmmoInClip();
+
+	UFUNCTION(BlueprintCallable, Category = Ammo)
+		int GetReserveAmmo();
+
+	void SetAmmoInClip(int ammo);
+	void SetReserveAmmo(int ammo);
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Mesh)
+		UStaticMeshComponent* weaponMesh;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
+		float attackCooldown;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
+		int damagePerHit;
+
+	int reserveAmmo, ammoInClip;
+
+private:
+	
 };

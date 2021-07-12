@@ -9,14 +9,9 @@ AGun::AGun()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	// Add the gun mesh and disable collisions with it
-	gunMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Gun Mesh"));
-	gunMesh->SetupAttachment(RootComponent);
-	gunMesh->SetCollisionProfileName(TEXT("NoCollision"));
-
 	// Add a mesh to keep track of where shots come out of the gun
 	shotPosition = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Shot Position"));
-	shotPosition->SetupAttachment(gunMesh);
+	shotPosition->SetupAttachment(weaponMesh);
 	shotPosition->SetVisibility(false);
 }
 
@@ -38,39 +33,12 @@ void AGun::Tick(float DeltaTime)
 
 }
 
-void AGun::RestoreAmmo(int ammo)
-{
-	reserveAmmo += ammo;
-
-	UE_LOG(LogTemp, Warning, TEXT("Reserve Ammo After Restore: %d"), reserveAmmo);
-}
-
 void AGun::ConsumeAmmo(int ammo)
 {
 	if (ammoInClip >= ammo)
 		ammoInClip -= ammo;
 
 	UE_LOG(LogTemp, Warning, TEXT("Clip After Consumption: %d / %d"), ammoInClip, clipSize);
-}
-
-int AGun::GetAmmoInClip()
-{
-	return ammoInClip;
-}
-
-int AGun::GetReserveAmmo()
-{
-	return reserveAmmo;
-}
-
-void AGun::SetAmmoInClip(int ammo)
-{
-	ammoInClip = ammo;
-}
-
-void AGun::SetReserveAmmo(int ammo)
-{
-	reserveAmmo = ammo;
 }
 
 bool AGun::ClipCanReload()

@@ -92,7 +92,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	void SetActiveWeapon(FWeapon weapon);
+	void SetActiveWeapon(FArsenalWeapon weapon);
 
 private:
 	bool setGunYet;

@@ -143,7 +143,7 @@ void AMyPlayerCharacter::FireWeapon()
 
 		if (myGun)
 		{
-			myGun->FireGun(this);
+			myGun->UseWeapon(this);
 		}
 	}
 }
@@ -164,47 +164,47 @@ void AMyPlayerCharacter::ReloadWeapon()
 
 void AMyPlayerCharacter::PreviousWeapon()
 {
-	weaponArsenal->ActivatePrevious();
-	SetActiveWeapon(weaponArsenal->GetActiveWeapon());
+	if (weaponArsenal->ActivatePrevious())
+		SetActiveWeapon(weaponArsenal->GetActiveWeapon());
 }
 
 void AMyPlayerCharacter::NextWeapon()
 {
-	weaponArsenal->ActivateNext();
-	SetActiveWeapon(weaponArsenal->GetActiveWeapon());
+	if (weaponArsenal->ActivateNext())
+		SetActiveWeapon(weaponArsenal->GetActiveWeapon());
 }
 
 void AMyPlayerCharacter::SwitchWeapon1()
 {
-	weaponArsenal->ActivateIndex(0);
-	SetActiveWeapon(weaponArsenal->GetActiveWeapon());
+	if (weaponArsenal->ActivateIndex(0))
+		SetActiveWeapon(weaponArsenal->GetActiveWeapon());
 }
 
 void AMyPlayerCharacter::SwitchWeapon2()
 {
-	weaponArsenal->ActivateIndex(1);
-	SetActiveWeapon(weaponArsenal->GetActiveWeapon());
+	if (weaponArsenal->ActivateIndex(1))
+		SetActiveWeapon(weaponArsenal->GetActiveWeapon());
 }
 
 void AMyPlayerCharacter::SwitchWeapon3()
 {
-	weaponArsenal->ActivateIndex(2);
-	SetActiveWeapon(weaponArsenal->GetActiveWeapon());
+	if (weaponArsenal->ActivateIndex(2))
+		SetActiveWeapon(weaponArsenal->GetActiveWeapon());
 }
 
 void AMyPlayerCharacter::SwitchWeapon4()
 {
-	weaponArsenal->ActivateIndex(3);
-	SetActiveWeapon(weaponArsenal->GetActiveWeapon());
+	if (weaponArsenal->ActivateIndex(3))
+		SetActiveWeapon(weaponArsenal->GetActiveWeapon());
 }
 
 void AMyPlayerCharacter::SwitchGrenade()
 {
-	weaponArsenal->ActivateGrenade();
-	SetActiveWeapon(weaponArsenal->GetActiveWeapon());
+	if (weaponArsenal->ActivateGrenade())
+		SetActiveWeapon(weaponArsenal->GetActiveWeapon());
 }
 
-void AMyPlayerCharacter::SetActiveWeapon(FWeapon weapon)
+void AMyPlayerCharacter::SetActiveWeapon(FArsenalWeapon weapon)
 {
 	if (heldGun)
 	{
@@ -290,7 +290,7 @@ void AMyPlayerCharacter::RestoreAmmo(FName ammoType, int ammo)
 		//If the ammo is for the current weapon, just add it to this weapon
 		if (myGun && myGun->ammoName.Compare(ammoType) == 0)
 		{
-			myGun->RestoreAmmo(ammo);
+			myGun->RestoreReserveAmmo(ammo);
 		}
 		else //Otherwise put it into the correct gun in the arsenal
 		{
