@@ -84,6 +84,20 @@ FArsenalWeapon UArsenalComponent::GetActiveWeapon()
 	return weaponList[activeWeapon];
 }
 
+void UArsenalComponent::SetActiveWeaponInfo(int rAmmo, int cAmmo)
+{
+	if (grenadeActive)
+	{
+		grenade.reserveAmmo = rAmmo;
+		grenade.ammoInClip = cAmmo;
+	}
+	else if (weaponList.IsValidIndex(activeWeapon))
+	{
+		weaponList[activeWeapon].reserveAmmo = rAmmo;
+		weaponList[activeWeapon].ammoInClip = cAmmo;
+	}
+}
+
 bool UArsenalComponent::ActivatePrevious()
 {
 	size_t currentActive = activeWeapon;

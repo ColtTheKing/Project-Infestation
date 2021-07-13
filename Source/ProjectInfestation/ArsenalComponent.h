@@ -37,6 +37,7 @@ public:
 	void AddAmmo(FName ammoType, int numAmmo);
 
 	FArsenalWeapon GetActiveWeapon();
+	void SetActiveWeaponInfo(int rAmmo, int cAmmo);
 
 	//These return true, if they activated a different weapon
 	bool ActivatePrevious();

@@ -40,7 +40,7 @@ public:
 		USkeletalMeshComponent* playerArms;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gun)
-		UChildActorComponent* heldGun;
+		UChildActorComponent* heldWeapon;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
 		UHealthComponent* health;
@@ -96,4 +96,6 @@ protected:
 
 private:
 	bool setGunYet;
+
+	void SaveWeaponInfo();
 };
