@@ -21,7 +21,7 @@ public:
 	AHitscanGun();
 
 	UFUNCTION(BlueprintImplementableEvent, Category = Shoot)
-		void FireGun(AActor* actor) override;
+		void UseWeapon(AActor* actor) override;
 
 protected:
 	UFUNCTION(BlueprintCallable, Category = Shoot)
