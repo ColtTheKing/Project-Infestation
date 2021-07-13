@@ -40,7 +40,7 @@ public:
 		USkeletalMeshComponent* playerArms;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gun)
-		UChildActorComponent* heldGun;
+		UChildActorComponent* heldWeapon;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
 		UHealthComponent* health;
@@ -81,6 +81,7 @@ public:
 	void SwitchWeapon2();
 	void SwitchWeapon3();
 	void SwitchWeapon4();
+	void SwitchGrenade();
 	void NextWeapon();
 	void PauseGame();
 
@@ -91,8 +92,10 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	void SetActiveWeapon(FWeapon weapon);
+	void SetActiveWeapon(FArsenalWeapon weapon);
 
 private:
 	bool setGunYet;
+
+	void SaveWeaponInfo();
 };

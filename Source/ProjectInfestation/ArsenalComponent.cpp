@@ -10,6 +10,7 @@ UArsenalComponent::UArsenalComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	activeWeapon = 0;
+	grenadeActive = false;
 }
 
 
@@ -18,7 +19,7 @@ void UArsenalComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	for (FWeapon& weapon : weaponList)
+	for (FArsenalWeapon& weapon : weaponList)
 	{
 		weapon.ammoName = weapon.gunSubclass.GetDefaultObject()->ammoName;
 		weapon.clipSize = weapon.gunSubclass.GetDefaultObject()->clipSize;
@@ -71,8 +72,11 @@ void UArsenalComponent::AddAmmo(FName ammoType, int numAmmo)
 	}
 }
 
-FWeapon UArsenalComponent::GetActiveWeapon()
+FArsenalWeapon UArsenalComponent::GetActiveWeapon()
 {
+	if (grenadeActive)
+		return grenade;
+	
 	if (!weaponList.IsValidIndex(activeWeapon))
 	{
 		UE_LOG(LogTemp, Fatal, TEXT("Active weapon is not a valid index!"));
@@ -80,52 +84,113 @@ FWeapon UArsenalComponent::GetActiveWeapon()
 	return weaponList[activeWeapon];
 }
 
-void UArsenalComponent::ActivatePrevious()
+void UArsenalComponent::SetActiveWeaponInfo(int rAmmo, int cAmmo)
 {
-	if (activeWeapon < 1)
-		activeWeapon = weaponList.Num() - 1;
+	if (grenadeActive)
+	{
+		grenade.reserveAmmo = rAmmo;
+		grenade.ammoInClip = cAmmo;
+	}
+	else if (weaponList.IsValidIndex(activeWeapon))
+	{
+		weaponList[activeWeapon].reserveAmmo = rAmmo;
+		weaponList[activeWeapon].ammoInClip = cAmmo;
+	}
+}
+
+bool UArsenalComponent::ActivatePrevious()
+{
+	size_t currentActive = activeWeapon;
+
+	if (currentActive < 1)
+		currentActive = weaponList.Num() - 1;
 	else
-		activeWeapon--;
+		currentActive--;
 
-	if (!weaponList.IsValidIndex(activeWeapon))
-		return;
+	if (!weaponList.IsValidIndex(currentActive))
+		return false;
 
 	//Keep cycling through weapons until you reach one that is enabled
-	while (!weaponList[activeWeapon].enabledForPlayer)
+	while (!weaponList[currentActive].enabledForPlayer)
 	{
-		if (activeWeapon < 1)
-			activeWeapon = weaponList.Num() - 1;
+		if (currentActive < 1)
+			currentActive = weaponList.Num() - 1;
 		else
-			activeWeapon--;
+			currentActive--;
 
-		if (!weaponList.IsValidIndex(activeWeapon))
-			return;
+		if (!weaponList.IsValidIndex(currentActive))
+			return false;
 	}
+
+	bool changedActive = weaponList.IsValidIndex(currentActive) && (currentActive != activeWeapon || grenadeActive);
+
+	if (changedActive)
+	{
+		grenadeActive = false;
+		activeWeapon = currentActive;
+		return true;
+	}
+
+	return false;
 }
 
-void UArsenalComponent::ActivateNext()
+bool UArsenalComponent::ActivateNext()
 {
-	activeWeapon++;
-	if (activeWeapon >= weaponList.Num())
-		activeWeapon = 0;
+	size_t currentActive = activeWeapon;
 
-	if (!weaponList.IsValidIndex(activeWeapon))
-		return;
+	currentActive++;
+	if (currentActive >= weaponList.Num())
+		currentActive = 0;
+
+	if (!weaponList.IsValidIndex(currentActive))
+		return false;
 
 	//Keep cycling through weapons until you reach one that is enabled
-	while (!weaponList[activeWeapon].enabledForPlayer)
+	while (!weaponList[currentActive].enabledForPlayer)
 	{
-		activeWeapon++;
-		if (activeWeapon >= weaponList.Num())
-			activeWeapon = 0;
+		currentActive++;
+		if (currentActive >= weaponList.Num())
+			currentActive = 0;
 
-		if (!weaponList.IsValidIndex(activeWeapon))
-			return;
+		if (!weaponList.IsValidIndex(currentActive))
+			return false;
 	}
+
+	bool changedActive = weaponList.IsValidIndex(currentActive) && (currentActive != activeWeapon || grenadeActive);
+
+	if (changedActive)
+	{
+		grenadeActive = false;
+		activeWeapon = currentActive;
+		return true;
+	}
+
+	return false;
 }
 
-void UArsenalComponent::ActivateIndex(size_t index)
+bool UArsenalComponent::ActivateIndex(size_t index)
 {
-	if (weaponList.IsValidIndex(index))
+	bool changedActive = weaponList.IsValidIndex(index) && (index != activeWeapon || grenadeActive);
+
+	if (changedActive)
+	{
+		grenadeActive = false;
 		activeWeapon = index;
+		return true;
+	}
+
+	return false;
+}
+
+bool UArsenalComponent::ActivateGrenade()
+{
+	bool changedActive = grenade.enabledForPlayer && !grenadeActive;
+
+	if (changedActive)
+	{
+		grenadeActive = true;
+		return true;
+	}
+
+	return false;
 }

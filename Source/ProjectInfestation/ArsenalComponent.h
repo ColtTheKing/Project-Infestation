@@ -10,7 +10,7 @@
 #include "ArsenalComponent.generated.h"
 
 USTRUCT()
-struct FWeapon
+struct FArsenalWeapon
 {
 	GENERATED_USTRUCT_BODY()
 
@@ -36,11 +36,14 @@ public:
 
 	void AddAmmo(FName ammoType, int numAmmo);
 
-	FWeapon GetActiveWeapon();
+	FArsenalWeapon GetActiveWeapon();
+	void SetActiveWeaponInfo(int rAmmo, int cAmmo);
 
-	void ActivatePrevious();
-	void ActivateNext();
-	void ActivateIndex(size_t index);
+	//These return true, if they activated a different weapon
+	bool ActivatePrevious();
+	bool ActivateNext();
+	bool ActivateIndex(size_t index);
+	bool ActivateGrenade();
 
 protected:
 	// Called when the game starts
@@ -48,8 +51,11 @@ protected:
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = Arsenal)
-		TArray<FWeapon> weaponList;
+		TArray<FArsenalWeapon> weaponList;
+
+	UPROPERTY(EditDefaultsOnly, Category = Arsenal)
+		FArsenalWeapon grenade;
 
 	size_t activeWeapon;
-
+	bool grenadeActive;
 };
