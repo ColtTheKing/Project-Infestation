@@ -7,12 +7,12 @@ AGrenade::AGrenade() : Super()
 
 }
 
-void AGrenade::Tick(float DeltaTime) 
+void AGrenade::BeginPlay() 
 {
 
 }
 
-void AGrenade::UseWeapon(AActor* actor)
+void AGrenade::Tick(float DeltaTime) 
 {
 
 }

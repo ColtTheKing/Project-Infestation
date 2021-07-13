@@ -24,12 +24,11 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Attack")
 		void UseWeapon(AActor* actor) override;
 
-	UFUNCTION(BlueprintCallable, Category = "Ammo")
-		void ConsumeAmmo(int ammo) override;
+	void ConsumeAmmo(int ammo) override;
 
 protected:
 	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	void BeginPlay() override;
 
 private:
 
