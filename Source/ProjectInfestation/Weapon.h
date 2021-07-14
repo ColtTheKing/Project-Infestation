@@ -34,6 +34,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Ammo)
 		virtual void ConsumeAmmo(int ammo) PURE_VIRTUAL(AGun::ConsumeAmmo, ;);
 
+	UFUNCTION(BlueprintCallable, Category = Attack)
+		bool CanAttack();
+
+	UFUNCTION(BlueprintCallable, Category = Attack)
+		void ResetAttackCooldown();
+
 	UFUNCTION(BlueprintCallable, Category = Ammo)
 		int GetAmmoInClip();
 
@@ -59,5 +65,5 @@ protected:
 	int reserveAmmo, ammoInClip;
 
 private:
-	
+	float timeUntilNextAttack;
 };
