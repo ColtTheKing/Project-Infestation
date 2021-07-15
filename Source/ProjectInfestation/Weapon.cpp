@@ -21,16 +21,12 @@ AWeapon::AWeapon()
 void AWeapon::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	UE_LOG(LogTemp, Warning, TEXT("Time until next attack: %d"), timeUntilNextAttack);
 }
 
 // Called every frame
 void AWeapon::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	UE_LOG(LogTemp, Warning, TEXT("Time until next attack: %d"), timeUntilNextAttack);
 
 	if (timeUntilNextAttack > 0)
 		timeUntilNextAttack -= DeltaTime;

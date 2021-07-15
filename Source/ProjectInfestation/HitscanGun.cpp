@@ -5,6 +5,20 @@
 
 AHitscanGun::AHitscanGun() : Super() {}
 
+// Called when the game starts or when spawned
+void AHitscanGun::BeginPlay()
+{
+	Super::BeginPlay();
+
+}
+
+// Called every frame
+void AHitscanGun::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+}
+
 FHitResult AHitscanGun::ShootRay(AActor* actor, float length, float angleFromCenter, float angleAround)
 {
 	FVector rayLocation;

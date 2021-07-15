@@ -4,11 +4,8 @@
 #include "Gun.h"
 
 // Sets default values
-AGun::AGun()
+AGun::AGun() : Super()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
-
 	// Add a mesh to keep track of where shots come out of the gun
 	shotPosition = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Shot Position"));
 	shotPosition->SetupAttachment(weaponMesh);
