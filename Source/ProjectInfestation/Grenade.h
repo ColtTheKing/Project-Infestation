@@ -15,6 +15,9 @@ class PROJECTINFESTATION_API AGrenade : public AWeapon
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh")
+		TSubclassOf<AActor> grenadeBP;
+
 	// Sets default values for this actor's properties
 	AGrenade();
 
@@ -31,8 +34,11 @@ protected:
 	void BeginPlay() override;
 
 private:
+	UPROPERTY(EditAnywhere, Category = "Logic")
+		float throwStrength;
 
 	// Handle throwing logic
-	void ThrowGrenade();
+	UFUNCTION(BlueprintCallable, Category = "Action")
+		void ThrowGrenade();
 
 };

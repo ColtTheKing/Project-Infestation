@@ -9,20 +9,31 @@ AGrenade::AGrenade() : Super()
 
 void AGrenade::BeginPlay() 
 {
-
+	Super::BeginPlay();
 }
 
 void AGrenade::Tick(float DeltaTime) 
 {
-
+	Super::Tick(DeltaTime);
 }
 
 void AGrenade::ConsumeAmmo(int ammo) 
 {
-
+	if (ammoInClip >= ammo)
+		ammoInClip -= ammo;
 }
 
 void AGrenade::ThrowGrenade() 
 {
-
+	// Spawn Grenade
+	FVector grenadeLocation = GetActorLocation();
+	FRotator grenadeRotation = FRotator(0.0f, 0.0f, 0.0f);
+	TWeakObjectPtr<AActor> spawnedGrenade = Cast<AActor>(GetWorld()->SpawnActor(grenadeBP, &grenadeLocation, &grenadeRotation));
+	
+	// Add impluse
+	if (spawnedGrenade != nullptr) 
+	{
+		UPrimitiveComponent* comp = Cast<UPrimitiveComponent>(spawnedGrenade->FindComponentByClass<UPrimitiveComponent>());
+		comp->AddImpulse(GetActorForwardVector() * throwStrength, FName("None"), true);
+	}
 }

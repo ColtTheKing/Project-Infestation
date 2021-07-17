@@ -19,17 +19,26 @@ void UArsenalComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// Set up weapons
 	for (FArsenalWeapon& weapon : weaponList)
 	{
-		weapon.ammoName = weapon.gunSubclass.GetDefaultObject()->ammoName;
-		weapon.clipSize = weapon.gunSubclass.GetDefaultObject()->clipSize;
-		weapon.enabledForPlayer = weapon.gunSubclass.GetDefaultObject()->enabledForPlayer;
+		weapon.ammoName = weapon.weaponSubclass.GetDefaultObject()->ammoName;
+		weapon.clipSize = weapon.weaponSubclass.GetDefaultObject()->clipSize;
+		weapon.enabledForPlayer = weapon.weaponSubclass.GetDefaultObject()->enabledForPlayer;
 
 		weapon.reserveAmmo = 0;
 		weapon.ammoInClip = weapon.clipSize;
 
 		UE_LOG(LogTemp, Warning, TEXT("Clip Size %d"), weapon.clipSize);
 	}
+
+	// Set up grenade
+	grenade.ammoName = grenade.weaponSubclass.GetDefaultObject()->ammoName;
+	grenade.clipSize = grenade.weaponSubclass.GetDefaultObject()->clipSize;
+	grenade.enabledForPlayer = grenade.weaponSubclass.GetDefaultObject()->enabledForPlayer;
+
+	grenade.reserveAmmo = 0;
+	grenade.ammoInClip = grenade.clipSize;
 }
 
 

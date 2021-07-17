@@ -81,6 +81,7 @@ void AMyPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAction("SwitchWeapon2", IE_Pressed, this, &AMyPlayerCharacter::SwitchWeapon2);
 	PlayerInputComponent->BindAction("SwitchWeapon3", IE_Pressed, this, &AMyPlayerCharacter::SwitchWeapon3);
 	PlayerInputComponent->BindAction("SwitchWeapon4", IE_Pressed, this, &AMyPlayerCharacter::SwitchWeapon4);
+	PlayerInputComponent->BindAction("SwitchGrenade", IE_Pressed, this, &AMyPlayerCharacter::SwitchGrenade);
 
 	PlayerInputComponent->BindAction("Pause", IE_Pressed, this, &AMyPlayerCharacter::PauseGame).bExecuteWhenPaused = true;
 }
@@ -139,11 +140,11 @@ void AMyPlayerCharacter::FireWeapon()
 	if (heldWeapon)
 	{
 		AActor* gunActor = heldWeapon->GetChildActor();
-		AGun* myGun = Cast<AGun>(gunActor);
+		AWeapon* myWeapon = Cast<AWeapon>(gunActor);
 
-		if (myGun)
+		if (myWeapon)
 		{
-			myGun->UseWeapon(this);
+			myWeapon->UseWeapon(this);
 		}
 	}
 }
@@ -249,15 +250,17 @@ void AMyPlayerCharacter::SwitchGrenade()
 
 	SaveWeaponInfo();
 
-	if (weaponArsenal->ActivateGrenade())
+	if (weaponArsenal->ActivateGrenade()) {
+		UE_LOG(LogTemp, Warning, TEXT("Q"));
 		SetActiveWeapon(weaponArsenal->GetActiveWeapon());
+	}
 }
 
 void AMyPlayerCharacter::SetActiveWeapon(FArsenalWeapon weapon)
 {
 	if (heldWeapon)
 	{
-		heldWeapon->SetChildActorClass(weapon.gunSubclass);
+		heldWeapon->SetChildActorClass(weapon.weaponSubclass);
 		
 		AActor* weaponActor = heldWeapon->GetChildActor();
 		AWeapon* myWeapon = Cast<AGun>(weaponActor);
