@@ -27,12 +27,18 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void UseWeapon(AActor* actor) PURE_VIRTUAL(AGun::UseWeapon, ;);
+	virtual void UseWeapon(AActor* actor) PURE_VIRTUAL(AWeapon::UseWeapon, ;);
 
 	void RestoreReserveAmmo(int ammo);
 
 	UFUNCTION(BlueprintCallable, Category = Ammo)
-		virtual void ConsumeAmmo(int ammo) PURE_VIRTUAL(AGun::ConsumeAmmo, ;);
+		virtual void ConsumeAmmo(int ammo) PURE_VIRTUAL(AWeapon::ConsumeAmmo, ;);
+
+	UFUNCTION(BlueprintCallable, Category = Attack)
+		bool CanAttack();
+
+	UFUNCTION(BlueprintCallable, Category = Attack)
+		void ResetAttackCooldown();
 
 	UFUNCTION(BlueprintCallable, Category = Ammo)
 		int GetAmmoInClip();
@@ -59,5 +65,5 @@ protected:
 	int reserveAmmo, ammoInClip;
 
 private:
-	
+	float timeUntilNextAttack;
 };
