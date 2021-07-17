@@ -29,6 +29,8 @@ public:
 
 	virtual void UseWeapon(AActor* actor) PURE_VIRTUAL(AWeapon::UseWeapon, ;);
 
+	virtual void StopUsingWeapon() PURE_VIRTUAL(AWeapon::StopUsingWeapon, ;);
+
 	void RestoreReserveAmmo(int ammo);
 
 	UFUNCTION(BlueprintCallable, Category = Ammo)
