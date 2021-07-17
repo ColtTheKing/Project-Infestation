@@ -19,11 +19,6 @@ AGun::AGun()
 void AGun::BeginPlay()
 {
 	Super::BeginPlay();
-
-	ammoInClip = clipSize;
-
-	UE_LOG(LogTemp, Warning, TEXT("Ammo In Clip At Start: %d"), ammoInClip);
-
 }
 
 // Called every frame
