@@ -32,6 +32,4 @@ protected:
 
 	UFUNCTION(BlueprintCallable, Category = Shoot)
 		FHitResult ShootRay(AActor* actor, float length, float angleFromCenter = 0, float angleAround = 0);
-
-	//put in function(s) to calculate angles and make them blueprint callable
 };
