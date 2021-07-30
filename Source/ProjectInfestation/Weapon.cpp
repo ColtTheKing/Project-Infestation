@@ -13,6 +13,8 @@ AWeapon::AWeapon()
 	weaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Weapon Mesh"));
 	weaponMesh->SetupAttachment(RootComponent);
 	weaponMesh->SetCollisionProfileName(TEXT("NoCollision"));
+
+	timeUntilNextAttack = 0;
 }
 
 // Called when the game starts or when spawned
@@ -27,6 +29,9 @@ void AWeapon::BeginPlay()
 void AWeapon::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (timeUntilNextAttack > 0)
+		timeUntilNextAttack -= DeltaTime;
 }
 
 void AWeapon::RestoreReserveAmmo(int ammo)
@@ -34,6 +39,18 @@ void AWeapon::RestoreReserveAmmo(int ammo)
 	reserveAmmo += ammo;
 
 	UE_LOG(LogTemp, Warning, TEXT("Reserve Ammo After Restore: %d"), reserveAmmo);
+}
+
+bool AWeapon::CanAttack()
+{
+	if (timeUntilNextAttack > 0)
+		return false;
+	return true;
+}
+
+void AWeapon::ResetAttackCooldown()
+{
+	timeUntilNextAttack = attackCooldown;
 }
 
 int AWeapon::GetAmmoInClip()
