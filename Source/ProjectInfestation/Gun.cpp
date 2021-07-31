@@ -66,3 +66,10 @@ void AGun::ReloadClip()
 		UE_LOG(LogTemp, Warning, TEXT("Reserve Ammo After Reload: %d"), reserveAmmo);
 	}
 }
+
+FVector AGun::CalculateShotSpread(const FVector& baseRay)
+{
+	FVector shotDirection = FMath::VRandCone(baseRay, FMath::DegreesToRadians(spreadAngle));
+	shotDirection.Normalize();
+	return shotDirection;
+}

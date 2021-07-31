@@ -17,8 +17,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
 		UStaticMeshComponent* shotPosition;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
-		int spreadAngle;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun, meta = (ClampMin = "0.0", ClampMax = "90.0", UIMin = "0.0", UIMax = "90.0"))
+		float spreadAngle;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
 		int pelletsPerShot;										
@@ -42,6 +42,9 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	// Determines the direction (unit vector) of a fired bullet or projectile based on the gun spread
+	FVector CalculateShotSpread(const FVector& baseRay);
 
 private:
 	

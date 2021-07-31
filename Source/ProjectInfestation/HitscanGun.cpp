@@ -30,7 +30,9 @@ FHitResult AHitscanGun::ShootRay(AActor* actor, float length, float angleFromCen
 	{
 		playerController->GetPlayerViewPoint(rayLocation, rayRotation);
 
-		endRay = rayLocation + (rayRotation.Vector() * length);
+		FVector shotDirection = CalculateShotSpread(rayRotation.Vector());
+
+		endRay = rayLocation + (shotDirection * length);
 	}
 
 	//Params are a tag for debugging, whether to use complex collision, and which object to ignore
