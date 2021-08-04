@@ -26,6 +26,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = Shoot)
 		void UseWeapon(AActor* actor) override;
 
+	UFUNCTION(BlueprintImplementableEvent, Category = Shoot)
+		void StopUsingWeapon() override;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
