@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Weapon.h"
+#include "Engine/StaticMesh.h"
 #include "Grenade.generated.h"
 
 /**
@@ -15,8 +16,13 @@ class PROJECTINFESTATION_API AGrenade : public AWeapon
 	GENERATED_BODY()
 
 public:
+	// Blueprint to spawn when throwing an grenade.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh")
 		TSubclassOf<AActor> grenadeBP;
+
+	// Mesh that player will hold when grenade is chosen.
+	UPROPERTY(EditAnywhere, Category = "Mesh")
+		UStaticMesh* grenadeMesh;
 
 	// Sets default values for this actor's properties
 	AGrenade();

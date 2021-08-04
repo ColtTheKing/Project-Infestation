@@ -10,6 +10,8 @@ AGrenade::AGrenade() : Super()
 void AGrenade::BeginPlay() 
 {
 	Super::BeginPlay();
+
+	weaponMesh->SetStaticMesh(grenadeMesh);
 }
 
 void AGrenade::Tick(float DeltaTime) 
