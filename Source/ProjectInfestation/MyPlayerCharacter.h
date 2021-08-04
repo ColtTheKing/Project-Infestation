@@ -75,6 +75,7 @@ public:
 	void StopCrouching();
 	void Interact();
 	void FireWeapon();
+	void StopFiringWeapon();
 	void ReloadWeapon();
 	void PreviousWeapon();
 	void SwitchWeapon1();

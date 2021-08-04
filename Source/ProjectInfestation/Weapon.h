@@ -19,6 +19,9 @@ public:
 		bool enabledForPlayer;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
+		bool constantlyShooting;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
 		FName ammoName;
 
 	// Sets default values for this actor's properties
