@@ -278,7 +278,6 @@ void AMyPlayerCharacter::SwitchGrenade()
 	SaveWeaponInfo();
 
 	if (weaponArsenal->ActivateGrenade()) {
-		UE_LOG(LogTemp, Warning, TEXT("Q"));
 		SetActiveWeapon(weaponArsenal->GetActiveWeapon());
 	}
 }
