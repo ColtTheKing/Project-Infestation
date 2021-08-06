@@ -7,6 +7,24 @@
 #include "Engine/StaticMesh.h"
 #include "Grenade.generated.h"
 
+USTRUCT()
+struct FHeldGrenade
+{
+	GENERATED_USTRUCT_BODY()
+
+	// Grenade actor to spawn when using grenade
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<AActor> grenadeBP;
+
+	// Mesh of currently held grenade 
+	UPROPERTY(EditAnywhere)
+		UStaticMesh* grenadeMesh;
+
+	// Size of currently held grenade
+	UPROPERTY(EditAnywhere)
+		FVector meshScale;
+};
+
 /**
  * 
  */
@@ -16,13 +34,9 @@ class PROJECTINFESTATION_API AGrenade : public AWeapon
 	GENERATED_BODY()
 
 public:
-	// Blueprint to spawn when throwing an grenade.
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh")
-		TSubclassOf<AActor> grenadeBP;
-
-	// Mesh that player will hold when grenade is chosen.
+	// Currently held grenade
 	UPROPERTY(EditAnywhere, Category = "Mesh")
-		UStaticMesh* grenadeMesh;
+		FHeldGrenade heldGrenade;
 
 	// Sets default values for this actor's properties
 	AGrenade();

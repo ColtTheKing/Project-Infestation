@@ -11,7 +11,9 @@ void AGrenade::BeginPlay()
 {
 	Super::BeginPlay();
 
-	weaponMesh->SetStaticMesh(grenadeMesh);
+	// Setup weapon mesh with held grenade
+	weaponMesh->SetStaticMesh(heldGrenade.grenadeMesh);
+	weaponMesh->SetWorldScale3D(heldGrenade.meshScale);
 }
 
 void AGrenade::Tick(float DeltaTime) 
@@ -30,7 +32,7 @@ void AGrenade::ThrowGrenade()
 	// Spawn Grenade
 	FVector grenadeLocation = GetActorLocation();
 	FRotator grenadeRotation = FRotator(0.0f, 0.0f, 0.0f);
-	TWeakObjectPtr<AActor> spawnedGrenade = Cast<AActor>(GetWorld()->SpawnActor(grenadeBP, &grenadeLocation, &grenadeRotation));
+	TWeakObjectPtr<AActor> spawnedGrenade = Cast<AActor>(GetWorld()->SpawnActor(heldGrenade.grenadeBP, &grenadeLocation, &grenadeRotation));
 	
 	// Add impluse
 	if (spawnedGrenade != nullptr) 
