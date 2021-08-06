@@ -51,6 +51,18 @@ void AMyPlayerCharacter::Tick(float DeltaTime)
 		SetActiveWeapon(weaponArsenal->GetActiveWeapon());
 		setGunYet = true;
 	}
+
+	// If the weapon attack button is being held down, try to do it every frame
+	if (heldWeapon)
+	{
+		AActor* gunActor = heldWeapon->GetChildActor();
+		AGun* myGun = Cast<AGun>(gunActor);
+
+		if (myGun && myGun->constantlyShooting)
+		{
+			myGun->UseWeapon(this);
+		}
+	}
 }
 
 // Called to bind functionality to input
@@ -72,6 +84,7 @@ void AMyPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMyPlayerCharacter::Interact);
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AMyPlayerCharacter::FireWeapon);
+	PlayerInputComponent->BindAction("Fire", IE_Released, this, &AMyPlayerCharacter::StopFiringWeapon);
 	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &AMyPlayerCharacter::ReloadWeapon);
 
 	PlayerInputComponent->BindAction("PreviousWeapon", IE_Pressed, this, &AMyPlayerCharacter::PreviousWeapon);
@@ -145,6 +158,20 @@ void AMyPlayerCharacter::FireWeapon()
 		if (myWeapon)
 		{
 			myWeapon->UseWeapon(this);
+		}
+	}
+}
+
+void AMyPlayerCharacter::StopFiringWeapon()
+{
+	if (heldWeapon)
+	{
+		AActor* gunActor = heldWeapon->GetChildActor();
+		AGun* myGun = Cast<AGun>(gunActor);
+
+		if (myGun)
+		{
+			myGun->StopUsingWeapon();
 		}
 	}
 }

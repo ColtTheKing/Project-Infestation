@@ -26,12 +26,13 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = Shoot)
 		void UseWeapon(AActor* actor) override;
 
+	UFUNCTION(BlueprintImplementableEvent, Category = Shoot)
+		void StopUsingWeapon() override;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintCallable, Category = Shoot)
 		FHitResult ShootRay(AActor* actor, float length, float angleFromCenter = 0, float angleAround = 0);
-
-	//put in function(s) to calculate angles and make them blueprint callable
 };
