@@ -21,6 +21,8 @@ AWeapon::AWeapon()
 void AWeapon::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	ammoInClip = clipSize;
 }
 
 // Called every frame
