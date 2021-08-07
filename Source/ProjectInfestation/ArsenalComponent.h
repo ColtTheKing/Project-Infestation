@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Gun.h"
+#include "Weapon.h"
 #include "Templates/SharedPointer.h"
 
 #include "ArsenalComponent.generated.h"
@@ -15,7 +15,7 @@ struct FArsenalWeapon
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditDefaultsOnly, Category = Class)
-		TSubclassOf<AGun> gunSubclass;
+		TSubclassOf<AWeapon> weaponSubclass;
 
 	FName ammoName;
 	int reserveAmmo, ammoInClip, clipSize;
