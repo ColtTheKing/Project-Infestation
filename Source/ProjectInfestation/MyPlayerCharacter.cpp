@@ -268,7 +268,7 @@ void AMyPlayerCharacter::SwitchGrenade()
 		return;
 
 	SaveWeaponInfo();
-
+	
 	if (weaponArsenal->ActivateGrenade()) {
 		SetActiveWeapon(weaponArsenal->GetActiveWeapon());
 	}
