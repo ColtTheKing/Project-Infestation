@@ -121,20 +121,12 @@ void AMyPlayerCharacter::StartCrouching()
 {
 	if (!bIsCrouched)
 		Crouch();
-
-	/*GetCapsuleComponent()->SetCapsuleHalfHeight(44.0f, true);
-	SetActorLocation(GetActorLocation() + FVector(0, 0, -44.0f));
-	playerCamera->SetRelativeLocation(playerCamera->GetRelativeLocation() + FVector(0, 0, -44.0f));*/
 }
 
 void AMyPlayerCharacter::StopCrouching()
 {
 	if (bIsCrouched)
 		UnCrouch();
-
-	/*GetCapsuleComponent()->SetCapsuleHalfHeight(88.0f, true);
-	SetActorLocation(GetActorLocation() + FVector(0, 0, 44.0f));
-	playerCamera->SetRelativeLocation(playerCamera->GetRelativeLocation() + FVector(0, 0, 44.0f));*/
 }
 
 void AMyPlayerCharacter::Interact()
@@ -276,7 +268,7 @@ void AMyPlayerCharacter::SwitchGrenade()
 		return;
 
 	SaveWeaponInfo();
-
+	
 	if (weaponArsenal->ActivateGrenade()) {
 		SetActiveWeapon(weaponArsenal->GetActiveWeapon());
 	}

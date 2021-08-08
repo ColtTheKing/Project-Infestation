@@ -16,7 +16,7 @@ public:
 		int clipSize;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
-		bool enabledForPlayer;
+		bool isEnabledWeapon;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
 		bool constantlyShooting;
