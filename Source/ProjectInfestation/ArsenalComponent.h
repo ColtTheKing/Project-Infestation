@@ -19,7 +19,7 @@ struct FArsenalWeapon
 
 	FName ammoName;
 	int reserveAmmo, ammoInClip, clipSize;
-	bool enabledForPlayer;
+	bool isEnabledWeapon;
 };
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))

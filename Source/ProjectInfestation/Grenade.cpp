@@ -31,7 +31,7 @@ void AGrenade::ThrowGrenade()
 {
 	// Spawn Grenade
 	FVector grenadeLocation = GetActorLocation();
-	FRotator grenadeRotation = FRotator(0.0f, 0.0f, 0.0f);
+	FRotator grenadeRotation = FRotator::ZeroRotator;
 	TWeakObjectPtr<AActor> spawnedGrenade = Cast<AActor>(GetWorld()->SpawnActor(heldGrenade.grenadeBP, &grenadeLocation, &grenadeRotation));
 	
 	// Add impluse

@@ -24,7 +24,7 @@ void UArsenalComponent::BeginPlay()
 	{
 		weapon.ammoName = weapon.weaponSubclass.GetDefaultObject()->ammoName;
 		weapon.clipSize = weapon.weaponSubclass.GetDefaultObject()->clipSize;
-		weapon.enabledForPlayer = weapon.weaponSubclass.GetDefaultObject()->enabledForPlayer;
+		weapon.isEnabledWeapon = weapon.weaponSubclass.GetDefaultObject()->isEnabledWeapon;
 
 		weapon.reserveAmmo = 0;
 		weapon.ammoInClip = weapon.clipSize;
@@ -35,7 +35,7 @@ void UArsenalComponent::BeginPlay()
 	// Set up grenade
 	grenade.ammoName = grenade.weaponSubclass.GetDefaultObject()->ammoName;
 	grenade.clipSize = grenade.weaponSubclass.GetDefaultObject()->clipSize;
-	grenade.enabledForPlayer = grenade.weaponSubclass.GetDefaultObject()->enabledForPlayer;
+	grenade.isEnabledWeapon = grenade.weaponSubclass.GetDefaultObject()->isEnabledWeapon;
 
 	grenade.reserveAmmo = 0;
 	grenade.ammoInClip = grenade.clipSize;
@@ -54,9 +54,9 @@ void UArsenalComponent::AddAmmo(FName ammoType, int numAmmo)
 	{
 		if (ammoType.Compare(weaponList[i].ammoName) == 0)
 		{
-			if (!weaponList[i].enabledForPlayer)
+			if (!weaponList[i].isEnabledWeapon)
 			{
-				weaponList[i].enabledForPlayer = true;
+				weaponList[i].isEnabledWeapon = true;
 
 				//Add ammo to the clip first if this is the first ammo for this weapon
 				int excess = numAmmo - weaponList[i].clipSize;
@@ -120,7 +120,7 @@ bool UArsenalComponent::ActivatePrevious()
 		return false;
 
 	//Keep cycling through weapons until you reach one that is enabled
-	while (!weaponList[currentActive].enabledForPlayer)
+	while (!weaponList[currentActive].isEnabledWeapon)
 	{
 		if (currentActive < 1)
 			currentActive = weaponList.Num() - 1;
@@ -155,7 +155,7 @@ bool UArsenalComponent::ActivateNext()
 		return false;
 
 	//Keep cycling through weapons until you reach one that is enabled
-	while (!weaponList[currentActive].enabledForPlayer)
+	while (!weaponList[currentActive].isEnabledWeapon)
 	{
 		currentActive++;
 		if (currentActive >= weaponList.Num())
@@ -193,7 +193,7 @@ bool UArsenalComponent::ActivateIndex(size_t index)
 
 bool UArsenalComponent::ActivateGrenade()
 {
-	bool changedActive = grenade.enabledForPlayer && !grenadeActive;
+	bool changedActive = grenade.isEnabledWeapon && !grenadeActive;
 
 	if (changedActive)
 	{
