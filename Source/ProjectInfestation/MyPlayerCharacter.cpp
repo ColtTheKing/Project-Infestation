@@ -132,7 +132,7 @@ void AMyPlayerCharacter::StopCrouching()
 void AMyPlayerCharacter::Interact()
 {
 	FHitResult rayHit = ShootRay(interactRange);
-	AInteractableActor* hitActor = Cast<AInteractableActor>(rayHit.Actor);
+	AInteractableActor* hitActor = Cast<AInteractableActor>(rayHit.GetActor());
 
 	if (hitActor)
 	{
@@ -328,18 +328,18 @@ FHitResult AMyPlayerCharacter::ShootRay(float length)
 	return hit;
 }
 
-void AMyPlayerCharacter::TakeDamage(int damage)
-{
-	//Could pass in a damage type later so the actor can respond differently
-
-	health->TakeDamage(damage);
-
-	if (health->GetCurrentHp() <= 0)
-	{
-		//End the game
-		KillPlayer();
-	}
-}
+//void AMyPlayerCharacter::TakeDamage(int damage)
+//{
+//	//Could pass in a damage type later so the actor can respond differently
+//
+//	health->TakeDamage(damage);
+//
+//	if (health->GetCurrentHp() <= 0)
+//	{
+//		//End the game
+//		KillPlayer();
+//	}
+//}
 
 void AMyPlayerCharacter::RestoreHp(int hp)
 {

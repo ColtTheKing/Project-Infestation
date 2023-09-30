@@ -51,8 +51,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Arsenal)
 		UArsenalComponent* weaponArsenal;
 
-	UFUNCTION(BlueprintCallable, Category = Health)
-		void TakeDamage(int damage);
+	/*UFUNCTION(BlueprintCallable, Category = Health)
+		void TakeDamage(int damage);*/
 
 	UFUNCTION(BlueprintCallable, Category = Health)
 		void RestoreHp(int hp);

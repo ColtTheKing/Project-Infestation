@@ -18,7 +18,7 @@ class PROJECTINFESTATION_API ABasicEnemy : public AEnemyCharacter
 public:	
 	ABasicEnemy();
 
-	void TakeDamage(int damage) override;
+	/*void TakeDamage(int damage) override;*/
 
 	void SetEnemySpawner(TWeakObjectPtr<AEnemySpawner> aEnemySpawner);
 
