@@ -30,8 +30,12 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	/*UFUNCTION(BlueprintCallable, Category = Damage)
-		virtual void TakeDamage(int damage) PURE_VIRTUAL(AEnemyCharacter::TakeDamage, ;);*/
+	UFUNCTION(BlueprintCallable, Category = Health)
+		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) PURE_VIRTUAL(AEnemyCharacter::TakeDamage, ;);
+
+	//From UE4 project
+	//UFUNCTION(BlueprintCallable, Category = Damage)
+	//	virtual void TakeDamage(int damage) PURE_VIRTUAL(AEnemyCharacter::TakeDamage, ;);
 
 protected:
 	// Called when the game starts or when spawned

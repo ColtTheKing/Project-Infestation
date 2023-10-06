@@ -328,6 +328,22 @@ FHitResult AMyPlayerCharacter::ShootRay(float length)
 	return hit;
 }
 
+float AMyPlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	//Could pass in a damage type later so the actor can respond differently
+
+	health->TakeDamage(damage);
+
+	if (health->GetCurrentHp() <= 0)
+	{
+		//End the game
+		KillPlayer();
+	}
+}
+
+//From UE4 project
 //void AMyPlayerCharacter::TakeDamage(int damage)
 //{
 //	//Could pass in a damage type later so the actor can respond differently

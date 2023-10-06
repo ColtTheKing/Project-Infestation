@@ -50,9 +50,13 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Arsenal)
 		UArsenalComponent* weaponArsenal;
+		
+	UFUNCTION(BlueprintCallable, Category = Health)
+		float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
-	/*UFUNCTION(BlueprintCallable, Category = Health)
-		void TakeDamage(int damage);*/
+	//From UE4 project
+	//UFUNCTION(BlueprintCallable, Category = Health)
+	//	void TakeDamage(int damage);
 
 	UFUNCTION(BlueprintCallable, Category = Health)
 		void RestoreHp(int hp);

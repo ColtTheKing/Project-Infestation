@@ -21,7 +21,10 @@ public:
 	// Called every frame
 	void Tick(float DeltaTime) override;
 
-	/*void TakeDamage(int damage) override;*/
+	float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
+	//From UE4 project
+	//void TakeDamage(int damage) override;
 
 	UFUNCTION(BlueprintImplementableEvent, Category = Death)
 		void KillQueen();

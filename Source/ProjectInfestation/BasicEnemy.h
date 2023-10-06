@@ -18,7 +18,10 @@ class PROJECTINFESTATION_API ABasicEnemy : public AEnemyCharacter
 public:	
 	ABasicEnemy();
 
-	/*void TakeDamage(int damage) override;*/
+	float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
+	//From UE4 project
+	//void TakeDamage(int damage) override;
 
 	void SetEnemySpawner(TWeakObjectPtr<AEnemySpawner> aEnemySpawner);
 
