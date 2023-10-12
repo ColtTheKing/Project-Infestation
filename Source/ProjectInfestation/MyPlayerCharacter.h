@@ -42,8 +42,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gun)
 		UChildActorComponent* heldWeapon;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
-		UHealthComponent* health;
+	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
+		UHealthComponent* health;*/
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Messages)
 		UMessageLogComponent* messageLog;
