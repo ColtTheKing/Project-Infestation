@@ -44,7 +44,7 @@ void AEnemySpawner::Tick(float deltaTime)
 
 void AEnemySpawner::SpawnEnemy()
 {
-	FEnemy* enemy = GetRandomEnemy();
+	TSubclassOf<AEnemyCharacter> enemy = GetRandomEnemy();
 	if (enemy == nullptr)
 		return;
 
@@ -52,32 +52,29 @@ void AEnemySpawner::SpawnEnemy()
 	FTransform localToWorld = FTransform(GetActorLocation());
 	FBox boundingBox = FBox::BuildAABB(localToWorld.GetLocation(), spawnArea->GetScaledBoxExtent());
 
-	// TODO: Possible performance issue as if there is too many enemies it might turn into a infinite loop
-	// Loop until found place to spawn
-	while (true)
+	// Calculate random location in bounding box
+	FVector randomLocation;
+	randomLocation = boundingBox.Min;
+	randomLocation.X += FGenericPlatformMath::FRand() * (boundingBox.Max.X - boundingBox.Min.X);
+	randomLocation.Y += FGenericPlatformMath::FRand() * (boundingBox.Max.Y - boundingBox.Min.Y);
+	randomLocation.Z += FGenericPlatformMath::FRand() * (boundingBox.Max.Z - boundingBox.Min.Z);
+
+	// Spawn a enemy
+	FRotator spawnRotation = FRotator(0.0f, 0.0f, 0.0f);
+	
+	CreateEnemyActor(enemy, randomLocation, spawnRotation);
+	
+	/*TWeakObjectPtr<ABasicEnemy> spawnedEnemy = Cast<ABasicEnemy>(GetWorld()->SpawnActor(enemy, &randomLocation, &spawnRotation));
+
+	if (spawnedEnemy != nullptr)
 	{
-		// Calculate random location in bounding box
-		FVector randomLocation;
-		randomLocation = boundingBox.Min;
-		randomLocation.X += FGenericPlatformMath::FRand() * (boundingBox.Max.X - boundingBox.Min.X);
-		randomLocation.Y += FGenericPlatformMath::FRand() * (boundingBox.Max.Y - boundingBox.Min.Y);
-		randomLocation.Z += FGenericPlatformMath::FRand() * (boundingBox.Max.Z - boundingBox.Min.Z);
-
-		// Spawn a enemy
-		FRotator spawnRotation = FRotator(0.0f, 0.0f, 0.0f);
-		TWeakObjectPtr<ABasicEnemy> spawnedEnemy = Cast<ABasicEnemy>(GetWorld()->SpawnActor(enemy->enemyCharacterBP, &randomLocation, &spawnRotation));
-
-		if (spawnedEnemy != nullptr)
-		{
-			spawnedEnemy->SetEnemySpawner(this);
-			enemiesSpawned++;
-			respawnTimer = respawnRate;
-			break;
-		}
-	}
+		spawnedEnemy->SetEnemySpawner(this);
+		enemiesSpawned++;
+		respawnTimer = respawnRate;
+	}*/
 }
 
-FEnemy* AEnemySpawner::GetRandomEnemy() 
+TSubclassOf<AEnemyCharacter> AEnemySpawner::GetRandomEnemy()
 {
 	float count = 0;
 	float randNum = FGenericPlatformMath::FRand();
@@ -86,7 +83,7 @@ FEnemy* AEnemySpawner::GetRandomEnemy()
 		count += enemy.respawnChance;
 		if (enemy.respawnChance != 0 && randNum <= enemy.respawnChance)
 		{
-			return &enemy;
+			return enemy.enemyCharacterBP;
 		}
 	}
 	return nullptr;

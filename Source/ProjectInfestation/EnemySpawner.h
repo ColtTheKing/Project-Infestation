@@ -29,31 +29,34 @@ class PROJECTINFESTATION_API AEnemySpawner : public AActor
 {
 private:
 	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere)
-		TArray<struct FEnemy> enemies;
-
-	UPROPERTY(EditAnywhere)
-		unsigned int spawnLimit;
-
-	UPROPERTY(EditAnywhere)
-		float respawnRate;
-
-	UFUNCTION()
-		void SpawnEnemy();
 	
 	TWeakObjectPtr<UBoxComponent> spawnArea;
 	size_t enemiesSpawned;
 	float respawnTimer;
 
-	// Respawns enemy of specific tag
-	FEnemy* GetRandomEnemy();
+	TArray<struct FEnemy> enemies;
 
-public:	
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		int spawnLimit;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		float respawnRate;
+
 	// Sets default values for this actor's properties
 	AEnemySpawner();
 
-	void HandleEnemyDespawn();
+	// Respawns enemy of specific tag
+	UFUNCTION(BlueprintCallable)
+		TSubclassOf<AEnemyCharacter> GetRandomEnemy();
+
+	void SpawnEnemy();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = Spawn)
+		void CreateEnemyActor(TSubclassOf<AEnemyCharacter> enemy, FVector location, FRotator rotation);
+
+	UFUNCTION(BlueprintCallable)
+		void HandleEnemyDespawn();
 
 protected:
 	// Called when the game starts or when spawned
