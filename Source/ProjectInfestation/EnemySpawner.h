@@ -34,7 +34,8 @@ private:
 	size_t enemiesSpawned;
 	float respawnTimer;
 
-	TArray<struct FEnemy> enemies;
+	UPROPERTY(EditAnywhere)
+		TArray<struct FEnemy> enemies;
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)

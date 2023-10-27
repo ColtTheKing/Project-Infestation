@@ -24,10 +24,8 @@ void AEnemySpawner::BeginPlay()
 	respawnTimer = respawnRate;
 
 	// Spawn enemies
-	while (enemiesSpawned < spawnLimit) 
-	{
+	for (int i = 0; i < spawnLimit; i++)
 		SpawnEnemy();
-	}
 }
 
 // Called every frame
@@ -37,9 +35,7 @@ void AEnemySpawner::Tick(float deltaTime)
 
 	respawnTimer -= deltaTime;
 	if (enemiesSpawned < spawnLimit && respawnTimer <= 0)
-	{
 		SpawnEnemy();
-	}
 }
 
 void AEnemySpawner::SpawnEnemy()
@@ -63,14 +59,13 @@ void AEnemySpawner::SpawnEnemy()
 	FRotator spawnRotation = FRotator(0.0f, 0.0f, 0.0f);
 	
 	CreateEnemyActor(enemy, randomLocation, spawnRotation);
+	enemiesSpawned++;
+	respawnTimer = respawnRate;
 	
 	/*TWeakObjectPtr<ABasicEnemy> spawnedEnemy = Cast<ABasicEnemy>(GetWorld()->SpawnActor(enemy, &randomLocation, &spawnRotation));
 
 	if (spawnedEnemy != nullptr)
-	{
 		spawnedEnemy->SetEnemySpawner(this);
-		enemiesSpawned++;
-		respawnTimer = respawnRate;
 	}*/
 }
 
