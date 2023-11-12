@@ -18,8 +18,8 @@ class PROJECTINFESTATION_API AEnemyCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
-		UHealthComponent* health;
+	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
+		UHealthComponent* health;*/
 
 	// Sets default values for this character's properties
 	AEnemyCharacter();
