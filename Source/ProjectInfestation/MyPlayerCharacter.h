@@ -54,8 +54,8 @@ public:
 	/*UFUNCTION(BlueprintCallable, Category = Health)
 		void TakeDamage(int damage);*/
 
-	UFUNCTION(BlueprintCallable, Category = Health)
-		void RestoreHp(int hp);
+	/*UFUNCTION(BlueprintCallable, Category = Health)
+		void RestoreHp(int hp);*/
 
 	UFUNCTION(BlueprintCallable, Category = Ammo)
 		void RestoreAmmo(FName ammoType, int ammo);

@@ -341,14 +341,14 @@ FHitResult AMyPlayerCharacter::ShootRay(float length)
 //	}
 //}
 
-void AMyPlayerCharacter::RestoreHp(int hp)
-{
-	/*UE_LOG(LogTemp, Warning, TEXT("Current HP Before Heal: %d"), health->GetCurrentHp());
-
-	health->RestoreHp(hp);
-
-	UE_LOG(LogTemp, Warning, TEXT("Current HP After Heal: %d"), health->GetCurrentHp());*/
-}
+//void AMyPlayerCharacter::RestoreHp(int hp)
+//{
+//	UE_LOG(LogTemp, Warning, TEXT("Current HP Before Heal: %d"), health->GetCurrentHp());
+//
+//	health->RestoreHp(hp);
+//
+//	UE_LOG(LogTemp, Warning, TEXT("Current HP After Heal: %d"), health->GetCurrentHp());
+//}
 
 void AMyPlayerCharacter::RestoreAmmo(FName ammoType, int ammo)
 {
