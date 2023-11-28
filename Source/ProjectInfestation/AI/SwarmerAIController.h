@@ -13,5 +13,9 @@ UCLASS()
 class PROJECTINFESTATION_API ASwarmerAIController : public AEnemyAIController
 {
 	GENERATED_BODY()
+
+public:
 	
+	ASwarmerAIController(const FObjectInitializer& objectInitializer);
+
 };

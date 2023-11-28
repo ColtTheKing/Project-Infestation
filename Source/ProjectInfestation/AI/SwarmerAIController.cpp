@@ -3,3 +3,7 @@
 
 #include "SwarmerAIController.h"
 
+ASwarmerAIController::ASwarmerAIController(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
+{
+
+}

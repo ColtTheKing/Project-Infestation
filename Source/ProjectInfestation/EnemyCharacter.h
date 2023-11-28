@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Components/CapsuleComponent.h"
+#include "BehaviorTree/BehaviorTree.h"
 
 #include "HealthComponent.h"
 
@@ -21,9 +22,6 @@ public:
 	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
 		UHealthComponent* health;*/
 
-	UPROPERTY(EditAnywhere, Category=AI)
-	class UBehaviorTree* enemyBehaviorTree;
-
 	// Sets default values for this character's properties
 	AEnemyCharacter();
 
@@ -36,9 +34,15 @@ public:
 	/*UFUNCTION(BlueprintCallable, Category = Damage)
 		virtual void TakeDamage(int damage) PURE_VIRTUAL(AEnemyCharacter::TakeDamage, ;);*/
 
+
+	FORCEINLINE UBehaviorTree* GetBehaviorTree() { return enemyBehaviorTree; }
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere, Category = AI)
+	class UBehaviorTree* enemyBehaviorTree;
 
 private:
 	

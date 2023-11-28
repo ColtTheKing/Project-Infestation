@@ -5,6 +5,7 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "../EnemyCharacter.h"
 
 AEnemyAIController::AEnemyAIController(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
 {
@@ -17,9 +18,21 @@ AEnemyAIController::AEnemyAIController(const FObjectInitializer& objectInitializ
 void AEnemyAIController::OnPossess(APawn* inPawn)
 {
 	Super::OnPossess(inPawn);
+
+	// Set up blackboard and tree
+	AEnemyCharacter* enemy = Cast<AEnemyCharacter>(inPawn);
+	if (enemy && enemy->GetBehaviorTree())
+	{
+		if (enemy->GetBehaviorTree()->BlackboardAsset)
+			blackboardComp->InitializeBlackboard(*enemy->GetBehaviorTree()->BlackboardAsset);
+
+		behaviorComp->StartTree(*(enemy->GetBehaviorTree()));
+	}
 }
 
 void AEnemyAIController::OnUnPossess()
 {
 	Super::OnUnPossess();
+
+	behaviorComp->StopTree();
 }
