@@ -21,6 +21,9 @@ public:
 	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
 		UHealthComponent* health;*/
 
+	UPROPERTY(EditAnywhere, Category=AI)
+	class UBehaviorTree* enemyBehaviorTree;
+
 	// Sets default values for this character's properties
 	AEnemyCharacter();
 
