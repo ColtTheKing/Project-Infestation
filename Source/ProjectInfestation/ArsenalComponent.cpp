@@ -89,8 +89,23 @@ FArsenalWeapon UArsenalComponent::GetActiveWeapon()
 	if (!weaponList.IsValidIndex(activeWeapon))
 	{
 		UE_LOG(LogTemp, Fatal, TEXT("Active weapon is not a valid index!"));
+		return grenade;
 	}
 	return weaponList[activeWeapon];
+}
+
+TSubclassOf<AWeapon> UArsenalComponent::GetWeaponOfType(FName ammoName)
+{
+	for (int i = 0; i < weaponList.Num(); i++)
+	{
+		if (weaponList[i].ammoName.IsEqual(ammoName))
+			return weaponList[i].weaponSubclass;
+	}
+
+	if (!weaponList.IsValidIndex(activeWeapon))
+		UE_LOG(LogTemp, Fatal, TEXT("Weapon name does not match any weapons in the arsenal!"));
+
+	return grenade.weaponSubclass;
 }
 
 void UArsenalComponent::SetActiveWeaponInfo(int rAmmo, int cAmmo)
@@ -104,6 +119,10 @@ void UArsenalComponent::SetActiveWeaponInfo(int rAmmo, int cAmmo)
 	{
 		weaponList[activeWeapon].reserveAmmo = rAmmo;
 		weaponList[activeWeapon].ammoInClip = cAmmo;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Fatal, TEXT("Active weapon is not a valid index!"));
 	}
 }
 

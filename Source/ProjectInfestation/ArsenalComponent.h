@@ -39,6 +39,9 @@ public:
 	FArsenalWeapon GetActiveWeapon();
 	void SetActiveWeaponInfo(int rAmmo, int cAmmo);
 
+	UFUNCTION(BlueprintCallable, Category = Weapon)
+		TSubclassOf<AWeapon> GetWeaponOfType(FName ammoType); //Assuming this gets a reference that I can edit
+
 	//These return true, if they activated a different weapon
 	bool ActivatePrevious();
 	bool ActivateNext();
