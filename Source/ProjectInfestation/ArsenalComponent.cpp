@@ -20,25 +20,25 @@ void UArsenalComponent::BeginPlay()
 	Super::BeginPlay();
 	
 	// Set up weapons
-	for (FArsenalWeapon& weapon : weaponList)
-	{
-		weapon.ammoName = weapon.weaponSubclass.GetDefaultObject()->ammoName;
-		weapon.clipSize = weapon.weaponSubclass.GetDefaultObject()->clipSize;
-		weapon.isEnabledWeapon = weapon.weaponSubclass.GetDefaultObject()->isEnabledWeapon;
+	//for (AWeapon& weapon : weaponList)
+	//{
+	//	weapon.weaponName = weapon.weaponSubclass.GetDefaultObject()->ammoName;
+	//	weapon.clipSize = weapon.weaponSubclass.GetDefaultObject()->clipSize;
+	//	weapon.isEnabledWeapon = weapon.weaponSubclass.GetDefaultObject()->isEnabledWeapon;
 
-		weapon.reserveAmmo = 0;
-		weapon.ammoInClip = weapon.clipSize;
+	//	weapon.reserveAmmo = 0;
+	//	weapon.ammoInClip = weapon.clipSize;
 
-		UE_LOG(LogTemp, Warning, TEXT("Clip Size %d"), weapon.clipSize);
-	}
+	//	UE_LOG(LogTemp, Warning, TEXT("Clip Size %d"), weapon.clipSize);
+	//}
 
-	// Set up grenade
-	grenade.ammoName = grenade.weaponSubclass.GetDefaultObject()->ammoName;
-	grenade.clipSize = grenade.weaponSubclass.GetDefaultObject()->clipSize;
-	grenade.isEnabledWeapon = grenade.weaponSubclass.GetDefaultObject()->isEnabledWeapon;
+	//// Set up grenade
+	//grenade.weaponName = grenade.weaponSubclass.GetDefaultObject()->ammoName;
+	//grenade.clipSize = grenade.weaponSubclass.GetDefaultObject()->clipSize;
+	//grenade.isEnabledWeapon = grenade.weaponSubclass.GetDefaultObject()->isEnabledWeapon;
 
-	grenade.reserveAmmo = 0;
-	grenade.ammoInClip = grenade.clipSize;
+	//grenade.reserveAmmo = 0;
+	//grenade.ammoInClip = grenade.clipSize;
 }
 
 
@@ -48,11 +48,17 @@ void UArsenalComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
+void UArsenalComponent::SetupWeapons(TArray<UChildActorComponent*> heldWeapons, UChildActorComponent* heldGrenade)
+{
+	weaponList[activeWeapon].reserveAmmo = rAmmo;
+	weaponList[activeWeapon].ammoInClip = cAmmo;
+}
+
 void UArsenalComponent::AddAmmo(FName ammoType, int numAmmo)
 {
 	for (size_t i = 0; i < weaponList.Num(); i++)
 	{
-		if (ammoType.Compare(weaponList[i].ammoName) == 0)
+		if (ammoType.Compare(weaponList[i].weaponName) == 0)
 		{
 			if (!weaponList[i].isEnabledWeapon)
 			{
@@ -98,7 +104,7 @@ TSubclassOf<AWeapon> UArsenalComponent::GetWeaponOfType(FName ammoName)
 {
 	for (int i = 0; i < weaponList.Num(); i++)
 	{
-		if (weaponList[i].ammoName.IsEqual(ammoName))
+		if (weaponList[i].weaponName.IsEqual(ammoName))
 			return weaponList[i].weaponSubclass;
 	}
 

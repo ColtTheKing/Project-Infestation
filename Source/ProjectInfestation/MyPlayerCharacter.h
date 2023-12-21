@@ -40,22 +40,16 @@ public:
 		USkeletalMeshComponent* playerArms;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gun)
-		UChildActorComponent* heldWeapon;
+		TArray<UChildActorComponent*> heldWeapons;
 
-	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
-		UHealthComponent* health;*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gun)
+		UChildActorComponent* heldGrenade;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Messages)
 		UMessageLogComponent* messageLog;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Arsenal)
 		UArsenalComponent* weaponArsenal;
-
-	/*UFUNCTION(BlueprintCallable, Category = Health)
-		void TakeDamage(int damage);*/
-
-	/*UFUNCTION(BlueprintCallable, Category = Health)
-		void RestoreHp(int hp);*/
 
 	UFUNCTION(BlueprintCallable, Category = Ammo)
 		void RestoreAmmo(FName ammoType, int ammo);
@@ -93,10 +87,10 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	void SetActiveWeapon(FArsenalWeapon weapon);
+	//void SetActiveWeapon(FArsenalWeapon weapon);
 
 private:
-	bool setGunYet;
+	//bool setGunYet;
 
 	void SaveWeaponInfo();
 };

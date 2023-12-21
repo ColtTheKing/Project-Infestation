@@ -25,14 +25,21 @@ AMyPlayerCharacter::AMyPlayerCharacter()
 	playerArms = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("PlayerArms"));
 	playerArms->SetupAttachment(playerCamera);
 
-	heldWeapon = CreateDefaultSubobject<UChildActorComponent>(TEXT("HeldWeapon"));
-	heldWeapon->SetupAttachment(playerArms);
-
-	/*health = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));*/
 	messageLog = CreateDefaultSubobject<UMessageLogComponent>(TEXT("MessageLog"));
 	weaponArsenal = CreateDefaultSubobject<UArsenalComponent>(TEXT("WeaponArsenal"));
 
-	setGunYet = false;
+	//Set up child objects for all of the base guns
+	for (int i = 0; i < weaponArsenal->weaponList.Num(); i++)
+	{
+		UChildActorComponent* heldWeapon = CreateDefaultSubobject<UChildActorComponent>(TEXT("HeldWeapon" + i));
+		heldWeapon->SetupAttachment(playerArms);
+		heldWeapons.Add(heldWeapon);
+	}
+
+	heldGrenade = CreateDefaultSubobject<UChildActorComponent>(TEXT("HeldGrenade"));
+	heldGrenade->SetupAttachment(playerArms);
+
+	//setGunYet = false;
 }
 
 // Called when the game starts or when spawned
@@ -46,14 +53,15 @@ void AMyPlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!setGunYet)
+	/*if (!setGunYet)
 	{
-		SetActiveWeapon(weaponArsenal->GetActiveWeapon());
+		weaponArsenal->SetupWeapons(heldWeapons, heldGrenade);
 		setGunYet = true;
-	}
+	}*/
 
 	// If the weapon attack button is being held down, try to do it every frame
-	if (heldWeapon)
+
+	/*if (heldWeapon)
 	{
 		AActor* gunActor = heldWeapon->GetChildActor();
 		AGun* myGun = Cast<AGun>(gunActor);
@@ -62,7 +70,7 @@ void AMyPlayerCharacter::Tick(float DeltaTime)
 		{
 			myGun->UseWeapon(this);
 		}
-	}
+	}*/
 }
 
 // Called to bind functionality to input
@@ -274,22 +282,22 @@ void AMyPlayerCharacter::SwitchGrenade()
 	}
 }
 
-void AMyPlayerCharacter::SetActiveWeapon(FArsenalWeapon weapon)
-{
-	if (heldWeapon)
-	{
-		heldWeapon->SetChildActorClass(weapon.weaponSubclass);
-		
-		AActor* weaponActor = heldWeapon->GetChildActor();
-		AWeapon* myWeapon = Cast<AGun>(weaponActor);
-
-		if (myWeapon)
-		{
-			myWeapon->SetReserveAmmo(weapon.reserveAmmo);
-			myWeapon->SetAmmoInClip(weapon.ammoInClip);
-		}
-	}
-}
+//void AMyPlayerCharacter::SetActiveWeapon(FArsenalWeapon weapon)
+//{
+//	if (heldWeapon)
+//	{
+//		heldWeapon->SetChildActorClass(weapon.weaponSubclass);
+//		
+//		AActor* weaponActor = heldWeapon->GetChildActor();
+//		AWeapon* myWeapon = Cast<AGun>(weaponActor);
+//
+//		if (myWeapon)
+//		{
+//			myWeapon->SetReserveAmmo(weapon.reserveAmmo);
+//			myWeapon->SetAmmoInClip(weapon.ammoInClip);
+//		}
+//	}
+//}
 
 void AMyPlayerCharacter::PauseGame()
 {
