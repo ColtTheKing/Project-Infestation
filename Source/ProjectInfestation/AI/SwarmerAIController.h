@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "EnemyAIController.h"
+#include "Perception/AIPerceptionTypes.h"
 #include "SwarmerAIController.generated.h"
 
 /**
@@ -18,4 +19,6 @@ public:
 	
 	ASwarmerAIController(const FObjectInitializer& objectInitializer);
 
+	UFUNCTION(BlueprintCallable)
+		void HandleSightSense(AActor* Actor, FAIStimulus const Stimulus);
 };
