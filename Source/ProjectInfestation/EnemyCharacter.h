@@ -34,16 +34,23 @@ public:
 	/*UFUNCTION(BlueprintCallable, Category = Damage)
 		virtual void TakeDamage(int damage) PURE_VIRTUAL(AEnemyCharacter::TakeDamage, ;);*/
 
-
+	FORCEINLINE int GetAttackDamage() { return attackDamage; }
+	FORCEINLINE float GetAttackRadius() { return attackRadius; }
 	FORCEINLINE UBehaviorTree* GetBehaviorTree() { return enemyBehaviorTree; }
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, Category = AI)
-	class UBehaviorTree* enemyBehaviorTree;
+	UPROPERTY(EditAnywhere, Category = "AI")
+		class UBehaviorTree* enemyBehaviorTree;
 
-private:
+	// Attack radius of the enemy AI
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI")
+		float attackRadius;
+
+	// Attack damage of the enemy AI
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI")
+		int attackDamage;
 	
 };

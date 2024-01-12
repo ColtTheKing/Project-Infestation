@@ -21,9 +21,9 @@ void ASwarmerAIController::Tick(float DeltaTime)
 	TWeakObjectPtr<AActor> actor = Cast<AActor>(GetBlackboardComp()->GetValueAsObject("TargetActor"));
 	if (actor != nullptr)
 	{
-		TWeakObjectPtr<APawn> enemy = GetPawn();
+		TWeakObjectPtr<AEnemyCharacter> enemy = Cast<AEnemyCharacter>(GetPawn());
 		float distance = enemy->GetDistanceTo(actor.Get());
-		GetBlackboardComp()->SetValueAsBool("TargetInRange", distance <= attackRadius);
+		GetBlackboardComp()->SetValueAsBool("TargetInRange", distance <= enemy->GetAttackRadius());
 	}
 }
 
