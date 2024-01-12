@@ -15,6 +15,11 @@ AEnemyAIController::AEnemyAIController(const FObjectInitializer& objectInitializ
 	BrainComponent = behaviorComp; // BrainComponent comes from the parent class.
 }
 
+void AEnemyAIController::MeleeAttack()
+{
+	// Should be overridden.
+}
+
 void AEnemyAIController::OnPossess(APawn* inPawn)
 {
 	Super::OnPossess(inPawn);

@@ -27,6 +27,8 @@ private:
 public:
 	AEnemyAIController(const FObjectInitializer& objectInitializer);
 
+	virtual void MeleeAttack();
+
 	FORCEINLINE UBlackboardComponent* GetBlackboardComp() const { return blackboardComp; }
 	FORCEINLINE UBehaviorTreeComponent* GetBehaviorComp() const { return behaviorComp; }
 

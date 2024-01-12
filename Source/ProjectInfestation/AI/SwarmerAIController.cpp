@@ -3,7 +3,6 @@
 #include "SwarmerAIController.h"
 
 #include "../MyPlayerCharacter.h"
-#include "../EnemyCharacter.h"
 
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
@@ -40,4 +39,14 @@ void ASwarmerAIController::HandleSightSense(AActor* actor, FAIStimulus const sti
 	else
 		// Player lost.
 		GetBlackboardComp()->SetValueAsObject("TargetActor", NULL);
+}
+
+void ASwarmerAIController::MeleeAttack()
+{
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Take Damage"));
+
+	TWeakObjectPtr<AActor> actor = Cast<AActor>(GetBlackboardComp()->GetValueAsObject("TargetActor"));
+	TWeakObjectPtr<AEnemyCharacter> enemy = Cast<AEnemyCharacter>(GetPawn());
+	actor->TakeDamage(enemy->GetAttackDamage(), FDamageEvent(), this, enemy.Get());
 }
