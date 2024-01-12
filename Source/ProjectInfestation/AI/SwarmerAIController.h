@@ -19,6 +19,9 @@ public:
 	
 	ASwarmerAIController(const FObjectInitializer& objectInitializer);
 
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
 	UFUNCTION(BlueprintCallable)
 		void HandleSightSense(AActor* Actor, FAIStimulus const Stimulus);
 };

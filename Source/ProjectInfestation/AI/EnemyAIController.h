@@ -18,11 +18,12 @@ class PROJECTINFESTATION_API AEnemyAIController : public AAIController
 	GENERATED_BODY()
 
 private:
+	
 	UPROPERTY(Transient)
-	UBlackboardComponent* blackboardComp;
+		UBlackboardComponent* blackboardComp;
 
 	UPROPERTY(Transient)
-	UBehaviorTreeComponent* behaviorComp;
+		UBehaviorTreeComponent* behaviorComp;
 	
 public:
 
@@ -36,4 +37,11 @@ protected:
 	virtual void OnPossess(class APawn* inPawn) override;
 	virtual void OnUnPossess() override;
 
+	// Attack radius of the enemy AI
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI")
+		int attackRadius;
+
+	// Attack damage of the enemy AI
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI")
+		int attackDamage;
 };
