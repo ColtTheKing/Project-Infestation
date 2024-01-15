@@ -26,7 +26,7 @@ void ASwarmerAIController::Tick(float DeltaTime)
 	}
 }
 
-void ASwarmerAIController::HandleSightSense(AActor* actor, FAIStimulus const stimulus)
+void ASwarmerAIController::UpdateTargetActor(AActor* actor, FAIStimulus const stimulus)
 {
 	// Only want to continue if the Actor sighted is the player.
 	TWeakObjectPtr<AMyPlayerCharacter> player = Cast<AMyPlayerCharacter>(actor);

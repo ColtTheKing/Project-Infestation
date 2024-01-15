@@ -22,8 +22,13 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	/*
+	* Updates the target actor currently being sensed.
+	* 
+	* NOTE: Currently target actor will only update if the player is sensed.
+	*/
 	UFUNCTION(BlueprintCallable)
-		void HandleSightSense(AActor* Actor, FAIStimulus const Stimulus);
+		void UpdateTargetActor(AActor* Actor, FAIStimulus const Stimulus);
 
 	UFUNCTION(BlueprintCallable)
 		void MeleeAttack() override;

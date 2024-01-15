@@ -38,6 +38,11 @@ private:
 public:
 	AEnemyAIController(const FObjectInitializer& objectInitializer);
 
+	/*
+	* Runs logic for meleeing a target including animations, sounds, damage applied, etc.
+	* 
+	* NOTE: Meant to be inherited by the child AI controllers.
+	*/
 	virtual void MeleeAttack();
 
 	FORCEINLINE UBlackboardComponent* GetBlackboardComp() const { return blackboardComp; }
