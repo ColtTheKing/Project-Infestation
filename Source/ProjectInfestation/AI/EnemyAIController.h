@@ -7,6 +7,7 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Perception/AIPerceptionComponent.h"
 #include "EnemyAIController.generated.h"
 
 /**
@@ -23,6 +24,16 @@ private:
 
 	UPROPERTY(Transient)
 		UBehaviorTreeComponent* behaviorComp;
+
+	/*
+	* Perception component that handles the senses of the controlled actor (sight, sound, etc.).
+	* Created in C++ to ensure that each child enemy controller will have one.
+	* 
+	* IMPORTANT: Only modify in the C++ if the component needs to be updated for each child.
+	*/
+	UPROPERTY(VisibleAnywhere, Transient)
+		UAIPerceptionComponent* perceptionComp;
+		
 	
 public:
 	AEnemyAIController(const FObjectInitializer& objectInitializer);
