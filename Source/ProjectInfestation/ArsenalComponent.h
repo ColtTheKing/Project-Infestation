@@ -31,7 +31,7 @@ public:
 	// Sets default values for this component's properties
 	UArsenalComponent();
 
-	void SetupWeapons(TArray<UChildActorComponent*> guns, UChildActorComponent* grenade, TArray<TSubclassOf<AGun>> gunTypes);
+	void SetupWeapons(TArray<AGun*> guns, AWeapon* grenade, TArray<TSubclassOf<AGun>> gunTypes);
 
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

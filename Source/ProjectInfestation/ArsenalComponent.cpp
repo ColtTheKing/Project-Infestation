@@ -48,16 +48,16 @@ void UArsenalComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
-void UArsenalComponent::SetupWeapons(TArray<UChildActorComponent*> heldGuns, UChildActorComponent* heldGrenade, TArray<TSubclassOf<AGun>> gunTypes)
+void UArsenalComponent::SetupWeapons(TArray<AGun*> heldGuns, AWeapon* heldGrenade, TArray<TSubclassOf<AGun>> gunTypes)
 {
 	for (size_t i = 0; i < heldGuns.Num(); i++)
 	{
-		heldGuns[i]->SetChildActorClass(gunTypes[i]);
+		/*heldGuns[i]->SetChildActorClass(gunTypes[i]);
 
 		AActor* gunActor = heldGuns[i]->GetChildActor();
-		AGun* myGun = Cast<AGun>(gunActor);
-
-		gunList.Add(myGun);
+		AGun* myGun = Cast<AGun>(gunActor);*/
+		/*Cast<gunTypes[i]>(heldGuns[i]);
+		gunList.Add(myGun);*/
 	}
 
 	/*gunList[activeWeapon]->SetReserveAmmo(rAmmo);

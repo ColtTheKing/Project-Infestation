@@ -40,7 +40,7 @@ public:
 		USkeletalMeshComponent* playerArms;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gun)
-		TArray<UChildActorComponent*> heldWeapons;
+		TArray<AGun*> heldWeapons;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gun)
 		UChildActorComponent* heldGrenade;

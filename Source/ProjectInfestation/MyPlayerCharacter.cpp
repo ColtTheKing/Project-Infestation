@@ -28,18 +28,6 @@ AMyPlayerCharacter::AMyPlayerCharacter()
 	messageLog = CreateDefaultSubobject<UMessageLogComponent>(TEXT("MessageLog"));
 	weaponArsenal = CreateDefaultSubobject<UArsenalComponent>(TEXT("WeaponArsenal"));
 
-	//Set up child objects for all of the base guns
-	for (int i = 0; i < gunTypes.Num(); i++)
-	{
-		UChildActorComponent* heldWeapon = CreateDefaultSubobject<UChildActorComponent>(TEXT("HeldWeapon" + i));
-		heldWeapon->SetupAttachment(playerArms);
-		heldWeapons.Add(heldWeapon);
-	}
-
-	heldGrenade = CreateDefaultSubobject<UChildActorComponent>(TEXT("HeldGrenade"));
-	heldGrenade->SetupAttachment(playerArms);
-
-	weaponArsenal->SetupWeapons(heldWeapons, heldGrenade, gunTypes);
 
 	//setupGunsYet = false;
 }
@@ -48,6 +36,21 @@ AMyPlayerCharacter::AMyPlayerCharacter()
 void AMyPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	////Set up child objects for all of the base guns
+	//for (int i = 0; i < gunTypes.Num(); i++)
+	//{
+	//	AGun* heldWeapon = NewObject<AGun>(playerArms);
+	//	//UChildActorComponent* heldWeapon = CreateDefaultSubobject<UChildActorComponent>(TEXT("HeldWeapon" + i));
+	//	//heldWeapon->SetupAttachment(playerArms);
+	//	heldWeapons.Add(heldWeapon);
+	//}
+
+	//AWeapon* heldGrenade = NewObject<AWeapon>(playerArms);
+	///*heldGrenade = CreateDefaultSubobject<UChildActorComponent>(TEXT("HeldGrenade"));
+	//heldGrenade->SetupAttachment(playerArms);*/
+
+	//weaponArsenal->SetupWeapons(heldWeapons, heldGrenade, gunTypes);
 }
 
 // Called every frame
