@@ -31,5 +31,5 @@ public:
 		void UpdateTargetActor(AActor* Actor, FAIStimulus const Stimulus);
 
 	UFUNCTION(BlueprintCallable)
-		void MeleeAttack() override;
+		virtual void MeleeAttack() override;
 };
