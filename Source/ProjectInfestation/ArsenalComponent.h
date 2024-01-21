@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Weapon.h"
+#include "Gun.h"
 #include "Templates/SharedPointer.h"
 
 #include "ArsenalComponent.generated.h"
@@ -31,18 +31,18 @@ public:
 	// Sets default values for this component's properties
 	UArsenalComponent();
 
-	void SetupWeapons(TArray<UChildActorComponent*> weapons, UChildActorComponent* grenade);
+	void SetupWeapons(TArray<UChildActorComponent*> guns, UChildActorComponent* grenade, TArray<TSubclassOf<AGun>> gunTypes);
 
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	void AddAmmo(FName ammoType, int numAmmo);
+	void AddAmmo(FName gunName, int numAmmo);
 
-	AWeapon GetActiveWeapon();
-	void SetActiveWeaponInfo(int rAmmo, int cAmmo);
+	AWeapon* GetActiveWeapon();
+	//void SetActiveWeaponInfo(int rAmmo, int cAmmo);
 
 	UFUNCTION(BlueprintCallable, Category = Weapon)
-		AWeapon GetWeaponOfType(FName ammoType); //Assuming this gets a reference that I can edit
+		AWeapon* GetWeaponOfType(FName gunName); //Assuming this gets a reference that I can edit
 
 	//These return true, if they activated a different weapon
 	bool ActivatePrevious();
@@ -51,10 +51,10 @@ public:
 	bool ActivateGrenade();
 
 	UPROPERTY(EditDefaultsOnly, Category = Arsenal)
-		TArray<AWeapon> weaponList;
+		TArray<AGun*> gunList;
 
 	UPROPERTY(EditDefaultsOnly, Category = Arsenal)
-		AWeapon grenade;
+		AWeapon* grenade;
 
 protected:
 	// Called when the game starts

@@ -22,7 +22,7 @@ public:
 		bool constantlyShooting;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
-		FName ammoName;
+		FName weaponName;
 
 	// Sets default values for this actor's properties
 	AWeapon();

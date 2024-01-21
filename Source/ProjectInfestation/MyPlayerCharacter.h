@@ -57,6 +57,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = Death)
 		void KillPlayer();
 
+	UFUNCTION(BlueprintCallable, Category = Ammo)
+		AWeapon* GetActiveWeapon();
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -83,6 +86,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Shoot)
 		FHitResult ShootRay(float length);
 
+	UPROPERTY(EditDefaultsOnly, Category = Arsenal)
+		TArray<TSubclassOf<AGun>> gunTypes;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -90,7 +96,7 @@ protected:
 	//void SetActiveWeapon(FArsenalWeapon weapon);
 
 private:
-	//bool setGunYet;
+	bool setupGunsYet;
 
-	void SaveWeaponInfo();
+	//void SaveWeaponInfo();
 };

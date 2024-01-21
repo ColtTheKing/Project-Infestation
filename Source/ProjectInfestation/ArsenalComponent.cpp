@@ -48,38 +48,48 @@ void UArsenalComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
-void UArsenalComponent::SetupWeapons(TArray<UChildActorComponent*> heldWeapons, UChildActorComponent* heldGrenade)
+void UArsenalComponent::SetupWeapons(TArray<UChildActorComponent*> heldGuns, UChildActorComponent* heldGrenade, TArray<TSubclassOf<AGun>> gunTypes)
 {
-	weaponList[activeWeapon].reserveAmmo = rAmmo;
-	weaponList[activeWeapon].ammoInClip = cAmmo;
+	for (size_t i = 0; i < heldGuns.Num(); i++)
+	{
+		heldGuns[i]->SetChildActorClass(gunTypes[i]);
+
+		AActor* gunActor = heldGuns[i]->GetChildActor();
+		AGun* myGun = Cast<AGun>(gunActor);
+
+		gunList.Add(myGun);
+	}
+
+	/*gunList[activeWeapon]->SetReserveAmmo(rAmmo);
+	gunList[activeWeapon]->SetAmmoInClip(cAmmo);*/
 }
 
-void UArsenalComponent::AddAmmo(FName ammoType, int numAmmo)
+void UArsenalComponent::AddAmmo(FName gunName, int numAmmo)
 {
-	for (size_t i = 0; i < weaponList.Num(); i++)
+	for (size_t i = 0; i < gunList.Num(); i++)
 	{
-		if (ammoType.Compare(weaponList[i].weaponName) == 0)
+		if (gunName.Compare(gunList[i]->weaponName) == 0)
 		{
-			if (!weaponList[i].isEnabledWeapon)
+			if (!gunList[i]->isEnabledWeapon)
 			{
-				weaponList[i].isEnabledWeapon = true;
+				gunList[i]->isEnabledWeapon = true;
 
 				//Add ammo to the clip first if this is the first ammo for this weapon
-				int excess = numAmmo - weaponList[i].clipSize;
+				int excess = numAmmo - gunList[i]->clipSize;
 				
 				if (excess > 0)
 				{
-					weaponList[i].reserveAmmo = excess;
-					weaponList[i].ammoInClip = weaponList[i].clipSize;
+					gunList[i]->SetReserveAmmo(excess);
+					gunList[i]->SetAmmoInClip(gunList[i]->clipSize);
 				}
 				else
 				{
-					weaponList[i].ammoInClip = numAmmo;
+					gunList[i]->SetAmmoInClip(numAmmo);
 				}
 			}
 			else
 			{
-				weaponList[i].reserveAmmo += numAmmo;
+				gunList[i]->SetReserveAmmo(gunList[i]->GetReserveAmmo() + numAmmo);
 			}
 
 			break;
@@ -87,76 +97,76 @@ void UArsenalComponent::AddAmmo(FName ammoType, int numAmmo)
 	}
 }
 
-FArsenalWeapon UArsenalComponent::GetActiveWeapon()
+AWeapon* UArsenalComponent::GetActiveWeapon()
 {
 	if (grenadeActive)
 		return grenade;
 	
-	if (!weaponList.IsValidIndex(activeWeapon))
+	if (!gunList.IsValidIndex(activeWeapon))
 	{
-		UE_LOG(LogTemp, Fatal, TEXT("Active weapon is not a valid index!"));
-		return grenade;
+		UE_LOG(LogTemp, Warning, TEXT("Active weapon is not a valid index!"));
+		return nullptr;
 	}
-	return weaponList[activeWeapon];
+	return gunList[activeWeapon];
 }
 
-TSubclassOf<AWeapon> UArsenalComponent::GetWeaponOfType(FName ammoName)
+AWeapon* UArsenalComponent::GetWeaponOfType(FName gunName)
 {
-	for (int i = 0; i < weaponList.Num(); i++)
+	for (int i = 0; i < gunList.Num(); i++)
 	{
-		if (weaponList[i].weaponName.IsEqual(ammoName))
-			return weaponList[i].weaponSubclass;
+		if (gunName.Compare(gunList[i]->weaponName) == 0)
+			return gunList[i];
 	}
-
-	if (!weaponList.IsValidIndex(activeWeapon))
-		UE_LOG(LogTemp, Fatal, TEXT("Weapon name does not match any weapons in the arsenal!"));
-
-	return grenade.weaponSubclass;
+	
+	UE_LOG(LogTemp, Warning, TEXT("Weapon name does not match any weapons in the arsenal!"));
+	return nullptr;
 }
 
-void UArsenalComponent::SetActiveWeaponInfo(int rAmmo, int cAmmo)
-{
-	if (grenadeActive)
-	{
-		grenade.reserveAmmo = rAmmo;
-		grenade.ammoInClip = cAmmo;
-	}
-	else if (weaponList.IsValidIndex(activeWeapon))
-	{
-		weaponList[activeWeapon].reserveAmmo = rAmmo;
-		weaponList[activeWeapon].ammoInClip = cAmmo;
-	}
-	else
-	{
-		UE_LOG(LogTemp, Fatal, TEXT("Active weapon is not a valid index!"));
-	}
-}
+//void UArsenalComponent::SetActiveWeaponInfo(int rAmmo, int cAmmo)
+//{
+//	if (grenadeActive)
+//	{
+//		grenade.reserveAmmo = rAmmo;
+//		grenade.ammoInClip = cAmmo;
+//	}
+//	else if (weaponList.IsValidIndex(activeWeapon))
+//	{
+//		weaponList[activeWeapon].reserveAmmo = rAmmo;
+//		weaponList[activeWeapon].ammoInClip = cAmmo;
+//	}
+//	else
+//	{
+//		UE_LOG(LogTemp, Warning, TEXT("Active weapon is not a valid index!"));
+//	}
+//}
 
 bool UArsenalComponent::ActivatePrevious()
 {
 	size_t currentActive = activeWeapon;
 
 	if (currentActive < 1)
-		currentActive = weaponList.Num() - 1;
+		currentActive = gunList.Num() - 1;
 	else
 		currentActive--;
 
-	if (!weaponList.IsValidIndex(currentActive))
+	if (!gunList.IsValidIndex(currentActive))
 		return false;
 
-	//Keep cycling through weapons until you reach one that is enabled
-	while (!weaponList[currentActive].isEnabledWeapon)
-	{
-		if (currentActive < 1)
-			currentActive = weaponList.Num() - 1;
-		else
-			currentActive--;
+	//UNCOMMENT ONCE I ADD A WAY TO DISABLE WEAPONS WITH NEW SYSTEM
+	
+	////Keep cycling through weapons until you reach one that is enabled
+	//while (!gunList[currentActive].isEnabledWeapon)
+	//{
+	//	if (currentActive < 1)
+	//		currentActive = weaponList.Num() - 1;
+	//	else
+	//		currentActive--;
 
-		if (!weaponList.IsValidIndex(currentActive))
-			return false;
-	}
+	//	if (!weaponList.IsValidIndex(currentActive))
+	//		return false;
+	//}
 
-	bool changedActive = weaponList.IsValidIndex(currentActive) && (currentActive != activeWeapon || grenadeActive);
+	bool changedActive = gunList.IsValidIndex(currentActive) && (currentActive != activeWeapon || grenadeActive);
 
 	if (changedActive)
 	{
@@ -173,24 +183,26 @@ bool UArsenalComponent::ActivateNext()
 	size_t currentActive = activeWeapon;
 
 	currentActive++;
-	if (currentActive >= weaponList.Num())
+	if (currentActive >= gunList.Num())
 		currentActive = 0;
 
-	if (!weaponList.IsValidIndex(currentActive))
+	if (!gunList.IsValidIndex(currentActive))
 		return false;
 
-	//Keep cycling through weapons until you reach one that is enabled
-	while (!weaponList[currentActive].isEnabledWeapon)
-	{
-		currentActive++;
-		if (currentActive >= weaponList.Num())
-			currentActive = 0;
+	//UNCOMMENT ONCE I ADD A WAY TO DISABLE WEAPONS WITH NEW SYSTEM
 
-		if (!weaponList.IsValidIndex(currentActive))
-			return false;
-	}
+	////Keep cycling through weapons until you reach one that is enabled
+	//while (!weaponList[currentActive].isEnabledWeapon)
+	//{
+	//	currentActive++;
+	//	if (currentActive >= weaponList.Num())
+	//		currentActive = 0;
 
-	bool changedActive = weaponList.IsValidIndex(currentActive) && (currentActive != activeWeapon || grenadeActive);
+	//	if (!weaponList.IsValidIndex(currentActive))
+	//		return false;
+	//}
+
+	bool changedActive = gunList.IsValidIndex(currentActive) && (currentActive != activeWeapon || grenadeActive);
 
 	if (changedActive)
 	{
@@ -204,7 +216,7 @@ bool UArsenalComponent::ActivateNext()
 
 bool UArsenalComponent::ActivateIndex(size_t index)
 {
-	bool changedActive = weaponList.IsValidIndex(index) && (index != activeWeapon || grenadeActive);
+	bool changedActive = gunList.IsValidIndex(index) && (index != activeWeapon || grenadeActive);
 
 	if (changedActive)
 	{
@@ -218,7 +230,10 @@ bool UArsenalComponent::ActivateIndex(size_t index)
 
 bool UArsenalComponent::ActivateGrenade()
 {
-	bool changedActive = grenade.isEnabledWeapon && !grenadeActive;
+	//UNCOMMENT ONCE I ADD A WAY TO DISABLE WEAPONS WITH NEW SYSTEM
+
+	//bool changedActive = grenade.isEnabledWeapon && !grenadeActive;
+	bool changedActive = !grenadeActive;
 
 	if (changedActive)
 	{
