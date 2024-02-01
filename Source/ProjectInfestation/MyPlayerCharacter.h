@@ -39,8 +39,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
 		USkeletalMeshComponent* playerArms;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gun)
-		TArray<AGun*> heldWeapons;
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gun)
+	//	TArray<AGun*> heldWeapons;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gun)
 		UChildActorComponent* heldGrenade;
@@ -86,9 +86,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Shoot)
 		FHitResult ShootRay(float length);
 
-	UPROPERTY(EditDefaultsOnly, Category = Arsenal)
-		TArray<TSubclassOf<AGun>> gunTypes;
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -96,7 +93,5 @@ protected:
 	//void SetActiveWeapon(FArsenalWeapon weapon);
 
 private:
-	bool setupGunsYet;
-
 	//void SaveWeaponInfo();
 };

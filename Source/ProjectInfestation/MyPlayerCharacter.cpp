@@ -27,9 +27,6 @@ AMyPlayerCharacter::AMyPlayerCharacter()
 
 	messageLog = CreateDefaultSubobject<UMessageLogComponent>(TEXT("MessageLog"));
 	weaponArsenal = CreateDefaultSubobject<UArsenalComponent>(TEXT("WeaponArsenal"));
-
-
-	//setupGunsYet = false;
 }
 
 // Called when the game starts or when spawned
@@ -37,32 +34,13 @@ void AMyPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	////Set up child objects for all of the base guns
-	//for (int i = 0; i < gunTypes.Num(); i++)
-	//{
-	//	AGun* heldWeapon = NewObject<AGun>(playerArms);
-	//	//UChildActorComponent* heldWeapon = CreateDefaultSubobject<UChildActorComponent>(TEXT("HeldWeapon" + i));
-	//	//heldWeapon->SetupAttachment(playerArms);
-	//	heldWeapons.Add(heldWeapon);
-	//}
-
-	//AWeapon* heldGrenade = NewObject<AWeapon>(playerArms);
-	///*heldGrenade = CreateDefaultSubobject<UChildActorComponent>(TEXT("HeldGrenade"));
-	//heldGrenade->SetupAttachment(playerArms);*/
-
-	//weaponArsenal->SetupWeapons(heldWeapons, heldGrenade, gunTypes);
+	weaponArsenal->SetupWeapons(playerArms);
 }
 
 // Called every frame
 void AMyPlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	/*if (!setupGunsYet)
-	{
-		weaponArsenal->SetupWeapons(heldWeapons, heldGrenade);
-		setupGunsYet = true;
-	}*/
 
 	// If the weapon attack button is being held down, try to do it every frame
 

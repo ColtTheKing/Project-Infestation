@@ -31,7 +31,9 @@ public:
 	// Sets default values for this component's properties
 	UArsenalComponent();
 
-	void SetupWeapons(TArray<AGun*> guns, AWeapon* grenade, TArray<TSubclassOf<AGun>> gunTypes);
+	void SetupWeapons(UPrimitiveComponent* attachTo);
+	void SetWeaponEnabled(int index, bool enabled);
+	void SetGrenadeEnabled(bool enabled);
 
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -39,7 +41,6 @@ public:
 	void AddAmmo(FName gunName, int numAmmo);
 
 	AWeapon* GetActiveWeapon();
-	//void SetActiveWeaponInfo(int rAmmo, int cAmmo);
 
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 		AWeapon* GetWeaponOfType(FName gunName); //Assuming this gets a reference that I can edit
@@ -48,7 +49,15 @@ public:
 	bool ActivatePrevious();
 	bool ActivateNext();
 	bool ActivateIndex(size_t index);
-	bool ActivateGrenade();
+	bool ActivateAndEnableGrenade();
+	bool ActivateWeaponOfType(FName gunName);
+	bool EnableActiveWeapon(int weaponIndex);
+
+	UPROPERTY(EditDefaultsOnly, Category = Arsenal)
+		TArray<TSubclassOf<AGun>> gunBPs;
+
+	UPROPERTY(EditDefaultsOnly, Category = Arsenal)
+		TSubclassOf<AWeapon> grenadeBP;
 
 	UPROPERTY(EditDefaultsOnly, Category = Arsenal)
 		TArray<AGun*> gunList;
