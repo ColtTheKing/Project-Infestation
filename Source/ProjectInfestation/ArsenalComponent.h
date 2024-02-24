@@ -31,7 +31,7 @@ public:
 	// Sets default values for this component's properties
 	UArsenalComponent();
 
-	void SetupWeapons(UPrimitiveComponent* attachTo);
+	void SetupWeapons(USceneComponent* attachTo);
 	void SetWeaponEnabled(int index, bool enabled);
 	void SetGrenadeEnabled(bool enabled);
 
@@ -51,7 +51,7 @@ public:
 	bool ActivateIndex(size_t index);
 	bool ActivateAndEnableGrenade();
 	bool ActivateWeaponOfType(FName gunName);
-	bool EnableActiveWeapon(int weaponIndex);
+	void EnableActiveWeapon(int weaponIndex);
 
 	UPROPERTY(EditDefaultsOnly, Category = Arsenal)
 		TArray<TSubclassOf<AGun>> gunBPs;

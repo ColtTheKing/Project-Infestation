@@ -72,3 +72,8 @@ void AWeapon::SetReserveAmmo(int ammo)
 {
 	reserveAmmo = ammo;
 }
+
+void AWeapon::ModifyDamagePerHit(float multiplier)
+{
+	damagePerHit = damagePerHit * multiplier;
+}

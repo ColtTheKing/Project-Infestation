@@ -51,6 +51,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Ammo)
 		int GetReserveAmmo();
 
+	UFUNCTION(BlueprintCallable, Category = Upgrade)
+		void ModifyDamagePerHit(float multiplier);
+
 	void SetAmmoInClip(int ammo);
 	void SetReserveAmmo(int ammo);
 

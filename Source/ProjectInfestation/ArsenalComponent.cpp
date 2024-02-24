@@ -27,7 +27,7 @@ void UArsenalComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
-void UArsenalComponent::SetupWeapons(UPrimitiveComponent* attachTo)
+void UArsenalComponent::SetupWeapons(USceneComponent* attachTo)
 {
 	FTransform localToWorld = FTransform(attachTo->GetComponentLocation());
 	FVector location = localToWorld.GetLocation();
@@ -36,7 +36,7 @@ void UArsenalComponent::SetupWeapons(UPrimitiveComponent* attachTo)
 	for (size_t i = 0; i < gunBPs.Num(); i++)
 	{
 		AActor* gunActor = GetWorld()->SpawnActor(gunBPs[i], &location, &rotation);
-		gunActor->AttachToComponent(attachTo, FAttachmentTransformRules::KeepRelativeTransform);
+		gunActor->AttachToComponent(attachTo, FAttachmentTransformRules::KeepWorldTransform);
 
 		AGun* myGun = Cast<AGun>(gunActor);
 		gunList.Add(myGun);
@@ -130,16 +130,16 @@ AWeapon* UArsenalComponent::GetWeaponOfType(FName gunName)
 
 bool UArsenalComponent::ActivatePrevious()
 {
-	size_t currentActive = activeWeapon;
+	size_t newActive = activeWeapon;
 
 	if (grenadeActive)
 		; //If grenade is currently active, just use the previously active weapon
-	else if (currentActive < 1)
-		currentActive = gunList.Num() - 1;
+	else if (newActive < 1)
+		newActive = gunList.Num() - 1;
 	else
-		currentActive--;
+		newActive--;
 
-	if (!gunList.IsValidIndex(currentActive))
+	if (!gunList.IsValidIndex(newActive))
 		return false;
 
 	//UNCOMMENT ONCE I ADD A WAY TO DISABLE WEAPONS WITH NEW SYSTEM
@@ -157,25 +157,28 @@ bool UArsenalComponent::ActivatePrevious()
 	//}
 
 	//If the weapon is actually different than before
-	bool changedActive = (currentActive != activeWeapon) || grenadeActive;
+	bool changedActive = (newActive != activeWeapon) || grenadeActive;
 	if (changedActive)
-		return EnableActiveWeapon(changedActive);
+	{
+		EnableActiveWeapon(newActive);
+		return true;
+	}
 
 	return false;
 }
 
 bool UArsenalComponent::ActivateNext()
 {
-	size_t currentActive = activeWeapon;
+	size_t newActive = activeWeapon;
 
 	if (grenadeActive)
 		; //If grenade is currently active, just use the previously active weapon
-	else if (currentActive >= gunList.Num() - 1)
-		currentActive = 0;
+	else if (newActive >= gunList.Num() - 1)
+		newActive = 0;
 	else
-		currentActive++;
+		newActive++;
 
-	if (!gunList.IsValidIndex(currentActive))
+	if (!gunList.IsValidIndex(newActive))
 		return false;
 
 	//UNCOMMENT ONCE I ADD A WAY TO DISABLE WEAPONS WITH NEW SYSTEM
@@ -192,9 +195,12 @@ bool UArsenalComponent::ActivateNext()
 	//}
 
 	//If the weapon is actually different than before
-	bool changedActive = (currentActive != activeWeapon) || grenadeActive;
+	bool changedActive = (newActive != activeWeapon) || grenadeActive;
 	if (changedActive)
-		return EnableActiveWeapon(changedActive);
+	{
+		EnableActiveWeapon(newActive);
+		return true;
+	}
 
 	return false;
 }
@@ -209,16 +215,16 @@ bool UArsenalComponent::ActivateIndex(size_t index)
 	//If the weapon is actually different than before
 	bool changedActive = (index != activeWeapon) || grenadeActive;
 	if (changedActive)
-		return EnableActiveWeapon(changedActive);
+	{
+		EnableActiveWeapon(index);
+		return true;
+	}
 
 	return false;
 }
 
 bool UArsenalComponent::ActivateWeaponOfType(FName gunName)
 {
-	/*UE_LOG(LogTemp, Warning, TEXT("Weapon name does not match any weapons in the arsenal!"));
-	return nullptr;*/
-
 	//Switch to grenade if that's the weapon type
 	if (gunName == grenade->weaponName)
 		return ActivateAndEnableGrenade();
@@ -239,9 +245,11 @@ bool UArsenalComponent::ActivateWeaponOfType(FName gunName)
 		return false;
 
 	bool changedActive = (gunIndex != activeWeapon) || grenadeActive;
-
 	if (changedActive)
-		return EnableActiveWeapon(gunIndex);
+	{
+		EnableActiveWeapon(gunIndex);
+		return true;
+	}
 
 	return false;
 }
@@ -255,13 +263,11 @@ bool UArsenalComponent::ActivateAndEnableGrenade()
 	if (changedActive)
 	{
 		grenadeActive = true;
+		SetGrenadeEnabled(false);
 
-
-
-		//DISABLE ALL NON GRENADE WEAPONS AND ENABLE GRENADE
-
-
-
+		//Disable all non grenade weapons
+		for (int i = 0; i < gunList.Num(); i++)
+			SetWeaponEnabled(i, true);
 
 		return true;
 	}
@@ -270,14 +276,19 @@ bool UArsenalComponent::ActivateAndEnableGrenade()
 }
 
 //Sets which weapon is visible and usable
-bool UArsenalComponent::EnableActiveWeapon(int weaponIndex)
+void UArsenalComponent::EnableActiveWeapon(int weaponIndex)
 {
 	grenadeActive = false;
 	activeWeapon = weaponIndex;
 
-	//ENABLE WEAPON AT INDEX AND DISABLE ALL OTHERS
+	//Enable weapon at index and disable all others
 	for (int i = 0; i < gunList.Num(); i++)
 	{
-		SetWeaponEnabled()
+		if (i == weaponIndex)
+			SetWeaponEnabled(i, true);
+		else
+			SetWeaponEnabled(i, false);
 	}
+
+	SetGrenadeEnabled(false);
 }
