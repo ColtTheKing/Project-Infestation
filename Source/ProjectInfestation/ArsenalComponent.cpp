@@ -36,7 +36,7 @@ void UArsenalComponent::SetupWeapons(USceneComponent* attachTo)
 	for (size_t i = 0; i < gunBPs.Num(); i++)
 	{
 		AActor* gunActor = GetWorld()->SpawnActor(gunBPs[i], &location, &rotation);
-		gunActor->AttachToComponent(attachTo, FAttachmentTransformRules::KeepWorldTransform);
+		gunActor->AttachToComponent(attachTo, FAttachmentTransformRules::KeepRelativeTransform);
 
 		AGun* myGun = Cast<AGun>(gunActor);
 		gunList.Add(myGun);
@@ -56,18 +56,14 @@ void UArsenalComponent::SetupWeapons(USceneComponent* attachTo)
 
 void UArsenalComponent::SetWeaponEnabled(int index, bool enabled)
 {
-	UStaticMeshComponent* staticMesh = gunList[index]->GetComponentByClass<UStaticMeshComponent>();
-	//enabled ? staticMesh->Activate() : staticMesh->Deactivate();
-	staticMesh->SetVisibility(enabled);
-	staticMesh->SetComponentTickEnabled(enabled);
+	gunList[index]->SetActorHiddenInGame(!enabled);
+	//gunList[index]->SetActorTickEnabled(enabled);
 }
 
 void UArsenalComponent::SetGrenadeEnabled(bool enabled)
 {
-	UStaticMeshComponent* staticMesh = grenade->GetComponentByClass<UStaticMeshComponent>();
-	//enabled ? staticMesh->Activate() : staticMesh->Deactivate();
-	staticMesh->SetVisibility(enabled);
-	staticMesh->SetComponentTickEnabled(enabled);
+	grenade->SetActorHiddenInGame(!enabled);
+	//grenade->SetActorTickEnabled(enabled);
 }
 
 void UArsenalComponent::AddAmmo(FName gunName, int numAmmo)

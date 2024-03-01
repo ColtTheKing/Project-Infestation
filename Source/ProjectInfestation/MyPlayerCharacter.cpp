@@ -45,17 +45,12 @@ void AMyPlayerCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	// If the weapon attack button is being held down, try to do it every frame
-
-	/*if (heldWeapon)
+	if (GetActiveWeapon())
 	{
-		AActor* gunActor = heldWeapon->GetChildActor();
-		AGun* myGun = Cast<AGun>(gunActor);
-
+		AGun* myGun = Cast<AGun>(GetActiveWeapon());
 		if (myGun && myGun->constantlyShooting)
-		{
 			myGun->UseWeapon(this);
-		}
-	}*/
+	}
 }
 
 AWeapon* AMyPlayerCharacter::GetActiveWeapon()
