@@ -57,13 +57,13 @@ void UArsenalComponent::SetupWeapons(USceneComponent* attachTo)
 void UArsenalComponent::SetWeaponEnabled(int index, bool enabled)
 {
 	gunList[index]->SetActorHiddenInGame(!enabled);
-	//gunList[index]->SetActorTickEnabled(enabled);
+	gunList[index]->SetActorTickEnabled(enabled);
 }
 
 void UArsenalComponent::SetGrenadeEnabled(bool enabled)
 {
 	grenade->SetActorHiddenInGame(!enabled);
-	//grenade->SetActorTickEnabled(enabled);
+	grenade->SetActorTickEnabled(enabled);
 }
 
 void UArsenalComponent::AddAmmo(FName gunName, int numAmmo)
