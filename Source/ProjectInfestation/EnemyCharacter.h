@@ -8,6 +8,7 @@
 #include "BehaviorTree/BehaviorTree.h"
 
 #include "HealthComponent.h"
+#include "AI/PatrolPath.h"
 
 #include "EnemyCharacter.generated.h"
 
@@ -43,7 +44,10 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, Category = "AI")
-		class UBehaviorTree* enemyBehaviorTree;
+		UBehaviorTree* enemyBehaviorTree;
+
+	UPROPERTY(EditAnywhere, Category = "AI")
+		APatrolPath* patrolPath;
 
 	// Attack radius of the enemy AI
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI")
