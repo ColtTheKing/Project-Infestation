@@ -38,6 +38,7 @@ public:
 	FORCEINLINE int GetAttackDamage() { return attackDamage; }
 	FORCEINLINE float GetAttackRadius() { return attackRadius; }
 	FORCEINLINE UBehaviorTree* GetBehaviorTree() { return enemyBehaviorTree; }
+	FORCEINLINE APatrolPath* GetPatrolPath() { return patrolPath; }
 
 protected:
 	// Called when the game starts or when spawned
