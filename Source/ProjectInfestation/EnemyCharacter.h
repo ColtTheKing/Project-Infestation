@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Components/CapsuleComponent.h"
+#include "BehaviorTree/BehaviorTree.h"
 
 #include "HealthComponent.h"
 
@@ -33,10 +34,23 @@ public:
 	/*UFUNCTION(BlueprintCallable, Category = Damage)
 		virtual void TakeDamage(int damage) PURE_VIRTUAL(AEnemyCharacter::TakeDamage, ;);*/
 
+	FORCEINLINE int GetAttackDamage() { return attackDamage; }
+	FORCEINLINE float GetAttackRadius() { return attackRadius; }
+	FORCEINLINE UBehaviorTree* GetBehaviorTree() { return enemyBehaviorTree; }
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-private:
+	UPROPERTY(EditAnywhere, Category = "AI")
+		class UBehaviorTree* enemyBehaviorTree;
+
+	// Attack radius of the enemy AI
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI")
+		float attackRadius;
+
+	// Attack damage of the enemy AI
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI")
+		int attackDamage;
 	
 };
