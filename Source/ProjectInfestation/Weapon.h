@@ -16,13 +16,13 @@ public:
 		int clipSize;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
-		bool isEnabledWeapon;
+		bool playerCanUse;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
 		bool constantlyShooting;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
-		FName ammoName;
+		FName weaponName;
 
 	// Sets default values for this actor's properties
 	AWeapon();
@@ -50,6 +50,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Ammo)
 		int GetReserveAmmo();
+
+	UFUNCTION(BlueprintCallable, Category = Upgrade)
+		void ModifyDamagePerHit(float multiplier);
 
 	void SetAmmoInClip(int ammo);
 	void SetReserveAmmo(int ammo);

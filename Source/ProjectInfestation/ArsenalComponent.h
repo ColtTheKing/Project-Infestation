@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Weapon.h"
+#include "Gun.h"
 #include "Templates/SharedPointer.h"
 
 #include "ArsenalComponent.generated.h"
@@ -17,7 +17,7 @@ struct FArsenalWeapon
 	UPROPERTY(EditDefaultsOnly, Category = Class)
 		TSubclassOf<AWeapon> weaponSubclass;
 
-	FName ammoName;
+	FName weaponName;
 	int reserveAmmo, ammoInClip, clipSize;
 	bool isEnabledWeapon;
 };
@@ -31,31 +31,45 @@ public:
 	// Sets default values for this component's properties
 	UArsenalComponent();
 
+	void SetupWeapons(USceneComponent* attachTo);
+	void SetWeaponEnabled(int index, bool enabled);
+	void SetGrenadeEnabled(bool enabled);
+
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	void AddAmmo(FName ammoType, int numAmmo);
+	void AddAmmo(FName gunName, int numAmmo);
 
-	FArsenalWeapon GetActiveWeapon();
-	void SetActiveWeaponInfo(int rAmmo, int cAmmo);
+	AWeapon* GetActiveWeapon();
+
+	UFUNCTION(BlueprintCallable, Category = Weapon)
+		AWeapon* GetWeaponOfType(FName gunName); //Assuming this gets a reference that I can edit
 
 	//These return true, if they activated a different weapon
 	bool ActivatePrevious();
 	bool ActivateNext();
 	bool ActivateIndex(size_t index);
-	bool ActivateGrenade();
+	bool ActivateAndEnableGrenade();
+	bool ActivateWeaponOfType(FName gunName);
+	void EnableActiveWeapon(int weaponIndex);
+
+	UPROPERTY(EditDefaultsOnly, Category = Arsenal)
+		TArray<TSubclassOf<AGun>> gunBPs;
+
+	UPROPERTY(EditDefaultsOnly, Category = Arsenal)
+		TSubclassOf<AWeapon> grenadeBP;
+
+	UPROPERTY(EditDefaultsOnly, Category = Arsenal)
+		TArray<AGun*> gunList;
+
+	UPROPERTY(EditDefaultsOnly, Category = Arsenal)
+		AWeapon* grenade;
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 private:
-	UPROPERTY(EditDefaultsOnly, Category = Arsenal)
-		TArray<FArsenalWeapon> weaponList;
-
-	UPROPERTY(EditDefaultsOnly, Category = Arsenal)
-		FArsenalWeapon grenade;
-
 	size_t activeWeapon;
 	bool grenadeActive;
 };

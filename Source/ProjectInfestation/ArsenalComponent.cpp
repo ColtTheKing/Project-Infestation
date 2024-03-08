@@ -18,27 +18,6 @@ UArsenalComponent::UArsenalComponent()
 void UArsenalComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	// Set up weapons
-	for (FArsenalWeapon& weapon : weaponList)
-	{
-		weapon.ammoName = weapon.weaponSubclass.GetDefaultObject()->ammoName;
-		weapon.clipSize = weapon.weaponSubclass.GetDefaultObject()->clipSize;
-		weapon.isEnabledWeapon = weapon.weaponSubclass.GetDefaultObject()->isEnabledWeapon;
-
-		weapon.reserveAmmo = 0;
-		weapon.ammoInClip = weapon.clipSize;
-
-		UE_LOG(LogTemp, Warning, TEXT("Clip Size %d"), weapon.clipSize);
-	}
-
-	// Set up grenade
-	grenade.ammoName = grenade.weaponSubclass.GetDefaultObject()->ammoName;
-	grenade.clipSize = grenade.weaponSubclass.GetDefaultObject()->clipSize;
-	grenade.isEnabledWeapon = grenade.weaponSubclass.GetDefaultObject()->isEnabledWeapon;
-
-	grenade.reserveAmmo = 0;
-	grenade.ammoInClip = grenade.clipSize;
 }
 
 
@@ -48,32 +27,71 @@ void UArsenalComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
-void UArsenalComponent::AddAmmo(FName ammoType, int numAmmo)
+void UArsenalComponent::SetupWeapons(USceneComponent* attachTo)
 {
-	for (size_t i = 0; i < weaponList.Num(); i++)
+	FTransform localToWorld = FTransform(attachTo->GetComponentLocation());
+	FVector location = localToWorld.GetLocation();
+	FRotator rotation = FRotator(localToWorld.GetRotation());
+
+	for (size_t i = 0; i < gunBPs.Num(); i++)
 	{
-		if (ammoType.Compare(weaponList[i].ammoName) == 0)
+		AActor* gunActor = GetWorld()->SpawnActor(gunBPs[i], &location, &rotation);
+		gunActor->AttachToComponent(attachTo, FAttachmentTransformRules::KeepRelativeTransform);
+
+		AGun* myGun = Cast<AGun>(gunActor);
+		gunList.Add(myGun);
+	}
+
+	AActor* grenadeActor = GetWorld()->SpawnActor(grenadeBP, &location, &rotation);
+	grenadeActor->AttachToComponent(attachTo, FAttachmentTransformRules::KeepRelativeTransform);
+
+	grenade = Cast<AWeapon>(grenadeActor);
+
+	//Make sure the first weapon in the arsenal is the only one active (visible and usable)
+	EnableActiveWeapon(0);
+
+	/*gunList[activeWeapon]->SetReserveAmmo(gunList[activeWeapon]->clipSize);
+	gunList[activeWeapon]->SetAmmoInClip(gunList[activeWeapon]->clipSize);*/
+}
+
+void UArsenalComponent::SetWeaponEnabled(int index, bool enabled)
+{
+	gunList[index]->SetActorHiddenInGame(!enabled);
+	gunList[index]->SetActorTickEnabled(enabled);
+}
+
+void UArsenalComponent::SetGrenadeEnabled(bool enabled)
+{
+	grenade->SetActorHiddenInGame(!enabled);
+	grenade->SetActorTickEnabled(enabled);
+}
+
+void UArsenalComponent::AddAmmo(FName gunName, int numAmmo)
+{
+	for (size_t i = 0; i < gunList.Num(); i++)
+	{
+		if (gunName.Compare(gunList[i]->weaponName) == 0)
 		{
-			if (!weaponList[i].isEnabledWeapon)
+			if (!gunList[i]->playerCanUse)
 			{
-				weaponList[i].isEnabledWeapon = true;
+				gunList[i]->playerCanUse = true;
 
 				//Add ammo to the clip first if this is the first ammo for this weapon
-				int excess = numAmmo - weaponList[i].clipSize;
+				int excess = numAmmo - gunList[i]->clipSize;
 				
 				if (excess > 0)
 				{
-					weaponList[i].reserveAmmo = excess;
-					weaponList[i].ammoInClip = weaponList[i].clipSize;
+					gunList[i]->SetReserveAmmo(excess);
+					gunList[i]->SetAmmoInClip(gunList[i]->clipSize);
 				}
 				else
 				{
-					weaponList[i].ammoInClip = numAmmo;
+					gunList[i]->SetAmmoInClip(numAmmo);
 				}
 			}
 			else
 			{
-				weaponList[i].reserveAmmo += numAmmo;
+				gunList[i]->SetReserveAmmo(gunList[i]->GetReserveAmmo() + numAmmo);
 			}
 
 			break;
@@ -81,62 +99,64 @@ void UArsenalComponent::AddAmmo(FName ammoType, int numAmmo)
 	}
 }
 
-FArsenalWeapon UArsenalComponent::GetActiveWeapon()
+AWeapon* UArsenalComponent::GetActiveWeapon()
 {
 	if (grenadeActive)
 		return grenade;
 	
-	if (!weaponList.IsValidIndex(activeWeapon))
+	if (!gunList.IsValidIndex(activeWeapon))
 	{
-		UE_LOG(LogTemp, Fatal, TEXT("Active weapon is not a valid index!"));
+		UE_LOG(LogTemp, Warning, TEXT("Active weapon is not a valid index!"));
+		return nullptr;
 	}
-	return weaponList[activeWeapon];
+	return gunList[activeWeapon];
 }
 
-void UArsenalComponent::SetActiveWeaponInfo(int rAmmo, int cAmmo)
+AWeapon* UArsenalComponent::GetWeaponOfType(FName gunName)
 {
-	if (grenadeActive)
+	for (int i = 0; i < gunList.Num(); i++)
 	{
-		grenade.reserveAmmo = rAmmo;
-		grenade.ammoInClip = cAmmo;
+		if (gunName.Compare(gunList[i]->weaponName) == 0)
+			return gunList[i];
 	}
-	else if (weaponList.IsValidIndex(activeWeapon))
-	{
-		weaponList[activeWeapon].reserveAmmo = rAmmo;
-		weaponList[activeWeapon].ammoInClip = cAmmo;
-	}
+	
+	UE_LOG(LogTemp, Warning, TEXT("Weapon name does not match any weapons in the arsenal!"));
+	return nullptr;
 }
 
 bool UArsenalComponent::ActivatePrevious()
 {
-	size_t currentActive = activeWeapon;
+	size_t newActive = activeWeapon;
 
-	if (currentActive < 1)
-		currentActive = weaponList.Num() - 1;
+	if (grenadeActive)
+		; //If grenade is currently active, just use the previously active weapon
+	else if (newActive < 1)
+		newActive = gunList.Num() - 1;
 	else
-		currentActive--;
+		newActive--;
 
-	if (!weaponList.IsValidIndex(currentActive))
+	if (!gunList.IsValidIndex(newActive))
 		return false;
 
-	//Keep cycling through weapons until you reach one that is enabled
-	while (!weaponList[currentActive].isEnabledWeapon)
-	{
-		if (currentActive < 1)
-			currentActive = weaponList.Num() - 1;
-		else
-			currentActive--;
+	//UNCOMMENT ONCE I ADD A WAY TO DISABLE WEAPONS WITH NEW SYSTEM
+	
+	////Keep cycling through weapons until you reach one that is enabled
+	//while (!gunList[currentActive].playerCanUse)
+	//{
+	//	if (currentActive < 1)
+	//		currentActive = weaponList.Num() - 1;
+	//	else
+	//		currentActive--;
 
-		if (!weaponList.IsValidIndex(currentActive))
-			return false;
-	}
+	//	if (!weaponList.IsValidIndex(currentActive))
+	//		return false;
+	//}
 
-	bool changedActive = weaponList.IsValidIndex(currentActive) && (currentActive != activeWeapon || grenadeActive);
-
+	//If the weapon is actually different than before
+	bool changedActive = (newActive != activeWeapon) || grenadeActive;
 	if (changedActive)
 	{
-		grenadeActive = false;
-		activeWeapon = currentActive;
+		EnableActiveWeapon(newActive);
 		return true;
 	}
 
@@ -145,32 +165,36 @@ bool UArsenalComponent::ActivatePrevious()
 
 bool UArsenalComponent::ActivateNext()
 {
-	size_t currentActive = activeWeapon;
+	size_t newActive = activeWeapon;
 
-	currentActive++;
-	if (currentActive >= weaponList.Num())
-		currentActive = 0;
+	if (grenadeActive)
+		; //If grenade is currently active, just use the previously active weapon
+	else if (newActive >= gunList.Num() - 1)
+		newActive = 0;
+	else
+		newActive++;
 
-	if (!weaponList.IsValidIndex(currentActive))
+	if (!gunList.IsValidIndex(newActive))
 		return false;
 
-	//Keep cycling through weapons until you reach one that is enabled
-	while (!weaponList[currentActive].isEnabledWeapon)
-	{
-		currentActive++;
-		if (currentActive >= weaponList.Num())
-			currentActive = 0;
+	//UNCOMMENT ONCE I ADD A WAY TO DISABLE WEAPONS WITH NEW SYSTEM
 
-		if (!weaponList.IsValidIndex(currentActive))
-			return false;
-	}
+	////Keep cycling through weapons until you reach one that is enabled
+	//while (!weaponList[currentActive].playerCanUse)
+	//{
+	//	currentActive++;
+	//	if (currentActive >= weaponList.Num())
+	//		currentActive = 0;
 
-	bool changedActive = weaponList.IsValidIndex(currentActive) && (currentActive != activeWeapon || grenadeActive);
+	//	if (!weaponList.IsValidIndex(currentActive))
+	//		return false;
+	//}
 
+	//If the weapon is actually different than before
+	bool changedActive = (newActive != activeWeapon) || grenadeActive;
 	if (changedActive)
 	{
-		grenadeActive = false;
-		activeWeapon = currentActive;
+		EnableActiveWeapon(newActive);
 		return true;
 	}
 
@@ -179,27 +203,88 @@ bool UArsenalComponent::ActivateNext()
 
 bool UArsenalComponent::ActivateIndex(size_t index)
 {
-	bool changedActive = weaponList.IsValidIndex(index) && (index != activeWeapon || grenadeActive);
+	//HAVE CODE HERE LATER TO DEAL WITH DISABLED WEAPONS ONCE THAT IS A THING
 
+	if (!gunList.IsValidIndex(index))
+		return false;
+
+	//If the weapon is actually different than before
+	bool changedActive = (index != activeWeapon) || grenadeActive;
 	if (changedActive)
 	{
-		grenadeActive = false;
-		activeWeapon = index;
+		EnableActiveWeapon(index);
 		return true;
 	}
 
 	return false;
 }
 
-bool UArsenalComponent::ActivateGrenade()
+bool UArsenalComponent::ActivateWeaponOfType(FName gunName)
 {
-	bool changedActive = grenade.isEnabledWeapon && !grenadeActive;
+	//Switch to grenade if that's the weapon type
+	if (gunName == grenade->weaponName)
+		return ActivateAndEnableGrenade();
 
+	//Find the gun with the provided name in the gun list
+	//HAVE CODE HERE LATER TO DEAL WITH FAILING TO SWITCH IF THAT WEAPON IS DISABLED
+	int gunIndex = -1;
+	for (int i = 0; i < gunList.Num(); i++)
+	{
+		if (gunName.Compare(gunList[i]->weaponName) == 0)
+		{
+			gunIndex = i;
+			break;
+		}
+	}
+
+	if (gunIndex == -1)
+		return false;
+
+	bool changedActive = (gunIndex != activeWeapon) || grenadeActive;
 	if (changedActive)
 	{
-		grenadeActive = true;
+		EnableActiveWeapon(gunIndex);
 		return true;
 	}
 
 	return false;
+}
+
+bool UArsenalComponent::ActivateAndEnableGrenade()
+{
+	//UNCOMMENT ONCE I ADD A WAY TO DISABLE WEAPONS WITH NEW SYSTEM
+	//bool changedActive = grenade.playerCanUse && !grenadeActive;
+	bool changedActive = !grenadeActive;
+
+	if (changedActive)
+	{
+		grenadeActive = true;
+		SetGrenadeEnabled(false);
+
+		//Disable all non grenade weapons
+		for (int i = 0; i < gunList.Num(); i++)
+			SetWeaponEnabled(i, true);
+
+		return true;
+	}
+
+	return false;
+}
+
+//Sets which weapon is visible and usable
+void UArsenalComponent::EnableActiveWeapon(int weaponIndex)
+{
+	grenadeActive = false;
+	activeWeapon = weaponIndex;
+
+	//Enable weapon at index and disable all others
+	for (int i = 0; i < gunList.Num(); i++)
+	{
+		if (i == weaponIndex)
+			SetWeaponEnabled(i, true);
+		else
+			SetWeaponEnabled(i, false);
+	}
+
+	SetGrenadeEnabled(false);
 }

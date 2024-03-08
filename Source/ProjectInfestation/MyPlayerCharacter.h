@@ -39,11 +39,15 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
 		USkeletalMeshComponent* playerArms;
 
+	//Temporary holder component to position the gun in the arms
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gun)
-		UChildActorComponent* heldWeapon;
+		USceneComponent* armGunAttachment;
 
-	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
-		UHealthComponent* health;*/
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gun)
+	//	TArray<AGun*> heldWeapons;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gun)
+		UChildActorComponent* heldGrenade;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Messages)
 		UMessageLogComponent* messageLog;
@@ -51,17 +55,14 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Arsenal)
 		UArsenalComponent* weaponArsenal;
 
-	/*UFUNCTION(BlueprintCallable, Category = Health)
-		void TakeDamage(int damage);*/
-
-	/*UFUNCTION(BlueprintCallable, Category = Health)
-		void RestoreHp(int hp);*/
-
 	UFUNCTION(BlueprintCallable, Category = Ammo)
 		void RestoreAmmo(FName ammoType, int ammo);
 
 	UFUNCTION(BlueprintImplementableEvent, Category = Death)
 		void KillPlayer();
+
+	UFUNCTION(BlueprintCallable, Category = Ammo)
+		AWeapon* GetActiveWeapon();
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -93,10 +94,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	void SetActiveWeapon(FArsenalWeapon weapon);
+	//void SetActiveWeapon(FArsenalWeapon weapon);
 
 private:
-	bool setGunYet;
-
-	void SaveWeaponInfo();
 };
