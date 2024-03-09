@@ -9,7 +9,7 @@
 
 UBTTask_FindPatrolPathPoint::UBTTask_FindPatrolPathPoint(FObjectInitializer const& objectInitializer)
 {
-	NodeName = "Find Next Point on Patrol Path";
+	NodeName = TEXT("Find Next Point on Patrol Path");
 }
 
 EBTNodeResult::Type UBTTask_FindPatrolPathPoint::ExecuteTask(UBehaviorTreeComponent& ownerComp, uint8* nodeMemory)
