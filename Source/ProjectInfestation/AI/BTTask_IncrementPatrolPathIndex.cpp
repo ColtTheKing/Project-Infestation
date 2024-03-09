@@ -18,7 +18,7 @@ EBTNodeResult::Type UBTTask_IncrementPatrolPathIndex::ExecuteTask(UBehaviorTreeC
 		return EBTNodeResult::Failed;
 
 	AEnemyCharacter* enemyPawn = Cast<AEnemyCharacter>(enemyController->GetPawn());
-	if (enemyPawn == nullptr)
+	if (enemyPawn == nullptr || enemyPawn->GetPatrolPath() == nullptr)
 		return EBTNodeResult::Failed;
 
 	UBlackboardComponent* enemyBlackboard = ownerComp.GetBlackboardComponent();
@@ -40,8 +40,8 @@ EBTNodeResult::Type UBTTask_IncrementPatrolPathIndex::ExecuteTask(UBehaviorTreeC
 
 	}
 
-	index = ((direction == EDirectionType::Forward) ? index++ : index--) % numOfPoints;
-	enemyBlackboard->SetValueAsInt(GetSelectedBlackboardKey(), index);
+	index = (direction == EDirectionType::Forward) ? index + 1 : index - 1;
+	enemyBlackboard->SetValueAsInt(GetSelectedBlackboardKey(), index % numOfPoints);
 
 	FinishLatentTask(ownerComp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;

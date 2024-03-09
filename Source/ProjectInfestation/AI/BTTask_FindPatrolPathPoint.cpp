@@ -19,7 +19,7 @@ EBTNodeResult::Type UBTTask_FindPatrolPathPoint::ExecuteTask(UBehaviorTreeCompon
 		return EBTNodeResult::Failed;
 
 	AEnemyCharacter* enemyPawn = Cast<AEnemyCharacter>(enemyController->GetPawn());
-	if (enemyPawn == nullptr)
+	if (enemyPawn == nullptr || enemyPawn->GetPatrolPath() == nullptr)
 		return EBTNodeResult::Failed;
 
 	UBlackboardComponent* enemyBlackboard = ownerComp.GetBlackboardComponent();
