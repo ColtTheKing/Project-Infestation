@@ -12,11 +12,11 @@ UBTDecorator_ContainsPatrolPath::UBTDecorator_ContainsPatrolPath()
 
 bool UBTDecorator_ContainsPatrolPath::CalculateRawConditionValue(UBehaviorTreeComponent& ownerComp, uint8* nodeMemory) const
 {
-	AEnemyAIController* enemyController = Cast<AEnemyAIController>(ownerComp.GetAIOwner());
+	TWeakObjectPtr<AEnemyAIController> enemyController = Cast<AEnemyAIController>(ownerComp.GetAIOwner());
 	if (enemyController == nullptr)
 		return false;
 
-	AEnemyCharacter* enemyPawn = Cast<AEnemyCharacter>(enemyController->GetPawn());
+	TWeakObjectPtr<AEnemyCharacter> enemyPawn = Cast<AEnemyCharacter>(enemyController->GetPawn());
 	if (enemyPawn == nullptr)
 		return false;
 

@@ -14,15 +14,15 @@ UBTTask_FindPatrolPathPoint::UBTTask_FindPatrolPathPoint(FObjectInitializer cons
 
 EBTNodeResult::Type UBTTask_FindPatrolPathPoint::ExecuteTask(UBehaviorTreeComponent& ownerComp, uint8* nodeMemory)
 {
-	AEnemyAIController* enemyController = Cast<AEnemyAIController>(ownerComp.GetAIOwner());
+	TWeakObjectPtr<AEnemyAIController> enemyController = Cast<AEnemyAIController>(ownerComp.GetAIOwner());
 	if (enemyController == nullptr)
 		return EBTNodeResult::Failed;
 
-	AEnemyCharacter* enemyPawn = Cast<AEnemyCharacter>(enemyController->GetPawn());
+	TWeakObjectPtr<AEnemyCharacter> enemyPawn = Cast<AEnemyCharacter>(enemyController->GetPawn());
 	if (enemyPawn == nullptr || enemyPawn->GetPatrolPath() == nullptr)
 		return EBTNodeResult::Failed;
 
-	UBlackboardComponent* enemyBlackboard = ownerComp.GetBlackboardComponent();
+	TWeakObjectPtr<UBlackboardComponent> enemyBlackboard = ownerComp.GetBlackboardComponent();
 	if (enemyBlackboard == nullptr)
 		return EBTNodeResult::Failed;
 

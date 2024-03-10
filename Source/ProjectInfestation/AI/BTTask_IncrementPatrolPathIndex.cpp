@@ -13,15 +13,15 @@ UBTTask_IncrementPatrolPathIndex::UBTTask_IncrementPatrolPathIndex()
 
 EBTNodeResult::Type UBTTask_IncrementPatrolPathIndex::ExecuteTask(UBehaviorTreeComponent& ownerComp, uint8* nodeMemory)
 {
-	AEnemyAIController* enemyController = Cast<AEnemyAIController>(ownerComp.GetAIOwner());
+	TWeakObjectPtr<AEnemyAIController> enemyController = Cast<AEnemyAIController>(ownerComp.GetAIOwner());
 	if (enemyController == nullptr)
 		return EBTNodeResult::Failed;
 
-	AEnemyCharacter* enemyPawn = Cast<AEnemyCharacter>(enemyController->GetPawn());
+	TWeakObjectPtr<AEnemyCharacter> enemyPawn = Cast<AEnemyCharacter>(enemyController->GetPawn());
 	if (enemyPawn == nullptr || enemyPawn->GetPatrolPath() == nullptr)
 		return EBTNodeResult::Failed;
 
-	UBlackboardComponent* enemyBlackboard = ownerComp.GetBlackboardComponent();
+	TWeakObjectPtr<UBlackboardComponent> enemyBlackboard = ownerComp.GetBlackboardComponent();
 	if (enemyBlackboard == nullptr)
 		return EBTNodeResult::Failed;
 
@@ -37,12 +37,10 @@ EBTNodeResult::Type UBTTask_IncrementPatrolPathIndex::ExecuteTask(UBehaviorTreeC
 
 		else if (index == minIndex && direction == EDirectionType::Reverse)
 			direction = EDirectionType::Forward;
-
 	}
 
 	index = (direction == EDirectionType::Forward) ? index + 1 : index - 1;
 	enemyBlackboard->SetValueAsInt(GetSelectedBlackboardKey(), index % numOfPoints);
-
 	FinishLatentTask(ownerComp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;
 }

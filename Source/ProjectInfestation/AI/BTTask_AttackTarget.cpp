@@ -6,13 +6,13 @@
 
 UBTTask_AttackTarget::UBTTask_AttackTarget()
 {
-	NodeName = "Attack Target";
+	NodeName = TEXT("Attack Target");
 }
 
 EBTNodeResult::Type UBTTask_AttackTarget::ExecuteTask(UBehaviorTreeComponent& ownerComp, uint8* nodeMemory)
 {
-	AEnemyAIController* enemyController = Cast<AEnemyAIController>(ownerComp.GetAIOwner());
-	if (enemyController == NULL)
+	TWeakObjectPtr<AEnemyAIController> enemyController = Cast<AEnemyAIController>(ownerComp.GetAIOwner());
+	if (enemyController == nullptr)
 		return EBTNodeResult::Failed;
 
 	enemyController->MeleeAttack();
