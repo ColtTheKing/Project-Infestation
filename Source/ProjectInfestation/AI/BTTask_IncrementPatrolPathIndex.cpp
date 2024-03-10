@@ -18,7 +18,10 @@ EBTNodeResult::Type UBTTask_IncrementPatrolPathIndex::ExecuteTask(UBehaviorTreeC
 		return EBTNodeResult::Failed;
 
 	TWeakObjectPtr<AEnemyCharacter> enemyPawn = Cast<AEnemyCharacter>(enemyController->GetPawn());
-	if (enemyPawn == nullptr || enemyPawn->GetPatrolPath() == nullptr)
+	if (enemyPawn == nullptr)
+		return EBTNodeResult::Failed;
+
+	if (enemyPawn->GetPatrolPath() == nullptr || enemyPawn->GetPatrolPath()->Num() == 0)
 		return EBTNodeResult::Failed;
 
 	TWeakObjectPtr<UBlackboardComponent> enemyBlackboard = ownerComp.GetBlackboardComponent();
