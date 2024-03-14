@@ -37,18 +37,27 @@ public:
 
 	FORCEINLINE int GetAttackDamage() { return attackDamage; }
 	FORCEINLINE float GetAttackRadius() { return attackRadius; }
+
+	// Used for behavior tree
 	FORCEINLINE UBehaviorTree* GetBehaviorTree() { return enemyBehaviorTree; }
 	FORCEINLINE APatrolPath* GetPatrolPath() { return patrolPath; }
+	FORCEINLINE bool IsBiDirectional() { return biDirectional; }
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	// Determines the behaviors of the enemy
 	UPROPERTY(EditAnywhere, Category = "AI")
 		UBehaviorTree* enemyBehaviorTree;
 
+	// The patrol path the enemy follows
 	UPROPERTY(EditAnywhere, Category = "AI")
 		APatrolPath* patrolPath;
+
+	// Patroling behavior of the enemy
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+		bool biDirectional = false;
 
 	// Attack radius of the enemy AI
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI")
@@ -57,5 +66,4 @@ protected:
 	// Attack damage of the enemy AI
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI")
 		int attackDamage;
-	
 };

@@ -33,7 +33,7 @@ EBTNodeResult::Type UBTTask_IncrementPatrolPathIndex::ExecuteTask(UBehaviorTreeC
 	int const maxIndex = numOfPoints - 1;
 	int32 index = enemyBlackboard->GetValueAsInt(GetSelectedBlackboardKey());
 
-	if (biDirectional)
+	if (enemyPawn->IsBiDirectional())
 	{
 		if (index >= maxIndex && direction == EDirectionType::Forward)
 			direction = EDirectionType::Reverse;
