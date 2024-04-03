@@ -24,8 +24,6 @@ AMyPlayerCharacter::AMyPlayerCharacter()
 
 	playerArms = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("PlayerArms"));
 	playerArms->SetupAttachment(playerCamera);
-	armGunAttachment = CreateDefaultSubobject<USceneComponent>(TEXT("ArmGunAttachment"));
-	armGunAttachment->SetupAttachment(playerArms);
 
 	messageLog = CreateDefaultSubobject<UMessageLogComponent>(TEXT("MessageLog"));
 	weaponArsenal = CreateDefaultSubobject<UArsenalComponent>(TEXT("WeaponArsenal"));
@@ -36,7 +34,7 @@ void AMyPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	weaponArsenal->SetupWeapons(armGunAttachment);
+	weaponArsenal->SetupWeapons(playerArms);
 }
 
 // Called every frame
