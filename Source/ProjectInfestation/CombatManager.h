@@ -22,6 +22,10 @@ public:
 	// Called at the beginning of play.
 	virtual void BeginPlay() override;
 
+	// ...
+	UFUNCTION(BlueprintCallable)
+		void OnEnemyDeath();
+
 private:
 	// Reference to game state (where events are declared). 
 	TWeakObjectPtr<AInfestationGameState> gameState;
