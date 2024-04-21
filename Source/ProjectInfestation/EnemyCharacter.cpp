@@ -9,6 +9,7 @@ AEnemyCharacter::AEnemyCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	/*health = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));*/
+	currentState = EEnemyBehaviorState::Passive;
 }
 
 // Called when the game starts or when spawned

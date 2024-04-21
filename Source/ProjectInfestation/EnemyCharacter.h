@@ -16,6 +16,14 @@
 
 class AEnemySpawner;
 
+UENUM()
+enum class EEnemyBehaviorState
+{
+	Passive,
+	Waiting,
+	Attacking
+};
+
 UCLASS()
 class PROJECTINFESTATION_API AEnemyCharacter : public ACharacter, public IGameplayTagAssetInterface
 {
@@ -44,6 +52,7 @@ public:
 	FORCEINLINE float GetAttackRadius() { return attackRadius; }
 
 	// Used for behavior tree
+	FORCEINLINE EEnemyBehaviorState GetEnemyState() { return currentState; }
 	FORCEINLINE UBehaviorTree* GetBehaviorTree() { return enemyBehaviorTree; }
 	FORCEINLINE APatrolPath* GetPatrolPath() { return patrolPath; }
 	FORCEINLINE bool IsBiDirectional() { return biDirectional; }
@@ -59,6 +68,10 @@ protected:
 	// Determines the behaviors of the enemy
 	UPROPERTY(EditAnywhere, Category = "AI")
 		UBehaviorTree* enemyBehaviorTree;
+
+	// Behavior state of the enemy
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="AI", meta=(DisplayName="Starting State"))
+		EEnemyBehaviorState currentState;
 
 	// The patrol path the enemy follows
 	UPROPERTY(EditAnywhere, Category = "AI")
