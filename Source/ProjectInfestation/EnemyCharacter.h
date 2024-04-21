@@ -81,6 +81,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
 		bool biDirectional = false;
 
+	// Gameplay-related tags associated with attack targets
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AI")
+		FGameplayTagContainer attackTargets;
+
 	// Attack radius of the enemy AI
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI")
 		float attackRadius;
