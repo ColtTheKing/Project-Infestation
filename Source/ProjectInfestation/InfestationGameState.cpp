@@ -5,10 +5,13 @@
 AInfestationGameState::AInfestationGameState() : Super()
 {
 	// Note: Set to true for testing delegate system.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
+
+	// Setup variables
+	delegates = NewObject<UInfestationDelegates>();
 }
 
 void AInfestationGameState::Tick(float DeltaTime)
 {
-	onDeathDelegate.Broadcast();
+	delegates->onDeathDelegate.Broadcast();
 }

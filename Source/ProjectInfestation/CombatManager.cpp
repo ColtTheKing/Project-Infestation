@@ -10,10 +10,11 @@ void ACombatManager::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT("CombatManger BeginPlay(): Failed to find InfestationGameState reference."));
 
 	// Subscribe to events.
-	gameState->onDeathDelegate.AddUniqueDynamic(this, &ACombatManager::OnEnemyDeath);
+	gameState->GetDelegates()->onDeathDelegate.AddUniqueDynamic(this, &ACombatManager::OnEnemyDeath);
 }
 
 void ACombatManager::OnEnemyDeath()
 {
-	UE_LOG(LogTemp, Error, TEXT("CombatManger OnEnemyDeath(): Event Fired"));
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("CombatManger OnEnemyDeath(): Event Fired"));
 }

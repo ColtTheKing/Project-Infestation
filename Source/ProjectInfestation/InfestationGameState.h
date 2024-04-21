@@ -4,10 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameStateBase.h"
+#include "InfestationDelegates.h"
 #include "InfestationGameState.generated.h"
-
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerFoundSignature, AActor*, enemyActor);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeathSignature);
 
 /**
  * The game state for Project Infestation.
@@ -29,12 +27,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Events
-	// NOTE: To be moved to separate EventList UObject class later.
-	UPROPERTY(BlueprintAssignable)
-		FOnPlayerFoundSignature onPlayerFoundDelegate;
+	// Gets the delegates storage object.
+	FORCEINLINE TWeakObjectPtr<UInfestationDelegates> GetDelegates() { return delegates; };
 
-	UPROPERTY(BlueprintAssignable)
-		FOnDeathSignature onDeathDelegate;
-
+private:
+	// Storage object that contains all game's delegates 
+	TWeakObjectPtr<UInfestationDelegates> delegates;
 };
