@@ -212,6 +212,11 @@ void AMyPlayerCharacter::PauseGame()
 	}
 }
 
+void AMyPlayerCharacter::GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const
+{
+	TagContainer.AppendTags(gameplayTags);
+}
+
 FHitResult AMyPlayerCharacter::ShootRay(float length)
 {
 	FVector rayLocation;

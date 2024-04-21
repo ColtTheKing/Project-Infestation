@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "GameplayTagAssetInterface.h"
+#include "GameplayTagContainer.h"
 #include "Components/CapsuleComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
 
@@ -15,7 +17,7 @@
 class AEnemySpawner;
 
 UCLASS()
-class PROJECTINFESTATION_API AEnemyCharacter : public ACharacter
+class PROJECTINFESTATION_API AEnemyCharacter : public ACharacter, public IGameplayTagAssetInterface
 {
 	GENERATED_BODY()
 
@@ -32,6 +34,9 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	// From IGameplayTagAssetInterface
+	virtual void GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const override;
+
 	/*UFUNCTION(BlueprintCallable, Category = Damage)
 		virtual void TakeDamage(int damage) PURE_VIRTUAL(AEnemyCharacter::TakeDamage, ;);*/
 
@@ -46,6 +51,10 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	// Gameplay-related tags associated with this actor 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="GameplayTags")
+		FGameplayTagContainer gameplayTags;
 
 	// Determines the behaviors of the enemy
 	UPROPERTY(EditAnywhere, Category = "AI")

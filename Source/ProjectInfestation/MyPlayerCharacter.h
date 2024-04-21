@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "GameplayTagAssetInterface.h"
+#include "GameplayTagContainer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/InputComponent.h"
@@ -22,13 +24,17 @@
 #include "MyPlayerCharacter.generated.h"
 
 UCLASS()
-class PROJECTINFESTATION_API AMyPlayerCharacter : public ACharacter
+class PROJECTINFESTATION_API AMyPlayerCharacter : public ACharacter, public IGameplayTagAssetInterface
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
 	AMyPlayerCharacter();
+
+	// Gameplay-related tags associated with this actor 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "GameplayTags")
+		FGameplayTagContainer gameplayTags;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = PlayerSpecs)
 		float interactRange;
@@ -86,6 +92,9 @@ public:
 	void SwitchGrenade();
 	void NextWeapon();
 	void PauseGame();
+
+	// From IGameplayTagAssetInterface
+	virtual void GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const override;
 
 	UFUNCTION(BlueprintCallable, Category = Shoot)
 		FHitResult ShootRay(float length);

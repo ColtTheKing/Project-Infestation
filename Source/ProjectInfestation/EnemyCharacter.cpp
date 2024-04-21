@@ -31,3 +31,8 @@ void AEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 {
 	// Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
+
+void AEnemyCharacter::GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const
+{
+	TagContainer.AppendTags(gameplayTags);
+}
