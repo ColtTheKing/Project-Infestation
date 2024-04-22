@@ -1,13 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "SwarmerAIController.h"
-
-#include "../MyPlayerCharacter.h"
-
 #include "GameplayTagAssetInterface.h"
 #include "GameplayTagContainer.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
+
+#include "../InfestationGameState.h"
+#include "../EnemyCharacter.h"
 
 ASwarmerAIController::ASwarmerAIController(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
 {
@@ -40,15 +40,18 @@ void ASwarmerAIController::UpdateAttackTarget(AActor* actor, FAIStimulus const s
 	if (!taggedActor->HasAnyMatchingGameplayTags(enemy->GetAttackTargets()))
 		return;
 	
+	TWeakObjectPtr<AInfestationGameState> gameState = Cast<AInfestationGameState>(GetWorld()->GetGameState());
 	if (stimulus.WasSuccessfullySensed())
 	{
 		// Target found.
 		GetBlackboardComp()->SetValueAsObject("TargetActor", actor);
+		gameState->GetDelegates()->onTargetFoundDelegate.Broadcast(GetPawn(), actor);
 	}
 	else
 	{
 		// Target lost.
 		GetBlackboardComp()->SetValueAsObject("TargetActor", NULL);
+		gameState->GetDelegates()->onTargetLostDelegate.Broadcast(GetPawn(), actor);
 	}
 }
 

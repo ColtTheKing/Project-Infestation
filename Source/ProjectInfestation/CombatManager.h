@@ -22,6 +22,14 @@ public:
 	// Called at the beginning of play.
 	virtual void BeginPlay() override;
 
+	// Called when an attack target is found (delegate fired)
+	UFUNCTION(BlueprintCallable)
+		void AttackTargetFound(AActor* originActor, AActor* targetActor);
+	
+	// Called when an attack target is lost (delegate fired)
+	UFUNCTION(BlueprintCallable)
+		void AttackTargetLost(AActor* originActor, AActor* targetActor);
+
 	// ...
 	UFUNCTION(BlueprintCallable)
 		void OnEnemyDeath();

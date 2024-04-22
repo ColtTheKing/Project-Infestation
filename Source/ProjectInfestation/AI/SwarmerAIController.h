@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "EnemyAIController.h"
-#include "../EnemyCharacter.h"
 #include "Perception/AIPerceptionTypes.h"
 #include "SwarmerAIController.generated.h"
 
