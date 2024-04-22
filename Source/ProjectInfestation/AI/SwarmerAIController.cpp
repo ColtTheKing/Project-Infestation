@@ -4,6 +4,8 @@
 
 #include "../MyPlayerCharacter.h"
 
+#include "GameplayTagAssetInterface.h"
+#include "GameplayTagContainer.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
 
@@ -26,19 +28,28 @@ void ASwarmerAIController::Tick(float DeltaTime)
 	}
 }
 
-void ASwarmerAIController::UpdateTargetActor(AActor* actor, FAIStimulus const stimulus)
+void ASwarmerAIController::UpdateAttackTarget(AActor* actor, FAIStimulus const stimulus)
 {
-	// Only want to continue if the Actor sighted is the player.
-	TWeakObjectPtr<AMyPlayerCharacter> player = Cast<AMyPlayerCharacter>(actor);
-	if (player == nullptr)
+	// Check if the actor sensed implements gameplay tags
+	IGameplayTagAssetInterface* taggedActor = Cast<IGameplayTagAssetInterface>(actor);
+	if (taggedActor == nullptr)
 		return;
 
+	// Check if the actor sensed has any tags matching an attack target
+	TWeakObjectPtr<AEnemyCharacter> enemy = Cast<AEnemyCharacter>(GetPawn());
+	if (!taggedActor->HasAnyMatchingGameplayTags(enemy->GetAttackTargets()))
+		return;
+	
 	if (stimulus.WasSuccessfullySensed())
-		// Player found.
-		GetBlackboardComp()->SetValueAsObject("TargetActor", player.Get());
+	{
+		// Target found.
+		GetBlackboardComp()->SetValueAsObject("TargetActor", actor);
+	}
 	else
-		// Player lost.
+	{
+		// Target lost.
 		GetBlackboardComp()->SetValueAsObject("TargetActor", NULL);
+	}
 }
 
 void ASwarmerAIController::MeleeAttack()

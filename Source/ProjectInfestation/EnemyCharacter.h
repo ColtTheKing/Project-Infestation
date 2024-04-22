@@ -48,10 +48,10 @@ public:
 	/*UFUNCTION(BlueprintCallable, Category = Damage)
 		virtual void TakeDamage(int damage) PURE_VIRTUAL(AEnemyCharacter::TakeDamage, ;);*/
 
+	// Getters for AI
 	FORCEINLINE int GetAttackDamage() { return attackDamage; }
 	FORCEINLINE float GetAttackRadius() { return attackRadius; }
-
-	// Used for behavior tree
+	FORCEINLINE FGameplayTagContainer GetAttackTargets() { return attackTargets; }
 	FORCEINLINE EEnemyBehaviorState GetEnemyState() { return currentState; }
 	FORCEINLINE UBehaviorTree* GetBehaviorTree() { return enemyBehaviorTree; }
 	FORCEINLINE APatrolPath* GetPatrolPath() { return patrolPath; }

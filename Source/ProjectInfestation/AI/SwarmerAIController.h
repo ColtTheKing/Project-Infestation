@@ -28,7 +28,7 @@ public:
 	* NOTE: Currently target actor will only update if the player is sensed.
 	*/
 	UFUNCTION(BlueprintCallable)
-		void UpdateTargetActor(AActor* Actor, FAIStimulus const Stimulus);
+		void UpdateAttackTarget(AActor* Actor, FAIStimulus const Stimulus);
 
 	UFUNCTION(BlueprintCallable)
 		virtual void MeleeAttack() override;
