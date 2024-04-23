@@ -45,6 +45,9 @@ public:
 	// From IGameplayTagAssetInterface
 	virtual void GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const override;
 
+	// Getter for GameplayTags
+	FORCEINLINE FGameplayTagContainer GetGameplayTags() { return gameplayTags; }
+
 	/*UFUNCTION(BlueprintCallable, Category = Damage)
 		virtual void TakeDamage(int damage) PURE_VIRTUAL(AEnemyCharacter::TakeDamage, ;);*/
 
