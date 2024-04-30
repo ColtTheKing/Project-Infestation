@@ -35,6 +35,6 @@ void AEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 void AEnemyCharacter::GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const
 {
-	TagContainer.AppendTags(gameplayTags);
+	TagContainer.AddTag(enemyType);
 	TagContainer.AddTag(currentState);
 }

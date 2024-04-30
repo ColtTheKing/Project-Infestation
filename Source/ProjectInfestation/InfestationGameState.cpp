@@ -5,7 +5,7 @@
 AInfestationGameState::AInfestationGameState() : Super()
 {
 	// Note: Set to true for testing delegate system.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	// Setup variables
 	delegates = NewObject<UInfestationDelegates>();

@@ -40,6 +40,9 @@ public:
 	/*UFUNCTION(BlueprintCallable, Category = Damage)
 		virtual void TakeDamage(int damage) PURE_VIRTUAL(AEnemyCharacter::TakeDamage, ;);*/
 
+	// Getters for Enemy
+	FORCEINLINE FGameplayTag GetEnemyType() { return enemyType; }
+
 	// Getters for AI
 	FORCEINLINE int GetAttackDamage() { return attackDamage; }
 	FORCEINLINE float GetAttackRadius() { return attackRadius; }
@@ -53,9 +56,9 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	// Gameplay-related tags associated with this actor 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="GameplayTags")
-		FGameplayTagContainer gameplayTags;
+	// Type of the enemy
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="GameplayTags", meta=(Categories="Enemy.Type"))
+		FGameplayTag enemyType;
 
 	// Determines the behaviors of the enemy
 	UPROPERTY(EditAnywhere, Category = "AI")
