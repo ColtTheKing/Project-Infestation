@@ -9,7 +9,7 @@ AEnemyCharacter::AEnemyCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	/*health = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));*/
-	currentState = EEnemyBehaviorState::Passive;
+	currentState = FGameplayTag::RequestGameplayTag("Enemy.State.Passive");
 }
 
 // Called when the game starts or when spawned
@@ -36,4 +36,5 @@ void AEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 void AEnemyCharacter::GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const
 {
 	TagContainer.AppendTags(gameplayTags);
+	TagContainer.AddTag(currentState);
 }

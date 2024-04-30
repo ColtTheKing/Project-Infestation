@@ -31,7 +31,10 @@ void AEnemyAIController::OnPossess(APawn* inPawn)
 	if (enemy && enemy->GetBehaviorTree())
 	{
 		if (enemy->GetBehaviorTree()->BlackboardAsset)
+		{
 			blackboardComp->InitializeBlackboard(*enemy->GetBehaviorTree()->BlackboardAsset);
+			blackboardComp->SetValueAsObject("SelfActor", enemy);
+		}
 
 		behaviorComp->StartTree(*(enemy->GetBehaviorTree()));
 	}

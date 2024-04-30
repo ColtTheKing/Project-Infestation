@@ -16,14 +16,6 @@
 
 class AEnemySpawner;
 
-UENUM()
-enum class EEnemyBehaviorState
-{
-	Passive,
-	Waiting,
-	Attacking
-};
-
 UCLASS()
 class PROJECTINFESTATION_API AEnemyCharacter : public ACharacter, public IGameplayTagAssetInterface
 {
@@ -45,9 +37,6 @@ public:
 	// From IGameplayTagAssetInterface
 	virtual void GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const override;
 
-	// Getter for GameplayTags
-	FORCEINLINE FGameplayTagContainer GetGameplayTags() { return gameplayTags; }
-
 	/*UFUNCTION(BlueprintCallable, Category = Damage)
 		virtual void TakeDamage(int damage) PURE_VIRTUAL(AEnemyCharacter::TakeDamage, ;);*/
 
@@ -55,7 +44,7 @@ public:
 	FORCEINLINE int GetAttackDamage() { return attackDamage; }
 	FORCEINLINE float GetAttackRadius() { return attackRadius; }
 	FORCEINLINE FGameplayTagContainer GetAttackTargets() { return attackTargets; }
-	FORCEINLINE EEnemyBehaviorState GetEnemyState() { return currentState; }
+	FORCEINLINE FGameplayTag GetEnemyState() { return currentState; }
 	FORCEINLINE UBehaviorTree* GetBehaviorTree() { return enemyBehaviorTree; }
 	FORCEINLINE APatrolPath* GetPatrolPath() { return patrolPath; }
 	FORCEINLINE bool IsBiDirectional() { return biDirectional; }
@@ -74,7 +63,7 @@ protected:
 
 	// Behavior state of the enemy
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="AI", meta=(DisplayName="Starting State"))
-		EEnemyBehaviorState currentState;
+		FGameplayTag currentState;
 
 	// The patrol path the enemy follows
 	UPROPERTY(EditAnywhere, Category = "AI")
