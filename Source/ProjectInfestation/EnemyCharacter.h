@@ -52,6 +52,11 @@ public:
 	FORCEINLINE APatrolPath* GetPatrolPath() { return patrolPath; }
 	FORCEINLINE bool IsBiDirectional() { return biDirectional; }
 
+	// Setter for AI
+	// NOTE: For CombatManager to change enemy state. Should replace as CombatManager should not be
+	//       changing the enemy state directly, it should just tell the enemy what it can do.
+	FORCEINLINE void SetEnemyState(FGameplayTag state) { currentState = state; }
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

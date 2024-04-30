@@ -12,74 +12,65 @@ void ACombatManager::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT("CombatManger BeginPlay(): Failed to find InfestationGameState reference."));
 
 	// Subscribe to events.
-	gameState->GetDelegates()->onTargetFoundDelegate.AddDynamic(this, &ACombatManager::AttackTargetFound);
-	gameState->GetDelegates()->onTargetLostDelegate.AddDynamic(this, &ACombatManager::AttackTargetLost);
+	gameState->GetDelegates()->onTargetFoundDelegate.AddUniqueDynamic(this, &ACombatManager::AttackTargetFound);
+	gameState->GetDelegates()->onTargetLostDelegate.AddUniqueDynamic(this, &ACombatManager::AttackTargetLost);
 	gameState->GetDelegates()->onDeathDelegate.AddDynamic(this, &ACombatManager::OnEnemyDeath);
 }
 
 void ACombatManager::AttackTargetFound(AActor* originActor, AActor* targetActor)
 {
-	//// Check if originActor is of class enemyActor
-	//TWeakObjectPtr<AEnemyCharacter> enemy = Cast<AEnemyCharacter>(originActor);
-	//if (enemy == nullptr)
-	//	return;
+	// Check if originActor is of class enemyActor or enemy is already attacking
+	TWeakObjectPtr<AEnemyCharacter> enemy = Cast<AEnemyCharacter>(originActor);
+	if (enemy == nullptr || enemy->GetEnemyState() != FGameplayTag::RequestGameplayTag("Enemy.State.Passive"))
+		return;
 
-	//// Check if the target actor is already added to combat manager
-	//FCombatGroup* currentCombatGroup = nullptr;
-	//for (FCombatGroup &combatGroup : groupsInCombat)
-	//{
-	//	if (combatGroup.targetActor == TWeakObjectPtr(targetActor))
-	//	{
-	//		currentCombatGroup = &combatGroup;
-	//		break;
-	//	}
-	//}
+	// Check if the target actor is already added to combat manager
+	FAttackTarget targetToFind(targetActor->GetUniqueID());
+	int currentAttackTargetIndex = attackTargets.Find(targetToFind);
 
-	//// Add target actor to combat manager if it wasn't found
-	//if (currentCombatGroup == nullptr)
-	//{
-	//	groupsInCombat.Emplace(targetActor);
-	//	currentCombatGroup = &groupsInCombat.Last();
-	//}
+	// Add target actor to combat manager if it wasn't found
+	if (currentAttackTargetIndex < 0)
+	{
+		attackTargets.Emplace(targetActor->GetUniqueID());
+		currentAttackTargetIndex = attackTargets.Num() - 1;
+	}
 
-	////// Get the type of the enemy
-	//// Option 1:
-	//FString enemyType;
-	//for (auto tag : enemy->GetGameplayTags())
-	//{
-	//	if (tag.ToString().Contains("Enemy"))
-	//	{
-	//		enemyType = tag.ToString();
-	//		break;
-	//	}
-	//}
+	// Add enemy type to group if it doesn't exist
+	FGameplayTag enemyType = enemy->GetEnemyType();
+	if (!enemiesInCombat.Contains(enemyType))
+	{
+		enemiesInCombat.Add(enemyType);
+		enemiesInWaiting.Add(enemyType);
+	}
 
-	////// Option 2:
-	////// Rather than defining gameplay tags in the config file, define them in the C++. That way you can easily check
-	////// if a gameplay tag is in a container. 
-	////// https://forums.unrealengine.com/t/using-gameplay-tags-in-c/106459/15
-	////// ...
+	// Check if the enemy is already added to the combat manager and exit if it is
+	FEnemyAttacker attackerToFind(enemy->GetUniqueID());
+	if (enemiesInCombat[enemyType].Find(attackerToFind) > -1 || enemiesInWaiting[enemyType].Find(attackerToFind) > -1)
+		return;
 
-	//// Add enemy type to group if it doesn't exist
-	//if (!currentCombatGroup->enemiesInCombat.Contains(enemyType))
-	//{
-	//	currentCombatGroup->enemiesInCombat.Add(enemyType);
-	//	currentCombatGroup->enemiesInWaiting.Add(enemyType);
-	//}
+	// Run logic for if the enemy can attack or has to wait to attack
+	if (attackTargets[currentAttackTargetIndex].CanAttack())
+	{
+		enemiesInCombat[enemyType].Emplace(enemy->GetUniqueID(), currentAttackTargetIndex);
+		attackTargets[currentAttackTargetIndex].currNumOfAttackers++;
+		enemy->SetEnemyState(FGameplayTag::RequestGameplayTag("Enemy.State.Attacking")); // TO BE REPLACED
+	}
+	else
+	{
+		enemiesInWaiting[enemyType].Emplace(enemy->GetUniqueID());
+		enemy->SetEnemyState(FGameplayTag::RequestGameplayTag("Enemy.State.Waiting")); // TO BE REPLACED
+	}
 
-	//// Run logic for if the enemy can attack or has to wait to attack
-	//// Note: Hardcoded for now, should be moved.
-	//unsigned int const MAXATTACKERS = 3;
-	//if (currentCombatGroup->enemiesInCombat[enemyType].Num() < MAXATTACKERS)
-	//{
-	//	// Able to attack
-	//	currentCombatGroup->enemiesInCombat[enemyType].Add(enemy);
-	//}
-	//else
-	//{
-	//	// Unable to attack
-	//	currentCombatGroup->enemiesInWaiting[enemyType].Add(enemy);
-	//}
+	// Debug messages for testing
+	/*FString test = TEXT("Number of Attacking Enemies: ");
+	test.AppendInt(enemiesInCombat[enemyType].Num());
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, test);
+
+	test = TEXT("Number of Waiting Enemies: ");
+	test.AppendInt(enemiesInWaiting[enemyType].Num());
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, test);*/
 }
 
 void ACombatManager::AttackTargetLost(AActor* originActor, AActor* targetActor)

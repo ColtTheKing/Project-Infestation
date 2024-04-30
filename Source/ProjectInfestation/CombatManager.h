@@ -9,22 +9,53 @@
 #include "CombatManager.generated.h"
 
 USTRUCT()
-struct FCombatGroup
+struct FAttackTarget
 {
 	GENERATED_USTRUCT_BODY()
 
-	FCombatGroup() = default;
+	FAttackTarget() = default;
 
-	FCombatGroup(TWeakObjectPtr<AActor> targetActor) : targetActor(targetActor) {}
+	FAttackTarget(uint32 targetActorID) : targetActorID(targetActorID) {}
 
-	// The actor being targeted by the enemies
-	TWeakObjectPtr<AActor> targetActor;
+	// The ID of the actor being targeted by enemies
+	uint32 targetActorID = 0;
 
-	// Enemies attacking the target
-	TMap<FString, TArray<TWeakObjectPtr<AEnemyCharacter>>> enemiesInCombat;
+	// The max number of attacker that can attack the target
+	unsigned int MAXATTACKERS = 3;
 
-	// Enemies waiting to attack the target
-	TMap<FString, TArray<TWeakObjectPtr<AEnemyCharacter>>> enemiesInWaiting;
+	// Current number of attackers attacking the target
+	unsigned int currNumOfAttackers = 0;
+
+	FORCEINLINE bool CanAttack() { return currNumOfAttackers < MAXATTACKERS; }
+
+	bool operator==(const FAttackTarget& attackTarget) const
+	{
+		return targetActorID == attackTarget.targetActorID;
+	}
+};
+
+USTRUCT()
+struct FEnemyAttacker
+{
+	GENERATED_USTRUCT_BODY()
+
+	FEnemyAttacker() = default;
+
+	FEnemyAttacker(uint32 enemyAttackerID) : enemyID(enemyAttackerID) {}
+
+	FEnemyAttacker(uint32 enemyAttackerID, int targetIndex)
+		: enemyID(enemyAttackerID), targetActorIndex(targetIndex) {}
+
+	// The ID of the enemy attacker
+	uint32 enemyID = 0;
+
+	// The index of the target attacker
+	int targetActorIndex = -1;
+
+	bool operator==(const FEnemyAttacker& enemyAttacker) const
+	{
+		return enemyID == enemyAttacker.enemyID;
+	}
 };
 
 /**
@@ -56,6 +87,12 @@ private:
 	// Reference to game state (where events are declared). 
 	TWeakObjectPtr<AInfestationGameState> gameState;
 
-	// A collection of groups of actors in combat
-	TArray<struct FCombatGroup> groupsInCombat;
+	//
+	TArray<struct FAttackTarget> attackTargets;
+
+	//
+	TMap<FGameplayTag, TArray<struct FEnemyAttacker>> enemiesInCombat;
+
+	//
+	TMap<FGameplayTag, TArray<struct FEnemyAttacker>> enemiesInWaiting;
 };
