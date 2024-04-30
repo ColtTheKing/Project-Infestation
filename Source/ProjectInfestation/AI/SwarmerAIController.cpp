@@ -36,10 +36,10 @@ void ASwarmerAIController::UpdateAttackTarget(AActor* actor, FAIStimulus const s
 		return;
 
 	// Check if the actor sensed has any tags matching an attack target
-	TWeakObjectPtr<AEnemyCharacter> enemy = Cast<AEnemyCharacter>(GetPawn());
+	AEnemyCharacter* enemy = Cast<AEnemyCharacter>(GetPawn());
 	if (!taggedActor->HasAnyMatchingGameplayTags(enemy->GetAttackTargets()))
 		return;
-	
+
 	TWeakObjectPtr<AInfestationGameState> gameState = Cast<AInfestationGameState>(GetWorld()->GetGameState());
 	if (stimulus.WasSuccessfullySensed())
 	{

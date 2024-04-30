@@ -31,6 +31,7 @@ public:
 	FORCEINLINE TWeakObjectPtr<UInfestationDelegates> GetDelegates() { return delegates; };
 
 private:
-	// Storage object that contains all game's delegates 
-	TWeakObjectPtr<UInfestationDelegates> delegates;
+	// Storage object that contains all game's delegates
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess))
+		UInfestationDelegates* delegates;
 };

@@ -12,9 +12,9 @@ void ACombatManager::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT("CombatManger BeginPlay(): Failed to find InfestationGameState reference."));
 
 	// Subscribe to events.
-	gameState->GetDelegates()->onTargetFoundDelegate.AddUniqueDynamic(this, &ACombatManager::AttackTargetFound);
-	gameState->GetDelegates()->onTargetLostDelegate.AddUniqueDynamic(this, &ACombatManager::AttackTargetLost);
-	gameState->GetDelegates()->onDeathDelegate.AddUniqueDynamic(this, &ACombatManager::OnEnemyDeath);
+	gameState->GetDelegates()->onTargetFoundDelegate.AddDynamic(this, &ACombatManager::AttackTargetFound);
+	gameState->GetDelegates()->onTargetLostDelegate.AddDynamic(this, &ACombatManager::AttackTargetLost);
+	gameState->GetDelegates()->onDeathDelegate.AddDynamic(this, &ACombatManager::OnEnemyDeath);
 }
 
 void ACombatManager::AttackTargetFound(AActor* originActor, AActor* targetActor)
