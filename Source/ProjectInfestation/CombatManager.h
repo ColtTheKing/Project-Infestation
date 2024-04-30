@@ -41,20 +41,20 @@ struct FEnemyAttacker
 
 	FEnemyAttacker() = default;
 
-	FEnemyAttacker(uint32 enemyAttackerID) : enemyID(enemyAttackerID) {}
+	FEnemyAttacker(TWeakObjectPtr<AEnemyCharacter> enemyAttacker) : enemy(enemyAttacker) {}
 
-	FEnemyAttacker(uint32 enemyAttackerID, int targetIndex)
-		: enemyID(enemyAttackerID), targetActorIndex(targetIndex) {}
+	FEnemyAttacker(TWeakObjectPtr<AEnemyCharacter> enemyAttacker, int targetIndex)
+		: enemy(enemyAttacker), targetActorIndex(targetIndex) {}
 
-	// The ID of the enemy attacker
-	uint32 enemyID = 0;
+	// The enemy attacker
+	TWeakObjectPtr<AEnemyCharacter> enemy;
 
 	// The index of the target attacker
 	int targetActorIndex = -1;
 
 	bool operator==(const FEnemyAttacker& enemyAttacker) const
 	{
-		return enemyID == enemyAttacker.enemyID;
+		return enemy == enemyAttacker.enemy;
 	}
 };
 
