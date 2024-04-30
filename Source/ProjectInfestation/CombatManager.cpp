@@ -14,7 +14,8 @@ void ACombatManager::BeginPlay()
 	// Subscribe to events.
 	gameState->GetDelegates()->onTargetFoundDelegate.AddUniqueDynamic(this, &ACombatManager::AttackTargetFound);
 	gameState->GetDelegates()->onTargetLostDelegate.AddUniqueDynamic(this, &ACombatManager::AttackTargetLost);
-	gameState->GetDelegates()->onDeathDelegate.AddDynamic(this, &ACombatManager::OnEnemyDeath);
+	gameState->GetDelegates()->onEnemyDeathDelegate.AddDynamic(this, &ACombatManager::OnEnemyDeath);
+	gameState->GetDelegates()->onTargetDeathDelegate.AddDynamic(this, &ACombatManager::OnTargetDeath);
 }
 
 void ACombatManager::AttackTargetFound(AActor* originActor, AActor* targetActor)
@@ -132,8 +133,13 @@ void ACombatManager::AttackTargetLost(AActor* originActor, AActor* targetActor)
 	
 }
 
-void ACombatManager::OnEnemyDeath()
+void ACombatManager::OnEnemyDeath(AActor* dyingActor)
 {
 	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("CombatManger OnEnemyDeath(): Event Fired"));
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("OnEnemyDeath(): Event Fired"));
+}
+
+void ACombatManager::OnTargetDeath(AActor* dyingActor)
+{
+	// ...
 }

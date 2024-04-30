@@ -13,5 +13,5 @@ AInfestationGameState::AInfestationGameState() : Super()
 
 void AInfestationGameState::Tick(float DeltaTime)
 {
-	delegates->onDeathDelegate.Broadcast();
+	
 }

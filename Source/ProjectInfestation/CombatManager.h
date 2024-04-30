@@ -61,6 +61,11 @@ struct FEnemyAttacker
 /**
  * A helper class that acts as a mediator between different
  * enemies when in combat.
+ * 
+ * TODO:
+ * - OnTargetDeath implementation
+ * - If an enemy can't attack a current target, check if there is any other targets to attack.
+ * - A reset. Useful if the player leaves an combat area.
  */
 UCLASS(Blueprintable)
 class PROJECTINFESTATION_API ACombatManager : public AInfo
@@ -71,28 +76,33 @@ public:
 	// Called at the beginning of play.
 	virtual void BeginPlay() override;
 
-	// Called when an attack target is found (delegate fired)
+	// Called when an attack target is found (delegate fired).
 	UFUNCTION(BlueprintCallable)
 		void AttackTargetFound(AActor* originActor, AActor* targetActor);
 	
-	// Called when an attack target is lost (delegate fired)
+	// Called when an attack target is lost (delegate fired).
 	UFUNCTION(BlueprintCallable)
 		void AttackTargetLost(AActor* originActor, AActor* targetActor);
 
-	// ...
+	// Called when an enemy actor dies.
 	UFUNCTION(BlueprintCallable)
-		void OnEnemyDeath();
+		void OnEnemyDeath(AActor* dyingActor);
+
+	// Called when an target actor dies (delegate fired).
+	// NOTE: Not implemented, to be implemented when there are more than one target actor.
+	UFUNCTION(BlueprintCallable)
+		void OnTargetDeath(AActor* dyingActor);
 
 private:
 	// Reference to game state (where events are declared). 
 	TWeakObjectPtr<AInfestationGameState> gameState;
 
-	//
+	// List of attack targets.
 	TArray<struct FAttackTarget> attackTargets;
 
-	//
+	// List of enemy attackers currently attacking a target.
 	TMap<FGameplayTag, TArray<struct FEnemyAttacker>> enemiesInCombat;
 
-	//
+	// List of enemy attackers waiting to attack a target.
 	TMap<FGameplayTag, TArray<struct FEnemyAttacker>> enemiesInWaiting;
 };

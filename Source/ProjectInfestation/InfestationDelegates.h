@@ -11,8 +11,11 @@ DECLARE_DYNAMIC_DELEGATE(FSimpleDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FSimpleMulticastDelegateSignature);
 
 // AI Delegates
-// Delegate type for when a actor's target perception changes.
+// Delegate type for when a actor's target perception changes
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnTargetPerceptionUpdatedSignature, AActor*, originActor, AActor*, targetActor);
+
+// Delegate type for when actor dies
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnActorDeathSignature, AActor*, dyingActor);
 
 /**
  * A storage class that stores all the game's delegates. 
@@ -28,9 +31,13 @@ class PROJECTINFESTATION_API UInfestationDelegates : public UObject
 public:
 	UInfestationDelegates() = default;
 
-	// Called when an actor dies.
+	// Called when an target actor dies.
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
-		FSimpleMulticastDelegateSignature onDeathDelegate;
+		FOnActorDeathSignature onTargetDeathDelegate;
+	
+	// Called when an enemy actor dies.
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+		FOnActorDeathSignature onEnemyDeathDelegate;
 
 	// Called when an actor finds it's target.
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
