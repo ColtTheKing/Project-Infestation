@@ -61,17 +61,6 @@ void ACombatManager::AttackTargetFound(AActor* originActor, AActor* targetActor)
 		enemiesInWaiting[enemyType].Emplace(enemy);
 		enemy->SetEnemyState(FGameplayTag::RequestGameplayTag("Enemy.State.Waiting")); // TO BE REPLACED
 	}
-
-	// Debug messages for testing
-	/*FString test = TEXT("Number of Attacking Enemies: ");
-	test.AppendInt(enemiesInCombat[enemyType].Num());
-	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, test);
-
-	test = TEXT("Number of Waiting Enemies: ");
-	test.AppendInt(enemiesInWaiting[enemyType].Num());
-	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, test);*/
 }
 
 void ACombatManager::AttackTargetLost(AActor* originActor, AActor* targetActor)
