@@ -81,19 +81,43 @@ void ACombatManager::AttackTargetLost(AActor* originActor, AActor* targetActor)
 	if (enemy == nullptr || enemy->GetEnemyState() == FGameplayTag::RequestGameplayTag("Enemy.State.Passive"))
 		return;
 
-	// Check if enemy type of the enemy exists in the combat manager
-	FGameplayTag enemyType = enemy->GetEnemyType();
-	if (!enemiesInCombat.Contains(enemyType) && !enemiesInWaiting.Contains(enemyType))
+	// Remove actor and set state to passive
+	bool removedActor = RemoveEnemyActor(enemy);
+	if (removedActor)
+		enemy->SetEnemyState(FGameplayTag::RequestGameplayTag("Enemy.State.Passive")); // TO BE REPLACED
+}
+
+void ACombatManager::OnEnemyDeath(AActor* dyingActor)
+{
+	// Check if originActor is of class enemyActor or if the enemy isn't attacking
+	TWeakObjectPtr<AEnemyCharacter> enemy = Cast<AEnemyCharacter>(dyingActor);
+	if (enemy == nullptr || enemy->GetEnemyState() == FGameplayTag::RequestGameplayTag("Enemy.State.Passive"))
 		return;
 
+	// Remove actor
+	RemoveEnemyActor(enemy);
+}
+
+void ACombatManager::OnTargetDeath(AActor* dyingActor)
+{
+	// ...
+}
+
+bool ACombatManager::RemoveEnemyActor(TWeakObjectPtr<AEnemyCharacter> enemyActor)
+{
+	// Check if enemy type of the enemy exists in the combat manager
+	FGameplayTag enemyType = enemyActor->GetEnemyType();
+	if (!enemiesInCombat.Contains(enemyType) && !enemiesInWaiting.Contains(enemyType))
+		return false;
+
 	// Run Logic for if the enemy is attacking or waiting
-	FEnemyAttacker enemyAttacker(enemy);
-	if (enemy->GetEnemyState() == FGameplayTag::RequestGameplayTag("Enemy.State.Attacking"))
+	FEnemyAttacker enemyAttacker(enemyActor);
+	if (enemyActor->GetEnemyState() == FGameplayTag::RequestGameplayTag("Enemy.State.Attacking"))
 	{
 		// Get index and check if it exists in the combat manager
 		int enemyAttackerIndex = enemiesInCombat[enemyType].Find(enemyAttacker);
 		if (enemyAttackerIndex < 0)
-			return;
+			return false;
 
 		// Remove from list of attackers
 		int attackTargetIndex = enemiesInCombat[enemyType][enemyAttackerIndex].targetActorIndex;
@@ -114,32 +138,22 @@ void ACombatManager::AttackTargetLost(AActor* originActor, AActor* targetActor)
 			enemiesInWaiting[enemyType].RemoveAtSwap(0);
 		}
 
-		// Update enemy state
-		enemy->SetEnemyState(FGameplayTag::RequestGameplayTag("Enemy.State.Passive")); // TO BE REPLACED
+		// Removal successful
+		return true;
 	}
-	else if (enemy->GetEnemyState() == FGameplayTag::RequestGameplayTag("Enemy.State.Waiting"))
+	else if (enemyActor->GetEnemyState() == FGameplayTag::RequestGameplayTag("Enemy.State.Waiting"))
 	{
 		// Get index and check if it exists in the combat manager
 		int enemyAttackerIndex = enemiesInWaiting[enemyType].Find(enemyAttacker);
 		if (enemyAttackerIndex < 0)
-			return;
+			return false;
 
 		// Remove from list of attackers
 		enemiesInWaiting[enemyType].RemoveAtSwap(enemyAttackerIndex);
 
-		// Update enemy state
-		enemy->SetEnemyState(FGameplayTag::RequestGameplayTag("Enemy.State.Passive")); // TO BE REPLACED
+		// Removal successful
+		return true;
 	}
 	
-}
-
-void ACombatManager::OnEnemyDeath(AActor* dyingActor)
-{
-	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("OnEnemyDeath(): Event Fired"));
-}
-
-void ACombatManager::OnTargetDeath(AActor* dyingActor)
-{
-	// ...
+	return false;
 }

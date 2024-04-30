@@ -94,6 +94,10 @@ public:
 		void OnTargetDeath(AActor* dyingActor);
 
 private:
+	// Removes actor from combat manager if it exists in the manager.
+	// @return If the removal was successful or not
+	bool RemoveEnemyActor(TWeakObjectPtr<AEnemyCharacter> enemyActor);
+
 	// Reference to game state (where events are declared). 
 	TWeakObjectPtr<AInfestationGameState> gameState;
 
