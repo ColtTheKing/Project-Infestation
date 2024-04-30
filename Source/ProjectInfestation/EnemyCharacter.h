@@ -62,7 +62,7 @@ protected:
 		UBehaviorTree* enemyBehaviorTree;
 
 	// Behavior state of the enemy
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="AI", meta=(DisplayName="Starting State"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="AI", meta=(DisplayName="Starting State", Categories="Enemy.State"))
 		FGameplayTag currentState;
 
 	// The patrol path the enemy follows
