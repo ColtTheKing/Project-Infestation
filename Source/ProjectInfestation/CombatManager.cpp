@@ -3,6 +3,7 @@
 #include "CombatManager.h"
 
 #include "GameplayTagsModule.h"
+#include "AI/AttackTargetInterface.h"
 
 void ACombatManager::BeginPlay()
 {
@@ -32,7 +33,12 @@ void ACombatManager::AttackTargetFound(AActor* originActor, AActor* targetActor)
 	// Add target actor to combat manager if it wasn't found
 	if (currentAttackTargetIndex < 0)
 	{
-		attackTargets.Emplace(targetActor->GetUniqueID());
+		IAttackTargetInterface* target = Cast<IAttackTargetInterface>(targetActor);
+		if (target != nullptr)
+			attackTargets.Emplace(targetActor->GetUniqueID(), target->GetMaxNumberOfAttackers());
+		else
+			attackTargets.Emplace(targetActor->GetUniqueID());
+
 		currentAttackTargetIndex = attackTargets.Num() - 1;
 	}
 

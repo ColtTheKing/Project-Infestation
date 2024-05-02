@@ -239,6 +239,11 @@ FHitResult AMyPlayerCharacter::ShootRay(float length)
 	return hit;
 }
 
+int AMyPlayerCharacter::GetMaxNumberOfAttackers() const
+{
+	return maxNumberOfAttackers;
+}
+
 //void AMyPlayerCharacter::TakeDamage(int damage)
 //{
 //	//Could pass in a damage type later so the actor can respond differently

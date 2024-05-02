@@ -17,14 +17,16 @@ struct FAttackTarget
 
 	FAttackTarget(uint32 targetActorID) : targetActorID(targetActorID) {}
 
+	FAttackTarget(uint32 targetActorID, int maxAttackers) : targetActorID(targetActorID), MAXATTACKERS(maxAttackers) {}
+
 	// The ID of the actor being targeted by enemies
 	uint32 targetActorID = 0;
 
 	// The max number of attacker that can attack the target
-	unsigned int MAXATTACKERS = 3;
+	int MAXATTACKERS = 3;
 
 	// Current number of attackers attacking the target
-	unsigned int currNumOfAttackers = 0;
+	int currNumOfAttackers = 0;
 
 	FORCEINLINE bool CanAttack() { return currNumOfAttackers < MAXATTACKERS; }
 

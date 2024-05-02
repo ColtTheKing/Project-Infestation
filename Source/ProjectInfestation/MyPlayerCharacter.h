@@ -19,12 +19,13 @@
 #include <ProjectInfestation/MessageLogComponent.h>
 #include <ProjectInfestation/ArsenalComponent.h>
 #include <ProjectInfestation/InfestationGameMode.h>
+#include <ProjectInfestation/AI/AttackTargetInterface.h>
 #include "Templates/SharedPointer.h"
 
 #include "MyPlayerCharacter.generated.h"
 
-UCLASS()
-class PROJECTINFESTATION_API AMyPlayerCharacter : public ACharacter, public IGameplayTagAssetInterface
+UCLASS(meta=(PrioritizeCategories="GameplayTags AI"))
+class PROJECTINFESTATION_API AMyPlayerCharacter : public ACharacter, public IGameplayTagAssetInterface, public IAttackTargetInterface
 {
 	GENERATED_BODY()
 
@@ -99,6 +100,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Shoot)
 		FHitResult ShootRay(float length);
 
+	virtual int GetMaxNumberOfAttackers() const override;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -106,4 +109,6 @@ protected:
 	//void SetActiveWeapon(FArsenalWeapon weapon);
 
 private:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="AI", meta = (AllowPrivateAccess))
+		int maxNumberOfAttackers;
 };
