@@ -45,6 +45,12 @@ public:
 	*/
 	virtual void MeleeAttack();
 
+	/*
+	* Updates the target actor currently being sensed.
+	*/
+	UFUNCTION(BlueprintCallable)
+		void UpdateAttackTarget(AActor* actor, FAIStimulus const stimulus);
+
 	FORCEINLINE UBlackboardComponent* GetBlackboardComp() const { return blackboardComp; }
 	FORCEINLINE UBehaviorTreeComponent* GetBehaviorComp() const { return behaviorComp; }
 
