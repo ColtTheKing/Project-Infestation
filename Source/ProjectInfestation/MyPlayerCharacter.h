@@ -46,10 +46,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
 		USkeletalMeshComponent* playerArms;
 
-	//Temporary holder component to position the gun in the arms
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gun)
-		USceneComponent* armGunAttachment;
-
 	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gun)
 	//	TArray<AGun*> heldWeapons;
 
