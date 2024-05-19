@@ -30,7 +30,8 @@ void UArsenalComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 void UArsenalComponent::SetupWeapons(USceneComponent* attachTo)
 {
 	FTransform localToWorld = FTransform(attachTo->GetComponentLocation());
-	FVector location = localToWorld.GetLocation();
+	//FVector location = localToWorld.GetLocation();
+	FVector location = FVector(0, 0, 0);
 	FRotator rotation = FRotator(localToWorld.GetRotation());
 
 	for (size_t i = 0; i < gunBPs.Num(); i++)
@@ -42,7 +43,7 @@ void UArsenalComponent::SetupWeapons(USceneComponent* attachTo)
 		gunList.Add(myGun);
 	}
 
-	AActor* grenadeActor = GetWorld()->SpawnActor(grenadeBP, &location, &rotation);
+	AActor* grenadeActor = GetWorld()->SpawnActor(grenadeBP, &localToWorld);
 	grenadeActor->AttachToComponent(attachTo, FAttachmentTransformRules::KeepRelativeTransform);
 
 	grenade = Cast<AWeapon>(grenadeActor);
