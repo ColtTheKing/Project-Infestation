@@ -25,12 +25,12 @@ private:
 	UPROPERTY(Transient)
 		UBehaviorTreeComponent* behaviorComp;
 
-	/*
-	* Perception component that handles the senses of the controlled actor (sight, sound, etc.).
-	* Created in C++ to ensure that each child enemy controller will have one.
-	* 
-	* IMPORTANT: Only modify in the C++ if the component needs to be updated for each child.
-	*/
+	/**
+	 * Perception component that handles the senses of the controlled actor (sight, sound, etc.).
+	 * Created in C++ to ensure that each child enemy controller will have one.
+	 * 
+	 * IMPORTANT: Only modify in the C++ if the component needs to be updated for each child.
+	 */
 	UPROPERTY(VisibleAnywhere, Transient)
 		UAIPerceptionComponent* perceptionComp;
 		
@@ -38,12 +38,18 @@ private:
 public:
 	AEnemyAIController(const FObjectInitializer& objectInitializer);
 
-	/*
-	* Runs logic for meleeing a target including animations, sounds, damage applied, etc.
-	* 
-	* NOTE: Meant to be inherited by the child AI controllers.
-	*/
+	/**
+	 * Runs logic for meleeing a target including animations, sounds, damage applied, etc.
+	 * 
+	 * NOTE: Meant to be inherited by the child AI controllers.
+	 */
 	virtual void MeleeAttack();
+
+	/**
+	 * Updates the target actor currently being sensed.
+	 */
+	UFUNCTION(BlueprintCallable)
+		void UpdateAttackTarget(AActor* actor, FAIStimulus const stimulus);
 
 	FORCEINLINE UBlackboardComponent* GetBlackboardComp() const { return blackboardComp; }
 	FORCEINLINE UBehaviorTreeComponent* GetBehaviorComp() const { return behaviorComp; }

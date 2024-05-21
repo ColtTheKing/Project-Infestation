@@ -8,22 +8,22 @@
 
 UBTTask_FindRandomLocation::UBTTask_FindRandomLocation()
 {
-	NodeName = "Find Random Location in NavMesh";
+	NodeName = TEXT("Find Random Location in NavMesh");
 }
 
 EBTNodeResult::Type UBTTask_FindRandomLocation::ExecuteTask(UBehaviorTreeComponent& ownerComp, uint8* nodeMemory)
 {
-	AEnemyAIController* enemyController = Cast<AEnemyAIController>(ownerComp.GetAIOwner());
-	if (enemyController == NULL)
+	TWeakObjectPtr<AEnemyAIController> enemyController = Cast<AEnemyAIController>(ownerComp.GetAIOwner());
+	if (enemyController == nullptr)
 		return EBTNodeResult::Failed;
 
-	APawn* enemyPawn = enemyController->GetPawn();
-	if (enemyPawn != NULL)
+	TWeakObjectPtr<APawn> enemyPawn = enemyController->GetPawn();
+	if (enemyPawn != nullptr)
 	{
 		FVector origin = enemyPawn->GetActorLocation();
 		
-		UNavigationSystemV1* navSystem = UNavigationSystemV1::GetCurrent(GetWorld());
-		if (navSystem != NULL)
+		TWeakObjectPtr<UNavigationSystemV1> navSystem = UNavigationSystemV1::GetCurrent(GetWorld());
+		if (navSystem != nullptr)
 		{
 			FNavLocation loc;
 			if (navSystem->GetRandomPointInNavigableRadius(origin, searchRadius, loc))

@@ -4,7 +4,7 @@
 #include "MyPlayerCharacter.h"
 
 // Sets default values
-AMyPlayerCharacter::AMyPlayerCharacter()
+AMyPlayerCharacter::AMyPlayerCharacter() : Super()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -210,6 +210,11 @@ void AMyPlayerCharacter::PauseGame()
 	}
 }
 
+void AMyPlayerCharacter::GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const
+{
+	TagContainer.AppendTags(gameplayTags);
+}
+
 FHitResult AMyPlayerCharacter::ShootRay(float length)
 {
 	FVector rayLocation;
@@ -230,6 +235,11 @@ FHitResult AMyPlayerCharacter::ShootRay(float length)
 	GetWorld()->LineTraceSingleByChannel(hit, rayLocation, endRay, ECC_Visibility, rayParams);
 
 	return hit;
+}
+
+int AMyPlayerCharacter::GetMaxNumberOfAttackers() const
+{
+	return maxNumberOfAttackers;
 }
 
 //void AMyPlayerCharacter::TakeDamage(int damage)

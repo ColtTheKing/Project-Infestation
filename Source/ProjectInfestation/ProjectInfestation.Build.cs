@@ -16,7 +16,8 @@ public class ProjectInfestation : ModuleRules
 			"InputCore",
 			"AIModule",
 			"GameplayTasks",
-			"NavigationSystem"
+			"NavigationSystem",
+			"GameplayTags"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });

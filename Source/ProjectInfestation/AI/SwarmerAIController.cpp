@@ -1,11 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "SwarmerAIController.h"
-
-#include "../MyPlayerCharacter.h"
-
+#include "GameplayTagAssetInterface.h"
+#include "GameplayTagContainer.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
+
+#include "../EnemyCharacter.h"
 
 ASwarmerAIController::ASwarmerAIController(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
 {
@@ -24,21 +25,6 @@ void ASwarmerAIController::Tick(float DeltaTime)
 		float distance = enemy->GetDistanceTo(actor.Get());
 		GetBlackboardComp()->SetValueAsBool("TargetInRange", distance <= enemy->GetAttackRadius());
 	}
-}
-
-void ASwarmerAIController::UpdateTargetActor(AActor* actor, FAIStimulus const stimulus)
-{
-	// Only want to continue if the Actor sighted is the player.
-	TWeakObjectPtr<AMyPlayerCharacter> player = Cast<AMyPlayerCharacter>(actor);
-	if (player == nullptr)
-		return;
-
-	if (stimulus.WasSuccessfullySensed())
-		// Player found.
-		GetBlackboardComp()->SetValueAsObject("TargetActor", player.Get());
-	else
-		// Player lost.
-		GetBlackboardComp()->SetValueAsObject("TargetActor", NULL);
 }
 
 void ASwarmerAIController::MeleeAttack()

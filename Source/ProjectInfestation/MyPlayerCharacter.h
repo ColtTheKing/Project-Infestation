@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "GameplayTagAssetInterface.h"
+#include "GameplayTagContainer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/InputComponent.h"
@@ -17,18 +19,23 @@
 #include <ProjectInfestation/MessageLogComponent.h>
 #include <ProjectInfestation/ArsenalComponent.h>
 #include <ProjectInfestation/InfestationGameMode.h>
+#include <ProjectInfestation/AI/AttackTargetInterface.h>
 #include "Templates/SharedPointer.h"
 
 #include "MyPlayerCharacter.generated.h"
 
-UCLASS()
-class PROJECTINFESTATION_API AMyPlayerCharacter : public ACharacter
+UCLASS(meta=(PrioritizeCategories="GameplayTags AI"))
+class PROJECTINFESTATION_API AMyPlayerCharacter : public ACharacter, public IGameplayTagAssetInterface, public IAttackTargetInterface
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
 	AMyPlayerCharacter();
+
+	// Gameplay-related tags associated with this actor 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "GameplayTags")
+		FGameplayTagContainer gameplayTags;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = PlayerSpecs)
 		float interactRange;
@@ -83,8 +90,13 @@ public:
 	void NextWeapon();
 	void PauseGame();
 
+	// From IGameplayTagAssetInterface
+	virtual void GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const override;
+
 	UFUNCTION(BlueprintCallable, Category = Shoot)
 		FHitResult ShootRay(float length);
+
+	virtual int GetMaxNumberOfAttackers() const override;
 
 protected:
 	// Called when the game starts or when spawned
@@ -93,4 +105,6 @@ protected:
 	//void SetActiveWeapon(FArsenalWeapon weapon);
 
 private:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="AI", meta = (AllowPrivateAccess))
+		int maxNumberOfAttackers;
 };
