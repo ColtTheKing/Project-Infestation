@@ -6,6 +6,7 @@
 #include "GameFramework/Info.h"
 #include "InfestationGameState.h"
 #include "EnemyCharacter.h"
+#include "AI/EnemyAIController.h"
 #include "CombatManager.generated.h"
 
 USTRUCT()
@@ -43,13 +44,26 @@ struct FEnemyAttacker
 
 	FEnemyAttacker() = default;
 
-	FEnemyAttacker(TWeakObjectPtr<AEnemyCharacter> enemyAttacker) : enemy(enemyAttacker) {}
+	FEnemyAttacker(TWeakObjectPtr<AEnemyCharacter> enemyAttacker) : enemy(enemyAttacker) 
+	{
+		controller = Cast<AEnemyAIController>(enemyAttacker->GetController());
+		if (controller == nullptr)
+			UE_LOG(LogTemp, Warning, TEXT("FEnemyAttacker FEnemyAttacker(): Failed to set enemy controller."));
+	}
 
 	FEnemyAttacker(TWeakObjectPtr<AEnemyCharacter> enemyAttacker, int targetIndex)
-		: enemy(enemyAttacker), targetActorIndex(targetIndex) {}
+		: enemy(enemyAttacker), targetActorIndex(targetIndex) 
+	{
+		controller = Cast<AEnemyAIController>(enemyAttacker->GetController());
+		if (controller == nullptr)
+			UE_LOG(LogTemp, Warning, TEXT("FEnemyAttacker FEnemyAttacker(): Failed to set enemy controller."));
+	}
 
 	// The enemy attacker
 	TWeakObjectPtr<AEnemyCharacter> enemy;
+
+	// The enemy AI controller
+	TWeakObjectPtr<AEnemyAIController> controller;
 
 	// The index of the target attacker
 	int targetActorIndex = -1;

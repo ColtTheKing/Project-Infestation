@@ -24,31 +24,30 @@ void AEnemyAIController::MeleeAttack()
 	// Should be overridden.
 }
 
-void AEnemyAIController::UpdateAttackTarget(AActor* actor, FAIStimulus const stimulus)
+bool AEnemyAIController::ValidAttackTarget(AActor* actor)
 {
 	// Check if the actor sensed implements gameplay tags
 	IGameplayTagAssetInterface* taggedActor = Cast<IGameplayTagAssetInterface>(actor);
 	if (taggedActor == nullptr)
-		return;
+		return false;
 
 	// Check if the actor sensed has any tags matching an attack target
 	AEnemyCharacter* enemy = Cast<AEnemyCharacter>(GetPawn());
 	if (!taggedActor->HasAnyMatchingGameplayTags(enemy->GetAttackTargets()))
-		return;
+		return false;
 
-	TWeakObjectPtr<AInfestationGameState> gameState = Cast<AInfestationGameState>(GetWorld()->GetGameState());
-	if (stimulus.WasSuccessfullySensed())
-	{
-		// Target found.
-		GetBlackboardComp()->SetValueAsObject("TargetActor", actor);
-		gameState->GetDelegates()->onTargetFoundDelegate.Broadcast(GetPawn(), actor);
-	}
-	else
-	{
-		// Target lost.
-		GetBlackboardComp()->SetValueAsObject("TargetActor", NULL);
-		gameState->GetDelegates()->onTargetLostDelegate.Broadcast(GetPawn(), actor);
-	}
+	// If passed all conditions
+	return true;
+}
+
+void AEnemyAIController::SetAttackTarget(AActor* actor)
+{
+	blackboardComp->SetValueAsObject("TargetActor", actor);
+}
+
+bool AEnemyAIController::WasSuccussfullySensed(FAIStimulus const stimulus)
+{
+	return stimulus.WasSuccessfullySensed();
 }
 
 void AEnemyAIController::OnPossess(APawn* inPawn)

@@ -33,8 +33,7 @@ private:
 	 */
 	UPROPERTY(VisibleAnywhere, Transient)
 		UAIPerceptionComponent* perceptionComp;
-		
-	
+
 public:
 	AEnemyAIController(const FObjectInitializer& objectInitializer);
 
@@ -45,11 +44,14 @@ public:
 	 */
 	virtual void MeleeAttack();
 
-	/**
-	 * Updates the target actor currently being sensed.
-	 */
 	UFUNCTION(BlueprintCallable)
-		void UpdateAttackTarget(AActor* actor, FAIStimulus const stimulus);
+		bool ValidAttackTarget(AActor* actor);
+
+	UFUNCTION(BlueprintCallable)
+		void SetAttackTarget(AActor* actor = nullptr);
+
+	UFUNCTION(BlueprintCallable)
+		bool WasSuccussfullySensed(FAIStimulus const stimulus);
 
 	FORCEINLINE UBlackboardComponent* GetBlackboardComp() const { return blackboardComp; }
 	FORCEINLINE UBehaviorTreeComponent* GetBehaviorComp() const { return behaviorComp; }
