@@ -40,14 +40,57 @@ bool AEnemyAIController::ValidAttackTarget(AActor* actor)
 	return true;
 }
 
-void AEnemyAIController::SetAttackTarget(AActor* actor)
+void AEnemyAIController::SetAttackTarget(AActor* attackTarget)
 {
-	blackboardComp->SetValueAsObject("TargetActor", actor);
+	targetActor = attackTarget;
+	blackboardComp->SetValueAsObject("TargetActor", attackTarget);
 }
 
 bool AEnemyAIController::WasSuccussfullySensed(FAIStimulus const stimulus)
 {
 	return stimulus.WasSuccessfullySensed();
+}
+
+void AEnemyAIController::AlertLocalEnemies(AActor* attackTarget)
+{
+	// Get overlapping actors
+	TSet<AActor*> overlappingActors;
+	GetPawn()->GetOverlappingActors(overlappingActors);
+
+	// Get CombatArea that the enemy is in
+	TWeakObjectPtr<AActor> combatArea;
+	for (AActor* actor : overlappingActors)
+	{
+		if (actor->GetName().Contains("CombatArea"))
+		{
+			combatArea = actor;
+			break;
+		}
+	}
+
+	// If doesn't exist, return
+	if (!combatArea.IsValid())
+		return;
+
+	// Alert the local enemies
+	// TODO: Move this code to a separate CombatArea class in the form of a function.
+	//       This makes the implementation cleaner. However, currently there isn't 
+	//       any benefit to doing this.
+	combatArea->GetOverlappingActors(overlappingActors);
+	for (AActor* actor : overlappingActors)
+	{
+		TWeakObjectPtr<AEnemyCharacter> enemy = Cast<AEnemyCharacter>(actor);
+		if (enemy != nullptr)
+		{
+			// Set attack target
+			TWeakObjectPtr<AEnemyAIController> enemyController = Cast<AEnemyAIController>(enemy->GetController());
+			enemyController->SetAttackTarget(attackTarget);
+
+			// Broadcast to combat manager
+			AInfestationGameState* state = Cast<AInfestationGameState>(GetWorld()->GetGameState());
+			state->GetDelegates()->onTargetFoundDelegate.Broadcast(actor, attackTarget);
+		}
+	}
 }
 
 void AEnemyAIController::OnPossess(APawn* inPawn)
