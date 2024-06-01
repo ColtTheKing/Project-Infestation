@@ -58,6 +58,7 @@ void AEnemyAIController::AlertLocalEnemies(AActor* attackTarget)
 	GetPawn()->GetOverlappingActors(overlappingActors);
 
 	// Get CombatArea that the enemy is in
+	// TODO: Replace hardcoded check for CombatArea
 	TWeakObjectPtr<AActor> combatArea;
 	for (AActor* actor : overlappingActors)
 	{
