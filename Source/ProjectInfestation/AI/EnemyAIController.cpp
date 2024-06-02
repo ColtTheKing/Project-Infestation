@@ -80,6 +80,10 @@ void AEnemyAIController::AlertLocalEnemies(AActor* attackTarget)
 	combatArea->GetOverlappingActors(overlappingActors);
 	for (AActor* actor : overlappingActors)
 	{
+		// Don't want to alert this enemy actor
+		if (actor == GetPawn())
+			continue;
+
 		TWeakObjectPtr<AEnemyCharacter> enemy = Cast<AEnemyCharacter>(actor);
 		if (enemy != nullptr)
 		{
