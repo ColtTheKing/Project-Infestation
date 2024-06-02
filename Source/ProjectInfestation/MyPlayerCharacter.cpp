@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "MyPlayerCharacter.h"
 
 // Sets default values
@@ -27,6 +26,9 @@ AMyPlayerCharacter::AMyPlayerCharacter() : Super()
 
 	messageLog = CreateDefaultSubobject<UMessageLogComponent>(TEXT("MessageLog"));
 	weaponArsenal = CreateDefaultSubobject<UArsenalComponent>(TEXT("WeaponArsenal"));
+
+	// Designate as Stimulus Source
+	stimuliSourceComponent = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("AIStimuliSource"));
 }
 
 // Called when the game starts or when spawned
