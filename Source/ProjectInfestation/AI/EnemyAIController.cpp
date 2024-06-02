@@ -8,6 +8,7 @@
 
 #include "../InfestationGameState.h"
 #include "../EnemyCharacter.h"
+#include "../CombatArea.h"
 
 AEnemyAIController::AEnemyAIController(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
 {
@@ -58,11 +59,10 @@ void AEnemyAIController::AlertLocalEnemies(AActor* attackTarget)
 	GetPawn()->GetOverlappingActors(overlappingActors);
 
 	// Get CombatArea that the enemy is in
-	// TODO: Replace hardcoded check for CombatArea
 	TWeakObjectPtr<AActor> combatArea;
 	for (AActor* actor : overlappingActors)
 	{
-		if (actor->GetName().Contains("CombatArea"))
+		if (actor->IsA(ACombatArea::StaticClass()))
 		{
 			combatArea = actor;
 			break;
