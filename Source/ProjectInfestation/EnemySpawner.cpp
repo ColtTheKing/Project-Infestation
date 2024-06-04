@@ -19,9 +19,17 @@ void AEnemySpawner::BeginPlay()
 	Super::BeginPlay();
 	
 	// Init variables
-	spawnArea = FindComponentByClass<UBoxComponent>();
 	enemiesSpawned = 0;
 	respawnTimer = respawnRate;
+
+	// Setup spawn points
+	for (int i = 0; i < spawnLocations.Num(); i++)
+	{
+		FVector spawnPosition = spawnLocations[i].positioner;
+		FRotator spawnRotation = FRotator(0.0f, 0.0f, 0.0f);
+		AActor* pointActor = GetWorld()->SpawnActor(spawnLocations[i].spawnPointBP, &spawnPosition, &spawnRotation);
+		spawnPoints.Add((ASpawnPoint*)pointActor);
+	}
 
 	// Spawn enemies
 	for (int i = 0; i < spawnLimit; i++)
@@ -44,29 +52,15 @@ void AEnemySpawner::SpawnEnemy()
 	if (enemy == nullptr)
 		return;
 
-	// Calculate bounding box
-	FTransform localToWorld = FTransform(GetActorLocation());
-	FBox boundingBox = FBox::BuildAABB(localToWorld.GetLocation(), spawnArea->GetScaledBoxExtent());
-
-	// Calculate random location in bounding box
-	FVector randomLocation;
-	randomLocation = boundingBox.Min;
-	randomLocation.X += FGenericPlatformMath::FRand() * (boundingBox.Max.X - boundingBox.Min.X);
-	randomLocation.Y += FGenericPlatformMath::FRand() * (boundingBox.Max.Y - boundingBox.Min.Y);
-	randomLocation.Z += FGenericPlatformMath::FRand() * (boundingBox.Max.Z - boundingBox.Min.Z);
-
-	// Spawn a enemy
+	//Get a random spawn point
+	int ind = FGenericPlatformMath::FRand() * (spawnPoints.Num() - 1);
+	// Spawn a enemy at the random spawn point
 	FRotator spawnRotation = FRotator(0.0f, 0.0f, 0.0f);
-	
-	CreateEnemyActor(enemy, randomLocation, spawnRotation);
+	CreateEnemyActor(enemy, spawnPoints[ind]->GetActorLocation(), spawnRotation);
+	spawnPoints[ind]->SpawnEnemy(); //Let the spawn point do any animations or whatever
+
 	enemiesSpawned++;
 	respawnTimer = respawnRate;
-	
-	/*TWeakObjectPtr<ABasicEnemy> spawnedEnemy = Cast<ABasicEnemy>(GetWorld()->SpawnActor(enemy, &randomLocation, &spawnRotation));
-
-	if (spawnedEnemy != nullptr)
-		spawnedEnemy->SetEnemySpawner(this);
-	}*/
 }
 
 TSubclassOf<AEnemyCharacter> AEnemySpawner::GetRandomEnemy()
