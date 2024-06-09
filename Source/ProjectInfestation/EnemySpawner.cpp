@@ -49,14 +49,17 @@ void AEnemySpawner::Tick(float deltaTime)
 void AEnemySpawner::SpawnEnemy()
 {
 	TSubclassOf<AEnemyCharacter> enemy = GetRandomEnemy();
-	if (enemy == nullptr)
+	if (enemy == nullptr || spawnPoints.Num() == 0)
 		return;
 
 	//Get a random spawn point
 	int ind = FGenericPlatformMath::FRand() * (spawnPoints.Num() - 1);
-	// Spawn a enemy at the random spawn point
+	FTransform localToWorld = FTransform(spawnPoints[ind]->GetActorLocation());
+	FVector spawnLocation = localToWorld.GetLocation();
+
+	//Spawn the enemy at that point
 	FRotator spawnRotation = FRotator(0.0f, 0.0f, 0.0f);
-	CreateEnemyActor(enemy, spawnPoints[ind]->GetActorLocation(), spawnRotation);
+	CreateEnemyActor(enemy, spawnLocation, spawnRotation);
 	spawnPoints[ind]->SpawnEnemy(); //Let the spawn point do any animations or whatever
 
 	enemiesSpawned++;
