@@ -53,9 +53,10 @@ void AEnemySpawner::SpawnEnemy()
 		return;
 
 	//Get a random spawn point
-	int ind = FGenericPlatformMath::FRand() * (spawnPoints.Num() - 1);
+	int ind = FGenericPlatformMath::FRand() * spawnPoints.Num();
 	FTransform localToWorld = FTransform(spawnPoints[ind]->GetActorLocation());
-	FVector spawnLocation = localToWorld.GetLocation();
+	//FVector spawnLocation = localToWorld.GetLocation();
+	FVector spawnLocation = GetTransform().TransformPosition(spawnPoints[ind]->GetActorLocation());
 
 	//Spawn the enemy at that point
 	FRotator spawnRotation = FRotator(0.0f, 0.0f, 0.0f);
