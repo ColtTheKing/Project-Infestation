@@ -49,7 +49,7 @@ private:
 	UPROPERTY(EditAnywhere)
 		TArray<struct FEnemy> enemies;
 
-	UPROPERTY(EditAnywhere, Category = "Spawner")
+	UPROPERTY(EditAnywhere)
 		TArray<FSpawnLocation> spawnLocations;
 
 	TArray<ASpawnPoint*> spawnPoints;
