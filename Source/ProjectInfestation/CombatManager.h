@@ -6,6 +6,7 @@
 #include "GameFramework/Info.h"
 #include "InfestationGameState.h"
 #include "EnemyCharacter.h"
+#include "AI/EnemyAIController.h"
 #include "CombatManager.generated.h"
 
 USTRUCT()
@@ -43,13 +44,26 @@ struct FEnemyAttacker
 
 	FEnemyAttacker() = default;
 
-	FEnemyAttacker(TWeakObjectPtr<AEnemyCharacter> enemyAttacker) : enemy(enemyAttacker) {}
+	FEnemyAttacker(TWeakObjectPtr<AEnemyCharacter> enemyAttacker) : enemy(enemyAttacker) 
+	{
+		controller = Cast<AEnemyAIController>(enemyAttacker->GetController());
+		if (controller == nullptr)
+			UE_LOG(LogTemp, Warning, TEXT("FEnemyAttacker FEnemyAttacker(): Failed to set enemy controller."));
+	}
 
 	FEnemyAttacker(TWeakObjectPtr<AEnemyCharacter> enemyAttacker, int targetIndex)
-		: enemy(enemyAttacker), targetActorIndex(targetIndex) {}
+		: enemy(enemyAttacker), targetActorIndex(targetIndex) 
+	{
+		controller = Cast<AEnemyAIController>(enemyAttacker->GetController());
+		if (controller == nullptr)
+			UE_LOG(LogTemp, Warning, TEXT("FEnemyAttacker FEnemyAttacker(): Failed to set enemy controller."));
+	}
 
 	// The enemy attacker
 	TWeakObjectPtr<AEnemyCharacter> enemy;
+
+	// The enemy AI controller
+	TWeakObjectPtr<AEnemyAIController> controller;
 
 	// The index of the target attacker
 	int targetActorIndex = -1;
@@ -75,40 +89,57 @@ class PROJECTINFESTATION_API ACombatManager : public AInfo
 	GENERATED_BODY()
 	
 public: 
-	// Called at the beginning of play.
+	/* Called at the beginning of play. */
 	virtual void BeginPlay() override;
 
-	// Called when an attack target is found (delegate fired).
+	/**
+	 * Called when an attack target is found (delegate fired).
+	 * @param originActor: Actor event was fired from.
+	 * @param targetActor: Target actor.
+	 */
 	UFUNCTION(BlueprintCallable)
 		void AttackTargetFound(AActor* originActor, AActor* targetActor);
-	
-	// Called when an attack target is lost (delegate fired).
+
+	/**
+	 * Called when an attack target is lost (delegate fired).
+	 * @param originActor: Actor event was fired from.
+	 * @param targetActor: Target actor.
+	 */
 	UFUNCTION(BlueprintCallable)
 		void AttackTargetLost(AActor* originActor, AActor* targetActor);
 
-	// Called when an enemy actor dies.
+	/**
+	 * Called when an enemy actor dies (delegate fired).
+	 * @param dyingActor: Enemy actor that died.
+	 */
 	UFUNCTION(BlueprintCallable)
 		void OnEnemyDeath(AActor* dyingActor);
 
-	// Called when an target actor dies (delegate fired).
-	// NOTE: Not implemented, to be implemented when there are more than one target actor.
+	/**
+	 * Called when an target actor dies (delegate fired).
+	 * NOTE: Not implemented, to be implemented when there are more than one target actor.
+	 * @param dyingActor: Target actor that died.
+	 */
 	UFUNCTION(BlueprintCallable)
 		void OnTargetDeath(AActor* dyingActor);
 
 private:
-	// Removes actor from combat manager if it exists in the manager.
-	// @return If the removal was successful or not
+	/**
+	 * Removes actor from combat manager if it exists in the manager.
+	 * @param enemyActor: Enemy actor to remove.
+	 * @return If the removal was successful or not.
+	 */
 	bool RemoveEnemyActor(TWeakObjectPtr<AEnemyCharacter> enemyActor);
 
-	// Reference to game state (where events are declared). 
+	/* Reference to game state(where events are declared). */ 
 	TWeakObjectPtr<AInfestationGameState> gameState;
 
-	// List of attack targets.
+	/* List of attack targets. */
 	TArray<struct FAttackTarget> attackTargets;
 
-	// List of enemy attackers currently attacking a target.
+	/* List of enemy attackers currently attacking a target. */
 	TMap<FGameplayTag, TArray<struct FEnemyAttacker>> enemiesInCombat;
 
-	// List of enemy attackers waiting to attack a target.
+	/* List of enemy attackers waiting to attack a target. */
 	TMap<FGameplayTag, TArray<struct FEnemyAttacker>> enemiesInWaiting;
 };

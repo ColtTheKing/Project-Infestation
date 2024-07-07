@@ -8,6 +8,7 @@
 
 #include "../InfestationGameState.h"
 #include "../EnemyCharacter.h"
+#include "../CombatArea.h"
 
 AEnemyAIController::AEnemyAIController(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
 {
@@ -24,30 +25,76 @@ void AEnemyAIController::MeleeAttack()
 	// Should be overridden.
 }
 
-void AEnemyAIController::UpdateAttackTarget(AActor* actor, FAIStimulus const stimulus)
+bool AEnemyAIController::ValidAttackTarget(AActor* actor)
 {
 	// Check if the actor sensed implements gameplay tags
 	IGameplayTagAssetInterface* taggedActor = Cast<IGameplayTagAssetInterface>(actor);
 	if (taggedActor == nullptr)
-		return;
+		return false;
 
 	// Check if the actor sensed has any tags matching an attack target
 	AEnemyCharacter* enemy = Cast<AEnemyCharacter>(GetPawn());
 	if (!taggedActor->HasAnyMatchingGameplayTags(enemy->GetAttackTargets()))
+		return false;
+
+	// If passed all conditions
+	return true;
+}
+
+void AEnemyAIController::SetAttackTarget(AActor* attackTarget)
+{
+	targetActor = attackTarget;
+	blackboardComp->SetValueAsObject("TargetActor", attackTarget);
+}
+
+bool AEnemyAIController::WasSuccussfullySensed(FAIStimulus const stimulus)
+{
+	return stimulus.WasSuccessfullySensed();
+}
+
+void AEnemyAIController::AlertLocalEnemies(AActor* attackTarget)
+{
+	// Get overlapping actors
+	TSet<AActor*> overlappingActors;
+	GetPawn()->GetOverlappingActors(overlappingActors);
+
+	// Get CombatArea that the enemy is in
+	TWeakObjectPtr<AActor> combatArea;
+	for (AActor* actor : overlappingActors)
+	{
+		if (actor->IsA(ACombatArea::StaticClass()))
+		{
+			combatArea = actor;
+			break;
+		}
+	}
+
+	// If doesn't exist, return
+	if (!combatArea.IsValid())
 		return;
 
-	TWeakObjectPtr<AInfestationGameState> gameState = Cast<AInfestationGameState>(GetWorld()->GetGameState());
-	if (stimulus.WasSuccessfullySensed())
+	// Alert the local enemies
+	// TODO: Move this code to a separate CombatArea class in the form of a function.
+	//       This makes the implementation cleaner. However, currently there isn't 
+	//       any benefit to doing this.
+	combatArea->GetOverlappingActors(overlappingActors);
+	for (AActor* actor : overlappingActors)
 	{
-		// Target found.
-		GetBlackboardComp()->SetValueAsObject("TargetActor", actor);
-		gameState->GetDelegates()->onTargetFoundDelegate.Broadcast(GetPawn(), actor);
-	}
-	else
-	{
-		// Target lost.
-		GetBlackboardComp()->SetValueAsObject("TargetActor", NULL);
-		gameState->GetDelegates()->onTargetLostDelegate.Broadcast(GetPawn(), actor);
+		// Don't want to alert this enemy actor
+		if (actor == GetPawn())
+			continue;
+
+		TWeakObjectPtr<AEnemyCharacter> enemy = Cast<AEnemyCharacter>(actor);
+		if (enemy != nullptr)
+		{
+			// Set attack target
+			TWeakObjectPtr<AEnemyAIController> enemyController = Cast<AEnemyAIController>(enemy->GetController());
+			enemyController->SetAttackTarget(attackTarget);
+
+			// Broadcast to combat manager
+			AInfestationGameState* state = Cast<AInfestationGameState>(GetWorld()->GetGameState());
+			state->GetDelegates()->onTargetFoundDelegate.Broadcast(actor, attackTarget);
+		}
 	}
 }
 

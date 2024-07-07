@@ -33,9 +33,9 @@ private:
 	 */
 	UPROPERTY(VisibleAnywhere, Transient)
 		UAIPerceptionComponent* perceptionComp;
-		
-	
+
 public:
+	/* Constructor */
 	AEnemyAIController(const FObjectInitializer& objectInitializer);
 
 	/**
@@ -46,10 +46,36 @@ public:
 	virtual void MeleeAttack();
 
 	/**
-	 * Updates the target actor currently being sensed.
+	 * Checks whether a actor is a valid attack target.
+	 * @param actor: Actor to check.
+	 * @return True if it's a valid attack target.
 	 */
 	UFUNCTION(BlueprintCallable)
-		void UpdateAttackTarget(AActor* actor, FAIStimulus const stimulus);
+		bool ValidAttackTarget(AActor* actor);
+
+	/**
+	 * Sets the attack target in both the controller and blackboard.
+	 * @param attackTarget: The attack target to set to.
+	 */
+	UFUNCTION(BlueprintCallable)
+		void SetAttackTarget(AActor* attackTarget = nullptr);
+
+	/**
+	 * Checks whether the actor was succussfully sensed (wrapper function).
+	 * @param stimulus: The stimulus to check.
+	 */
+	UFUNCTION(BlueprintCallable)
+		bool WasSuccussfullySensed(FAIStimulus const stimulus);
+
+	/**
+	 * Alerts enemies around the controller's pawn using a local combat area.
+	 * TODO: Shouldn't take a target actor, the combat manager should decide what the attack target is. 
+	 *       This means there should be a separate event in the combat mangager for alerting enemies. Too
+	 *       much work for little benefit at the moment.
+	 * @param targetActor: Actor for those enemies to target.
+	 */
+	UFUNCTION(BlueprintCallable)
+		void AlertLocalEnemies(AActor* targetActor);
 
 	FORCEINLINE UBlackboardComponent* GetBlackboardComp() const { return blackboardComp; }
 	FORCEINLINE UBehaviorTreeComponent* GetBehaviorComp() const { return behaviorComp; }
@@ -57,4 +83,8 @@ public:
 protected:
 	virtual void OnPossess(class APawn* inPawn) override;
 	virtual void OnUnPossess() override;
+
+	/* Current target actor of the enemy. */
+	UPROPERTY(BlueprintReadOnly)
+		AActor* targetActor;
 };

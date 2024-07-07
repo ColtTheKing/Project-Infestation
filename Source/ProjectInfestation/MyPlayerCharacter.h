@@ -11,6 +11,7 @@
 #include "Components/InputComponent.h"
 #include "Components/ChildActorComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include <ProjectInfestation/InteractableActor.h>
@@ -34,7 +35,7 @@ public:
 	AMyPlayerCharacter();
 
 	// Gameplay-related tags associated with this actor 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "GameplayTags")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="GameplayTags")
 		FGameplayTagContainer gameplayTags;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = PlayerSpecs)
@@ -57,6 +58,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Arsenal)
 		UArsenalComponent* weaponArsenal;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="AI")
+		UAIPerceptionStimuliSourceComponent* stimuliSourceComponent;
 
 	UFUNCTION(BlueprintCallable, Category = Ammo)
 		void RestoreAmmo(FName ammoType, int ammo);
