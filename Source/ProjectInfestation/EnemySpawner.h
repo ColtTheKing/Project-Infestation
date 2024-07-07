@@ -9,6 +9,7 @@
 #include "Templates/SharedPointer.h"
 
 #include "BasicEnemy.h"
+#include "SpawnPoint.h"
 
 #include "EnemySpawner.generated.h"
 
@@ -24,18 +25,34 @@ struct FEnemy
 		float respawnChance;
 };
 
+USTRUCT()
+struct FSpawnLocation
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<ASpawnPoint> spawnPointBP;
+
+	UPROPERTY(EditAnywhere, meta = (MakeEditWidget = "true", AllowPrivateAccess = "true"))
+		FVector positioner;
+};
+
 UCLASS()
 class PROJECTINFESTATION_API AEnemySpawner : public AActor
 {
 private:
 	GENERATED_BODY()
-	
-	TWeakObjectPtr<UBoxComponent> spawnArea;
+
 	size_t enemiesSpawned;
 	float respawnTimer;
 
 	UPROPERTY(EditAnywhere)
 		TArray<struct FEnemy> enemies;
+
+	UPROPERTY(EditAnywhere)
+		TArray<FSpawnLocation> spawnLocations;
+
+	TArray<ASpawnPoint*> spawnPoints;
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
