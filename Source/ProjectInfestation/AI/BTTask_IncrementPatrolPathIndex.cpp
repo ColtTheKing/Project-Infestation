@@ -28,7 +28,7 @@ EBTNodeResult::Type UBTTask_IncrementPatrolPathIndex::ExecuteTask(UBehaviorTreeC
 	if (enemyBlackboard == nullptr)
 		return EBTNodeResult::Failed;
 
-	int const numOfPoints = enemyPawn->GetPatrolPath()->Num();
+	int numOfPoints = enemyPawn->GetPatrolPath()->Num();
 	int const minIndex = 0;
 	int const maxIndex = numOfPoints - 1;
 	int32 index = enemyBlackboard->GetValueAsInt(GetSelectedBlackboardKey());
@@ -38,8 +38,17 @@ EBTNodeResult::Type UBTTask_IncrementPatrolPathIndex::ExecuteTask(UBehaviorTreeC
 		if (index >= maxIndex && direction == EDirectionType::Forward)
 			direction = EDirectionType::Reverse;
 
-		else if (index == minIndex && direction == EDirectionType::Reverse)
+		else if (index <= minIndex && direction == EDirectionType::Reverse)
 			direction = EDirectionType::Forward;
+	}
+	else
+	{
+		/*
+		   Hacky way of fixing a bug where if multiple patrol paths are being followed simultaneously
+		   by multiple actors, the direction will change even if the enemy isn't bidirectional. The
+		   variable is private so I can only assume that it has something to do with Unreal's memory management.
+		*/
+		direction = EDirectionType::Forward;
 	}
 
 	index = (direction == EDirectionType::Forward) ? index + 1 : index - 1;
