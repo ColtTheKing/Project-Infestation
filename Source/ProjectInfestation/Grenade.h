@@ -47,6 +47,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Attack")
 		void UseWeapon(AActor* actor) override;
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "Attack")
+		void StopUsingWeapon() override;
+
 	void ConsumeAmmo(int ammo) override;
 
 protected:

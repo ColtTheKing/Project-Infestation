@@ -260,11 +260,11 @@ bool UArsenalComponent::ActivateAndEnableGrenade()
 	if (changedActive)
 	{
 		grenadeActive = true;
-		SetGrenadeEnabled(false);
+		SetGrenadeEnabled(true);
 
 		//Disable all non grenade weapons
 		for (int i = 0; i < gunList.Num(); i++)
-			SetWeaponEnabled(i, true);
+			SetWeaponEnabled(i, false);
 
 		return true;
 	}
