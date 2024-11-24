@@ -50,12 +50,14 @@ void AEnemySpawner::SpawnEnemy()
 {
 	TSubclassOf<AEnemyCharacter> enemy = GetRandomEnemy();
 	if (enemy == nullptr || spawnPoints.Num() == 0)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Cannot spawn as enemy or spawn point is null"));
 		return;
+	}
 
 	//Get a random spawn point
 	int ind = FGenericPlatformMath::FRand() * spawnPoints.Num();
 	FTransform localToWorld = FTransform(spawnPoints[ind]->GetActorLocation());
-	//FVector spawnLocation = localToWorld.GetLocation();
 	FVector spawnLocation = GetTransform().TransformPosition(spawnPoints[ind]->GetActorLocation());
 
 	//Spawn the enemy at that point

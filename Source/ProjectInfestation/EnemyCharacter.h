@@ -9,7 +9,6 @@
 #include "Components/CapsuleComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
 
-#include "HealthComponent.h"
 #include "AI/PatrolPath.h"
 
 #include "EnemyCharacter.generated.h"
@@ -22,9 +21,6 @@ class PROJECTINFESTATION_API AEnemyCharacter : public ACharacter, public IGamepl
 	GENERATED_BODY()
 
 public:
-	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
-		UHealthComponent* health;*/
-
 	// Sets default values for this character's properties
 	AEnemyCharacter();
 
@@ -36,9 +32,6 @@ public:
 
 	// From IGameplayTagAssetInterface
 	virtual void GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const override;
-
-	/*UFUNCTION(BlueprintCallable, Category = Damage)
-		virtual void TakeDamage(int damage) PURE_VIRTUAL(AEnemyCharacter::TakeDamage, ;);*/
 
 	// Getters for Enemy
 	FORCEINLINE FGameplayTag GetEnemyType() { return enemyType; }
