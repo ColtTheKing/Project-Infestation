@@ -16,7 +16,6 @@
 #include "GameFramework/Controller.h"
 #include "InteractableActor.h"
 #include "Gun.h"
-#include "HealthComponent.h"
 #include "MessageLogComponent.h"
 #include "ArsenalComponent.h"
 #include "InfestationGameMode.h"

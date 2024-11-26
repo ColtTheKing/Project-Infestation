@@ -4,8 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Gun.h"
-#include <ProjectInfestation/EnemyCharacter.h>
-#include <ProjectInfestation/HealthComponent.h>
+#include "EnemyCharacter.h"
 
 #include "HitscanGun.generated.h"
 

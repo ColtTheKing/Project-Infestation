@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "GameFramework/Character.h"
-#include "HealthComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "InfestationGameMode.generated.h"
 
