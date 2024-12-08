@@ -14,13 +14,12 @@
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
-#include <ProjectInfestation/InteractableActor.h>
-#include <ProjectInfestation/Gun.h>
-#include <ProjectInfestation/HealthComponent.h>
-#include <ProjectInfestation/MessageLogComponent.h>
-#include <ProjectInfestation/ArsenalComponent.h>
-#include <ProjectInfestation/InfestationGameMode.h>
-#include <ProjectInfestation/AI/AttackTargetInterface.h>
+#include "InteractableActor.h"
+#include "Gun.h"
+#include "MessageLogComponent.h"
+#include "ArsenalComponent.h"
+#include "InfestationGameMode.h"
+#include "AI/AttackTargetInterface.h"
 #include "Templates/SharedPointer.h"
 
 #include "MyPlayerCharacter.generated.h"
@@ -46,9 +45,6 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Mesh)
 		USkeletalMeshComponent* playerArms;
-
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gun)
-	//	TArray<AGun*> heldWeapons;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gun)
 		UChildActorComponent* heldGrenade;
@@ -105,8 +101,6 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	//void SetActiveWeapon(FArsenalWeapon weapon);
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="AI", meta = (AllowPrivateAccess))

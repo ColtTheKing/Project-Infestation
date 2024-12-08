@@ -8,7 +8,7 @@
 #include "Components/ActorComponent.h"
 #include "Templates/SharedPointer.h"
 
-#include "BasicEnemy.h"
+#include "EnemyCharacter.h"
 #include "SpawnPoint.h"
 
 #include "EnemySpawner.generated.h"

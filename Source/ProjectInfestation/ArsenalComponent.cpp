@@ -30,7 +30,6 @@ void UArsenalComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 void UArsenalComponent::SetupWeapons(USceneComponent* attachTo)
 {
 	FTransform localToWorld = FTransform(attachTo->GetComponentLocation());
-	//FVector location = localToWorld.GetLocation();
 	FVector location = FVector(0, 0, 0);
 	FRotator rotation = FRotator(localToWorld.GetRotation());
 
@@ -51,6 +50,7 @@ void UArsenalComponent::SetupWeapons(USceneComponent* attachTo)
 	//Make sure the first weapon in the arsenal is the only one active (visible and usable)
 	EnableActiveWeapon(0);
 
+	//Set starting ammo counts
 	/*gunList[activeWeapon]->SetReserveAmmo(gunList[activeWeapon]->clipSize);
 	gunList[activeWeapon]->SetAmmoInClip(gunList[activeWeapon]->clipSize);*/
 }
