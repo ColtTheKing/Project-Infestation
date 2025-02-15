@@ -2,7 +2,7 @@
 
 #include "BTTask_AttackTarget.h"
 
-#include "EnemyAIController.h"
+#include "../EnemyAIController.h"
 
 UBTTask_AttackTarget::UBTTask_AttackTarget()
 {
