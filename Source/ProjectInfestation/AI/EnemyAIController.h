@@ -8,6 +8,9 @@
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Perception/AIPerceptionComponent.h"
+
+#include "AIObjectiveGenerationComponent.h"
+
 #include "EnemyAIController.generated.h"
 
 /**
@@ -33,6 +36,9 @@ private:
 	 */
 	UPROPERTY(VisibleAnywhere, Transient)
 		UAIPerceptionComponent* perceptionComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Transient, meta = (AllowPrivateAccess))
+		UAIObjectiveGenerationComponent* objectiveGenerationComp;
 
 public:
 	/* Constructor */

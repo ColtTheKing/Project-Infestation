@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "Perception/AIPerceptionComponent.h"
 #include "GameplayTagAssetInterface.h"
 
 #include "../Objectives/AIObjective.h"
@@ -14,11 +15,14 @@
  * 
  */
 UCLASS(BlueprintType, Blueprintable, EditInlineNew, DefaultToInstanced)
-class PROJECTINFESTATION_API UBaseAIObjectiveGenerator : public UObject
+class PROJECTINFESTATION_API UBaseAIObjectiveGenerator : public UObject, public IGameplayTagAssetInterface
 {
 	GENERATED_BODY()
 	
 public:
+	// Set default values
+	UBaseAIObjectiveGenerator();
+
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void OnUpdate();
 	
@@ -28,10 +32,20 @@ public:
 	UFUNCTION(BlueprintCallable)
 		TArray<UAIObjective*> GetExistingObjectives();
 
+	// From IGameplayTagAssetInterface
+	virtual void GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const override;
+
+	FORCEINLINE void SetOwnerPerceptionComponent(
+		TWeakObjectPtr<UAIPerceptionComponent> perceptionComponent) { ownerPerceptionComponent = perceptionComponent; };
+
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="AI|Objective Generator")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="AI Objective Generator")
 		FGameplayTag objectiveGeneratorType;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="AI|Objective Generator")
+	// Usually set by the ObjectiveGenerationComponent but can be set on it's own.
+	UPROPERTY(BlueprintReadWrite, Category = "AI Objective Generator")
+		TWeakObjectPtr<UAIPerceptionComponent> ownerPerceptionComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="AI Objective Generator")
 		TArray<UAIObjective*> existingObjectives;
 };
