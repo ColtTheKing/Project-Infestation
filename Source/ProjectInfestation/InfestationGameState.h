@@ -33,5 +33,5 @@ public:
 private:
 	// Storage object that contains all game's delegates
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess))
-		UInfestationDelegates* delegates;
+		TWeakObjectPtr<UInfestationDelegates> delegates;
 };
