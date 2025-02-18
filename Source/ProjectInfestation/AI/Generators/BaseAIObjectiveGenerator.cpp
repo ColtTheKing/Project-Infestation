@@ -10,7 +10,23 @@ UBaseAIObjectiveGenerator::UBaseAIObjectiveGenerator()
 
 UAIObjective* UBaseAIObjectiveGenerator::GetOrCreateObjective(TSubclassOf<UAIObjective> objectiveType)
 {
-	return nullptr;
+	if (objectiveType == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s: ObjectiveType is invalid type."), *this->GetFName().ToString());
+		return nullptr;
+	}
+
+	// Get existing
+	for (auto& objective : existingObjectives)
+	{
+		if (objective->IsA(objectiveType))
+			return objective;
+	}
+	
+	// Create if it doesn't exist
+	auto* newObjective = NewObject<UAIObjective>(this, objectiveType);
+	existingObjectives.Add(newObjective);
+	return newObjective;
 }
 
 TArray<UAIObjective*> UBaseAIObjectiveGenerator::GetExistingObjectives()
