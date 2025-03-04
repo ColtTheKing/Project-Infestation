@@ -19,7 +19,7 @@ void UAIObjectiveGenerationComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// Set AIPerceptionComponent in generators
+	// Set AIController and AIPerceptionComponent in generators
 	UAIPerceptionComponent* perceptionComponent = GetOwner()->GetComponentByClass<UAIPerceptionComponent>();
 	if (perceptionComponent == nullptr)
 	{
