@@ -13,5 +13,11 @@ UCLASS()
 class PROJECTINFESTATION_API UCombatAIObjectiveGenerator : public UBaseAIObjectiveGenerator
 {
 	GENERATED_BODY()
-	
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat AI Objective Generator")
+		float searchRadius;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat AI Objective Generator")
+		TArray<TEnumAsByte<EObjectTypeQuery>> attackTargetTypes;
 };

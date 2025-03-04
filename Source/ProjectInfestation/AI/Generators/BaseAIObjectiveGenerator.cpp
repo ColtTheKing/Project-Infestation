@@ -35,7 +35,7 @@ TArray<AActor*> UBaseAIObjectiveGenerator::QuerySurroundingActors(float radius,
 {
 	FVector actorLocation = ownerPerceptionComponent->GetOwner()->GetActorLocation(); 
 	TWeakObjectPtr<AController> ownerController = Cast<AController>(ownerPerceptionComponent->GetOwner()); // Add owner actor to actors to ignore
-	if (ownerController == nullptr) // NOTE: Would perfer this to be one line, however for now it's fine. Would need to change design to allow for it and I currently don't know how to do that.
+	if (ownerController == nullptr) // NOTE: Would perfer this to be one line, however for now it's fine. Would need to change design to allow for it and I currently don't know how to do that
 		// Owner is actor
 		actorsToIgnore.Add(ownerPerceptionComponent->GetOwner());
 	else
