@@ -45,6 +45,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 		AWeapon* GetWeaponOfType(FName gunName); //Assuming this gets a reference that I can edit
 
+	UFUNCTION(BlueprintCallable, Category = Weapon)
+		int GetNumWeapons(int num);
+
+	UFUNCTION(BlueprintCallable, Category = Weapon)
+		AWeapon* GetWeaponAtIndex(int index);
+
 	//These return true, if they activated a different weapon
 	bool ActivatePrevious();
 	bool ActivateNext();

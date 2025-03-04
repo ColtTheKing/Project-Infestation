@@ -125,6 +125,18 @@ AWeapon* UArsenalComponent::GetWeaponOfType(FName gunName)
 	return nullptr;
 }
 
+int UArsenalComponent::GetNumWeapons(int num)
+{
+	return gunList.Num();
+}
+
+AWeapon* UArsenalComponent::GetWeaponAtIndex(int index)
+{
+	if (index >= 0 && index < gunList.Num())
+		return gunList[index];
+	return nullptr;
+}
+
 bool UArsenalComponent::ActivatePrevious()
 {
 	size_t newActive = activeWeapon;
