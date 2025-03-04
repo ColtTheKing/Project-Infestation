@@ -46,10 +46,6 @@ public:
 	FORCEINLINE void SetOwnerPerceptionComponent(
 		TWeakObjectPtr<UAIPerceptionComponent> perceptionComponent) { ownerPerceptionComponent = perceptionComponent; };
 
-	// Needed to access trace functions in the blueprint editor. TODO: Find another way.
-	// Source: https://forums.unrealengine.com/t/access-kismet-library-in-uobject-based-blueprint/462242
-	UWorld* GetWorld() const override;
-
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="AI Objective Generator")
 		FGameplayTag objectiveGeneratorType;
