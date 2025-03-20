@@ -21,6 +21,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Instanced, Category="AI Objective Generation")
 		TArray<TObjectPtr<UBaseAIObjectiveGenerator>> objectiveGenerators;
 
+private:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta=(AllowPrivateAccess=true))
+		float generatorsUpdateTimer;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
