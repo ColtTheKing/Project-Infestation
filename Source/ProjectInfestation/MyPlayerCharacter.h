@@ -90,6 +90,11 @@ public:
 	void NextWeapon();
 	void PauseGame();
 
+	UFUNCTION(BlueprintImplementableEvent, Category = Arsenal)
+		void OpenWeaponWheel();
+	UFUNCTION(BlueprintImplementableEvent, Category = Arsenal)
+		void CloseWeaponWheel();
+
 	// From IGameplayTagAssetInterface
 	virtual void GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const override;
 

@@ -42,19 +42,22 @@ public:
 
 	AWeapon* GetActiveWeapon();
 
-	UFUNCTION(BlueprintCallable, Category = Weapon)
+	UFUNCTION(BlueprintCallable, Category = Arsenal)
 		AWeapon* GetWeaponOfType(FName gunName); //Assuming this gets a reference that I can edit
 
-	UFUNCTION(BlueprintCallable, Category = Weapon)
+	UFUNCTION(BlueprintCallable, Category = Arsenal)
 		int GetNumWeapons(int num);
 
-	UFUNCTION(BlueprintCallable, Category = Weapon)
+	UFUNCTION(BlueprintCallable, Category = Arsenal)
 		AWeapon* GetWeaponAtIndex(int index);
 
 	//These return true, if they activated a different weapon
 	bool ActivatePrevious();
 	bool ActivateNext();
-	bool ActivateIndex(size_t index);
+
+	UFUNCTION(BlueprintCallable, Category = Arsenal)
+		bool ActivateIndex(int index);
+
 	bool ActivateAndEnableGrenade();
 	bool ActivateWeaponOfType(FName gunName);
 	void EnableActiveWeapon(int weaponIndex);

@@ -214,7 +214,7 @@ bool UArsenalComponent::ActivateNext()
 	return false;
 }
 
-bool UArsenalComponent::ActivateIndex(size_t index)
+bool UArsenalComponent::ActivateIndex(int index)
 {
 	//HAVE CODE HERE LATER TO DEAL WITH DISABLED WEAPONS ONCE THAT IS A THING
 

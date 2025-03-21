@@ -89,6 +89,9 @@ void AMyPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAction("SwitchWeapon4", IE_Pressed, this, &AMyPlayerCharacter::SwitchWeapon4);
 	PlayerInputComponent->BindAction("SwitchGrenade", IE_Pressed, this, &AMyPlayerCharacter::SwitchGrenade);
 
+	PlayerInputComponent->BindAction("WeaponWheel", IE_Pressed, this, &AMyPlayerCharacter::OpenWeaponWheel);
+	PlayerInputComponent->BindAction("WeaponWheel", IE_Released, this, &AMyPlayerCharacter::CloseWeaponWheel);
+
 	PlayerInputComponent->BindAction("Pause", IE_Pressed, this, &AMyPlayerCharacter::PauseGame).bExecuteWhenPaused = true;
 }
 
