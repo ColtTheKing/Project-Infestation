@@ -17,16 +17,24 @@ UAIObjective* UBaseAIObjectiveGenerator::GetOrCreateObjective(TSubclassOf<UAIObj
 	}
 
 	// Get existing
-	for (auto& objective : existingObjectives)
-	{
-		if (objective->IsA(objectiveType))
-			return objective;
-	}
+	auto* objective = GetExistingObjective(objectiveType);
+	if (objective != nullptr)
+		return objective;
 	
 	// Create if it doesn't exist
 	auto* newObjective = NewObject<UAIObjective>(this, objectiveType);
 	existingObjectives.Add(newObjective);
 	return newObjective;
+}
+
+UAIObjective* UBaseAIObjectiveGenerator::GetExistingObjective(TSubclassOf<UAIObjective> objectiveType)
+{
+	for (auto& objective : existingObjectives)
+	{
+		if (objective->IsA(objectiveType))
+			return objective;
+	}
+	return nullptr;
 }
 
 TArray<AActor*> UBaseAIObjectiveGenerator::QuerySurroundingActors(float radius,

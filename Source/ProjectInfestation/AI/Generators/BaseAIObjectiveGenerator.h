@@ -30,6 +30,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		UAIObjective* GetOrCreateObjective(TSubclassOf<UAIObjective> objectiveType);
 
+	UFUNCTION(BlueprintCallable)
+		UAIObjective* GetExistingObjective(TSubclassOf<UAIObjective> objectiveType);
+
 	// Wrapper for UKismetSystemLibrary::SphereTraceMultiForObjects, makes it simpler for child blueprints to call and parse found actors.
 	// NOTE: If performance/memory is an issue down the road, sphere trace can be swapped for a box trace. Sphere trace is very unlikely to be the issue though. 
 	UFUNCTION(BlueprintCallable, meta=(AutoCreateRefTerm="actorsToIgnore"))
