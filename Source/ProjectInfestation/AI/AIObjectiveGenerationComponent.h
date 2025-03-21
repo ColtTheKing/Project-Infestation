@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 
 #include "Generators/BaseAIObjectiveGenerator.h"
+#include "Objectives/AIObjective.h"
 
 #include "AIObjectiveGenerationComponent.generated.h"
 
@@ -35,6 +36,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void UpdateGenerators();
+
+	UFUNCTION(BlueprintCallable)
+		TArray<UAIObjective*> GetGeneratedObjectives();
 
 	// Development function for testing a single generator.
 	// TODO: If function ends up actually used for the game, change objectiveGenerators to hash table for fast search.

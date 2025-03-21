@@ -55,5 +55,5 @@ protected:
 		TWeakObjectPtr<UAIPerceptionComponent> ownerPerceptionComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="AI Objective Generator")
-		TArray<UAIObjective*> existingObjectives;
+		TArray<TObjectPtr<UAIObjective>> existingObjectives;
 };

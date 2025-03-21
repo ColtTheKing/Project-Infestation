@@ -51,6 +51,16 @@ void UAIObjectiveGenerationComponent::UpdateGenerators()
 		generator->OnUpdate();
 }
 
+TArray<UAIObjective*> UAIObjectiveGenerationComponent::GetGeneratedObjectives()
+{
+	TArray<UAIObjective*> generatorsObjectives;
+	for (auto& generator : objectiveGenerators)
+	{
+		generatorsObjectives.Append(generator->GetExistingObjectives());
+	}
+	return generatorsObjectives;
+}
+
 UBaseAIObjectiveGenerator* UAIObjectiveGenerationComponent::GetGenerator(TSubclassOf<UBaseAIObjectiveGenerator> objectiveGeneratorClass)
 {
 	if (objectiveGenerators.IsEmpty())
