@@ -127,6 +127,9 @@ void AMyPlayerCharacter::StopCrouching()
 
 void AMyPlayerCharacter::Interact()
 {
+	if (playerUIOpen)
+		return;
+
 	FHitResult rayHit = ShootRay(interactRange);
 	AInteractableActor* hitActor = Cast<AInteractableActor>(rayHit.GetActor());
 
@@ -138,6 +141,9 @@ void AMyPlayerCharacter::Interact()
 
 void AMyPlayerCharacter::FireWeapon()
 {
+	if (playerUIOpen)
+		return;
+
 	AWeapon* myWeapon = weaponArsenal->GetActiveWeapon();
 
 	if (myWeapon)
@@ -154,6 +160,9 @@ void AMyPlayerCharacter::StopFiringWeapon()
 
 void AMyPlayerCharacter::ReloadWeapon()
 {
+	if (playerUIOpen)
+		return;
+
 	AWeapon* myWeapon = weaponArsenal->GetActiveWeapon();
 
 	if (myWeapon)

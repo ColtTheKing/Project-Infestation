@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "InfestUtilities.h"
+#include "InfestationUtilities.h"
 
-bool UInfestUtilities::GetNormalisedMousePositionInGeometry(UObject* WorldContextObject, FGeometry Geometry, FVector2D& Position)
+bool UInfestationUtilities::GetNormalisedMousePositionInGeometry(UObject* WorldContextObject, FGeometry Geometry, FVector2D& Position)
 {
 	FVector2D pixelPosition;
 	FVector2D viewportMinPosition;

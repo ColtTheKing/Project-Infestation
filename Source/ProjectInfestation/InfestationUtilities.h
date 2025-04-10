@@ -9,10 +9,10 @@
 #include "Blueprint/SlateBlueprintLibrary.h"
 #include "Blueprint/WidgetLayoutLibrary.h"
 
-#include "InfestUtilities.generated.h"
+#include "InfestationUtilities.generated.h"
 
 UCLASS()
-class PROJECTINFESTATION_API UInfestUtilities : public UObject
+class PROJECTINFESTATION_API UInfestationUtilities : public UObject
 {
 	GENERATED_BODY()
 	

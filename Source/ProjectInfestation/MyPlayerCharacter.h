@@ -58,6 +58,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="AI")
 		UAIPerceptionStimuliSourceComponent* stimuliSourceComponent;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI)
+		bool playerUIOpen;
+
 	UFUNCTION(BlueprintCallable, Category = Ammo)
 		void RestoreAmmo(FName ammoType, int ammo);
 
