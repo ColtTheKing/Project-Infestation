@@ -58,6 +58,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="AI")
 		UAIPerceptionStimuliSourceComponent* stimuliSourceComponent;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI)
+		bool playerUIOpen;
+
 	UFUNCTION(BlueprintCallable, Category = Ammo)
 		void RestoreAmmo(FName ammoType, int ammo);
 
@@ -89,6 +92,11 @@ public:
 	void SwitchGrenade();
 	void NextWeapon();
 	void PauseGame();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = Arsenal)
+		void OpenWeaponWheel();
+	UFUNCTION(BlueprintImplementableEvent, Category = Arsenal)
+		void CloseWeaponWheel();
 
 	// From IGameplayTagAssetInterface
 	virtual void GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const override;

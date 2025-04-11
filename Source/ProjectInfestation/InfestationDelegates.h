@@ -17,6 +17,9 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnTargetPerceptionUpdatedSignature
 // Delegate type for when actor dies
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnActorDeathSignature, AActor*, dyingActor);
 
+// UI Delegates
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponWheelSelectSignature, int, weaponInd);
+
 /**
  * A storage class that stores all the game's delegates. 
  * 
@@ -46,4 +49,7 @@ public:
 	// Called when an actor loses it's target.
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 		FOnTargetPerceptionUpdatedSignature onTargetLostDelegate;
+
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+		FOnWeaponWheelSelectSignature onWeaponWheelSelectDelegate;
 };
