@@ -24,6 +24,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
 		FName weaponName;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
+		UTexture2D* weaponIcon;
+
 	// Sets default values for this actor's properties
 	AWeapon();
 
