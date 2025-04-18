@@ -37,42 +37,6 @@ UAIObjective* UBaseAIObjectiveGenerator::GetExistingObjective(TSubclassOf<UAIObj
 	return nullptr;
 }
 
-TArray<AActor*> UBaseAIObjectiveGenerator::QuerySurroundingActors(float radius,
-	const TArray<TEnumAsByte<EObjectTypeQuery>>& objectTypes, TArray<AActor*> actorsToIgnore,
-	FLinearColor traceColor, FLinearColor traceHitColor, float drawTime)
-{
-	FVector actorLocation;
-	TWeakObjectPtr<AController> ownerController = Cast<AController>(ownerPerceptionComponent->GetOwner()); // Add owner actor to actors to ignore
-	if (ownerController == nullptr) // NOTE: Would perfer this to be one line, however for now it's fine. Would need to change design to allow for it and I currently am to lazy to do that
-	{
-		// Owner is actor
-		actorLocation = ownerPerceptionComponent->GetOwner()->GetActorLocation();
-		actorsToIgnore.Add(ownerPerceptionComponent->GetOwner());
-	}
-	else
-	{
-		// Owner is a controller
-		actorLocation = ownerController->GetPawn()->GetActorLocation();
-		actorsToIgnore.Add(ownerController->GetPawn());
-	}
-
-	TArray<FHitResult> hitResults;
-	bool bhit = UKismetSystemLibrary::SphereTraceMultiForObjects(
-		GetWorld(), actorLocation, actorLocation, radius, objectTypes, false, 
-		actorsToIgnore, EDrawDebugTrace::ForDuration, hitResults, true,
-		traceColor, traceHitColor, drawTime);
-	
-	TArray<AActor*> queriedActors;
-	if (!bhit) // None of the objectTypes hit
-		return queriedActors;
-	
-	for (const auto& hitResult : hitResults)
-	{
-		queriedActors.Add(hitResult.GetActor());
-	}
-	return queriedActors;
-}
-
 TArray<UAIObjective*> UBaseAIObjectiveGenerator::GetExistingObjectives()
 {
 	return existingObjectives;

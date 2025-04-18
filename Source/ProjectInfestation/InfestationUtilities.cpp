@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "InfestationUtilities.h"
 
 bool UInfestationUtilities::GetNormalisedMousePositionInGeometry(UObject* WorldContextObject, FGeometry Geometry, FVector2D& Position)
@@ -21,4 +20,32 @@ bool UInfestationUtilities::GetNormalisedMousePositionInGeometry(UObject* WorldC
 
 	// Calculate if the mouse is inside the geometry or not
 	return FMath::Min(Position.X, Position.Y) >= 0.f && FMath::Max(Position.X, Position.Y) <= 1.f;
+}
+
+TArray<AActor*> UInfestationUtilities::QuerySurroundingActors(
+	AActor* originActor, float radius, 
+	const TArray<TEnumAsByte<EObjectTypeQuery>>& objectTypes, TArray<AActor*> actorsToIgnore, 
+	FLinearColor traceColor, FLinearColor traceHitColor, float drawTime)
+{
+	if (originActor == nullptr)
+		return TArray<AActor*>();
+
+	FVector actorLocation = originActor->GetActorLocation();
+	actorsToIgnore.Add(originActor);
+
+	TArray<FHitResult> hitResults;
+	bool bhit = UKismetSystemLibrary::SphereTraceMultiForObjects(
+		originActor->GetWorld(), actorLocation, actorLocation, radius, objectTypes, false,
+		actorsToIgnore, EDrawDebugTrace::ForDuration, hitResults, true,
+		traceColor, traceHitColor, drawTime);
+
+	TArray<AActor*> queriedActors;
+	if (!bhit) // None of the objectTypes hit
+		return queriedActors;
+
+	for (const auto& hitResult : hitResults)
+	{
+		queriedActors.Add(hitResult.GetActor());
+	}
+	return queriedActors;
 }
