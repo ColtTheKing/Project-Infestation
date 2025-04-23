@@ -28,10 +28,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	// Gets the delegates storage object.
-	FORCEINLINE TWeakObjectPtr<UInfestationDelegates> GetDelegates() { return delegates; };
+	FORCEINLINE TObjectPtr<UInfestationDelegates> GetDelegates() { return delegates; };
 
 private:
 	// Storage object that contains all game's delegates
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess))
-		TWeakObjectPtr<UInfestationDelegates> delegates;
+		TObjectPtr<UInfestationDelegates> delegates;
 };
