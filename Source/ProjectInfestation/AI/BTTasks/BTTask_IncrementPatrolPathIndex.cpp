@@ -2,8 +2,8 @@
 
 #include "BTTask_IncrementPatrolPathIndex.h"
 
-#include "../EnemyCharacter.h"
-#include "EnemyAIController.h"
+#include "../../EnemyCharacter.h"
+#include "../EnemyAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 UBTTask_IncrementPatrolPathIndex::UBTTask_IncrementPatrolPathIndex()
