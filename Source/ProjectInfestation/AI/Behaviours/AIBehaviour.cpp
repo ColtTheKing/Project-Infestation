@@ -3,6 +3,37 @@
 
 #include "AIBehaviour.h"
 
+UAIBehaviour::UAIBehaviour()
+{
+	cooldownTimer = 0;
+}
+
+void UAIBehaviour::Tick(float DeltaTime)
+{
+	if(IsCoolingDown())
+		cooldownTimer -= DeltaTime;
+}
+
+bool UAIBehaviour::IsTickable() const
+{
+	return true;
+}
+
+bool UAIBehaviour::IsTickableInEditor() const
+{
+	return false;
+}
+
+bool UAIBehaviour::IsTickableWhenPaused() const
+{
+	return false;
+}
+
+TStatId UAIBehaviour::GetStatId() const
+{
+	return TStatId();
+}
+
 bool UAIBehaviour::IsValidSelectionOption() const
 {
 	return !IsCoolingDown() && AreStartingConditionsMet();
@@ -10,12 +41,14 @@ bool UAIBehaviour::IsValidSelectionOption() const
 
 bool UAIBehaviour::IsCoolingDown() const
 {
-	return false;
+	return cooldownTimer > 0;
 }
 
 bool UAIBehaviour::AreStartingConditionsMet() const
 {
-	return false;
+	if (IsCoolingDown())
+		return false;
+	return true;
 }
 
 float UAIBehaviour::GetSelectionScore() const
@@ -23,12 +56,15 @@ float UAIBehaviour::GetSelectionScore() const
 	return 0.0f;
 }
 
-void UAIBehaviour::StartBehaviour() const
+void UAIBehaviour::StartBehaviour()
 {
+	executionState = BehaviourState::RUNNING;
 }
 
-void UAIBehaviour::StopBehaviour() const
+void UAIBehaviour::StopBehaviour()
 {
+	executionState = BehaviourState::COMPLETED;
+	cooldownTimer = maxCooldownTime;
 }
 
 void UAIBehaviour::GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const

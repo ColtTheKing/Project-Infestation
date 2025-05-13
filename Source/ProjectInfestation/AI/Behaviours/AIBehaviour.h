@@ -8,21 +8,33 @@
 #include "GameplayTagAssetInterface.h"
 #include "AIBehaviour.generated.h"
 
-/**
- * 
- */
+UENUM(BlueprintType)
+enum BehaviourState
+{
+	RUNNING		UMETA(DisplayName = "RUNNING"), 
+	COMPLETED	UMETA(DisplayName = "COMPLETED"), 
+	FAILED		UMETA(DisplayName = "FAILED")
+};
+
 UCLASS()
-class PROJECTINFESTATION_API UAIBehaviour : public UObject, public IGameplayTagAssetInterface
+class PROJECTINFESTATION_API UAIBehaviour : public UObject, public IGameplayTagAssetInterface, public FTickableGameObject
 {
 	GENERATED_BODY()
 	
 public:
+	UAIBehaviour();
+
+	void Tick(float DeltaTime) override;
+	bool IsTickable() const override;
+	bool IsTickableInEditor() const override;
+	bool IsTickableWhenPaused() const override;
+	TStatId GetStatId() const override;
 
 	// Can this behaviour be started i.e. is it valid option for selection?
 	UFUNCTION(BlueprintCallable)
 		bool IsValidSelectionOption() const;
 
-	// Is the behaviour currently colling down?
+	// Is the behaviour currently cooling down?
 	UFUNCTION(BlueprintCallable)
 		bool IsCoolingDown() const;
 
@@ -35,13 +47,16 @@ public:
 		virtual float GetSelectionScore() const;
 
 	UFUNCTION(BlueprintCallable)
-		void StartBehaviour() const;
+		void StartBehaviour();
 
 	UFUNCTION(BlueprintCallable)
-		void StopBehaviour() const;
+		void StopBehaviour();
 
 	// From IGameplayTagAssetInterface
 	virtual void GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI Behaviour")
+		float maxCooldownTime;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI Behaviour")
@@ -55,5 +70,11 @@ protected:
 		FGameplayTag behaviourType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI Behaviour")
+		TEnumAsByte<BehaviourState> executionState;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI Behaviour")
 		bool isInterruptible;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI Behaviour")
+		float cooldownTimer;
 };
