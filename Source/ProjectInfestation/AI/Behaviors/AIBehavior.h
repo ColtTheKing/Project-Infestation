@@ -6,23 +6,23 @@
 #include "UObject/NoExportTypes.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "GameplayTagAssetInterface.h"
-#include "AIBehaviour.generated.h"
+#include "AIBehavior.generated.h"
 
 UENUM(BlueprintType)
-enum BehaviourState
+enum BehaviorState
 {
 	RUNNING		UMETA(DisplayName = "RUNNING"), 
 	COMPLETED	UMETA(DisplayName = "COMPLETED"), 
 	FAILED		UMETA(DisplayName = "FAILED")
 };
 
-UCLASS()
-class PROJECTINFESTATION_API UAIBehaviour : public UObject, public IGameplayTagAssetInterface, public FTickableGameObject
+UCLASS(BlueprintType, Blueprintable, EditInlineNew, DefaultToInstanced)
+class PROJECTINFESTATION_API UAIBehavior : public UObject, public IGameplayTagAssetInterface, public FTickableGameObject
 {
 	GENERATED_BODY()
 	
 public:
-	UAIBehaviour();
+	UAIBehavior();
 
 	void Tick(float DeltaTime) override;
 	bool IsTickable() const override;
@@ -30,51 +30,51 @@ public:
 	bool IsTickableWhenPaused() const override;
 	TStatId GetStatId() const override;
 
-	// Can this behaviour be started i.e. is it valid option for selection?
+	// Can this Behavior be started i.e. is it valid option for selection?
 	UFUNCTION(BlueprintCallable)
 		bool IsValidSelectionOption() const;
 
-	// Is the behaviour currently cooling down?
+	// Is the Behavior currently cooling down?
 	UFUNCTION(BlueprintCallable)
 		bool IsCoolingDown() const;
 
-	// Are the conditions valid for this behaviour to be started
+	// Are the conditions valid for this Behavior to be started
 	UFUNCTION(BlueprintCallable)
 		virtual bool AreStartingConditionsMet() const;
 
-	// Calculates a score used of behaviour selection when we have multiple options
+	// Calculates a score used of Behavior selection when we have multiple options
 	UFUNCTION(BlueprintCallable)
 		virtual float GetSelectionScore() const;
 
 	UFUNCTION(BlueprintCallable)
-		void StartBehaviour();
+		void StartBehavior();
 
 	UFUNCTION(BlueprintCallable)
-		void StopBehaviour();
+		void StopBehavior();
 
 	// From IGameplayTagAssetInterface
 	virtual void GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI Behaviour")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI Behavior")
 		float maxCooldownTime;
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI Behaviour")
-		FString behaviourName;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI Behavior")
+		FString BehaviorName;
 
-	// Behaviour tree for behaviour
-	UPROPERTY(EditAnywhere, Category = "AI Behaviour")
+	// Behavior tree for Behavior
+	UPROPERTY(EditAnywhere, Category = "AI Behavior")
 		UBehaviorTree* behaviorTree;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI Behaviour")
-		FGameplayTag behaviourType;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI Behavior")
+		FGameplayTag behaviorType;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI Behaviour")
-		TEnumAsByte<BehaviourState> executionState;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI Behavior")
+		TEnumAsByte<BehaviorState> executionState;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI Behaviour")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI Behavior")
 		bool isInterruptible;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI Behaviour")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI Behavior")
 		float cooldownTimer;
 };
