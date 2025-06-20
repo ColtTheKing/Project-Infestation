@@ -34,7 +34,7 @@ TStatId UAIBehavior::GetStatId() const
 	return TStatId();
 }
 
-bool UAIBehavior::IsValidSelectionOption() const
+bool UAIBehavior::IsValidSelectionOption()
 {
 	return !IsCoolingDown() && AreStartingConditionsMet();
 }
@@ -42,18 +42,6 @@ bool UAIBehavior::IsValidSelectionOption() const
 bool UAIBehavior::IsCoolingDown() const
 {
 	return cooldownTimer > 0;
-}
-
-bool UAIBehavior::AreStartingConditionsMet() const
-{
-	if (IsCoolingDown())
-		return false;
-	return true;
-}
-
-float UAIBehavior::GetSelectionScore() const
-{
-	return 0.0f;
 }
 
 void UAIBehavior::StartBehavior()

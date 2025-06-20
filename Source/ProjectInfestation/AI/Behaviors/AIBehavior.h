@@ -32,19 +32,19 @@ public:
 
 	// Can this Behavior be started i.e. is it valid option for selection?
 	UFUNCTION(BlueprintCallable)
-		bool IsValidSelectionOption() const;
+		bool IsValidSelectionOption();
 
 	// Is the Behavior currently cooling down?
 	UFUNCTION(BlueprintCallable)
 		bool IsCoolingDown() const;
 
 	// Are the conditions valid for this Behavior to be started
-	UFUNCTION(BlueprintCallable)
-		virtual bool AreStartingConditionsMet() const;
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+		bool AreStartingConditionsMet();
 
 	// Calculates a score used of Behavior selection when we have multiple options
-	UFUNCTION(BlueprintCallable)
-		virtual float GetSelectionScore() const;
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+		int GetSelectionScore();
 
 	UFUNCTION(BlueprintCallable)
 		void StartBehavior();
