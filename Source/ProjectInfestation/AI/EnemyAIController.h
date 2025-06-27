@@ -10,6 +10,7 @@
 #include "Perception/AIPerceptionComponent.h"
 
 #include "AIObjectiveGenerationComponent.h"
+#include "Behaviors/AIBehavior.h"
 
 #include "EnemyAIController.generated.h"
 
@@ -24,6 +25,7 @@ class PROJECTINFESTATION_API AEnemyAIController : public AAIController
 private:
 	UPROPERTY(BlueprintReadWrite, Transient, meta = (AllowPrivateAccess))
 		UBlackboardComponent* blackboardComp;
+
 	UPROPERTY(Transient)
 		UBehaviorTreeComponent* behaviorComp;
 
@@ -72,6 +74,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		bool WasSuccussfullySensed(FAIStimulus const stimulus);
 
+	UFUNCTION(BlueprintCallable)
+		void RunBehavior(UAIBehavior* behavior);
+
 	/**
 	 * Alerts enemies around the controller's pawn using a local combat area.
 	 * TODO: Shouldn't take a target actor, the combat manager should decide what the attack target is. 
@@ -92,4 +97,8 @@ protected:
 	/* Current target actor of the enemy. */
 	UPROPERTY(BlueprintReadOnly)
 		AActor* targetActor;
+
+	// IMPORTANT: Delete before pushing to Develop
+	UPROPERTY(Instanced, EditAnywhere, BlueprintReadWrite, Category="AI")
+		TObjectPtr<UAIBehavior> defaultBehavior;
 };

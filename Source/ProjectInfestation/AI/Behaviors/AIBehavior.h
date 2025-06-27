@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BlackboardData.h"
 #include "GameplayTagAssetInterface.h"
 #include "AIBehavior.generated.h"
 
@@ -20,7 +21,7 @@ UCLASS(BlueprintType, Blueprintable, EditInlineNew, DefaultToInstanced)
 class PROJECTINFESTATION_API UAIBehavior : public UObject, public IGameplayTagAssetInterface, public FTickableGameObject
 {
 	GENERATED_BODY()
-	
+
 public:
 	UAIBehavior();
 
@@ -32,25 +33,32 @@ public:
 
 	// Can this Behavior be started i.e. is it valid option for selection?
 	UFUNCTION(BlueprintCallable)
-		bool IsValidSelectionOption();
+	bool IsValidSelectionOption();
 
 	// Is the Behavior currently cooling down?
 	UFUNCTION(BlueprintCallable)
-		bool IsCoolingDown() const;
+	bool IsCoolingDown() const;
 
 	// Are the conditions valid for this Behavior to be started
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-		bool AreStartingConditionsMet();
+	bool AreStartingConditionsMet();
 
 	// Calculates a score used of Behavior selection when we have multiple options
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-		int GetSelectionScore();
+	int GetSelectionScore();
+
+	// Function that takes a external blackboard component and sets variables in the blackboard asset
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void UpdateExternalBlackboard(UBlackboardComponent* blackboardComp);
 
 	UFUNCTION(BlueprintCallable)
-		void StartBehavior();
+	void StartBehavior();
 
 	UFUNCTION(BlueprintCallable)
-		void StopBehavior();
+	void StopBehavior();
+
+	FORCEINLINE UBehaviorTree* GetBehaviorTree() const { return behaviorTree; }
+	FORCEINLINE UBlackboardData* GetBlackboardAsset() const { return behaviorTree->GetBlackboardAsset(); }
 
 	// From IGameplayTagAssetInterface
 	virtual void GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const override;
@@ -64,7 +72,7 @@ protected:
 
 	// Behavior tree for Behavior
 	UPROPERTY(EditAnywhere, Category = "AI Behavior")
-		UBehaviorTree* behaviorTree;
+		TObjectPtr<UBehaviorTree> behaviorTree;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI Behavior")
 		FGameplayTag behaviorType;

@@ -55,6 +55,26 @@ bool AEnemyAIController::WasSuccussfullySensed(FAIStimulus const stimulus)
 	return stimulus.WasSuccessfullySensed();
 }
 
+void AEnemyAIController::RunBehavior(UAIBehavior* behavior)
+{
+	// If either is NULL then we don't want to continue.
+	if (!behavior->GetBehaviorTree() && !behavior->GetBehaviorTree()->GetBlackboardAsset())
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s: Behavior Tree of Behavior or BlackboardAsset of Behavior's Behavior Tree is NULL. Aborted function call."), *this->GetFName().ToString());
+		return;
+	}
+
+	// Setup blackboard.
+	blackboardComp->InitializeBlackboard(*behavior->GetBlackboardAsset());
+	blackboardComp->SetValueAsObject("SelfActor", GetPawn());
+	
+	// Update Blackboard variables to the ones in the Behavior.
+	behavior->UpdateExternalBlackboard(blackboardComp);
+
+	// Run behavior.
+	behaviorComp->StartTree(*behavior->GetBehaviorTree());
+}
+
 void AEnemyAIController::AlertLocalEnemies(AActor* attackTarget)
 {
 	// Get overlapping actors
