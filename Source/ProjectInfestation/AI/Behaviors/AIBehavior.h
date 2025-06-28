@@ -73,12 +73,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Behavior")
 		FString BehaviorName;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Behavior")
+		FGameplayTag behaviorType;
+
 	// Behavior tree for Behavior
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Behavior")
 		TObjectPtr<UBehaviorTree> behaviorTree;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Behavior")
-		FGameplayTag behaviorType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Behavior")
 		TEnumAsByte<BehaviorState> executionState;
