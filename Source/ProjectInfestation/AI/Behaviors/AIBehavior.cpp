@@ -59,3 +59,8 @@ void UAIBehavior::GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) cons
 {
 	TagContainer.AddTag(behaviorType);
 }
+
+bool UAIBehavior::IsValidBlackboard(UBlackboardComponent* blackboardComp)
+{
+	return blackboardComp->GetBlackboardAsset() == GetBlackboardAsset();
+}

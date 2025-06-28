@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "BehaviorTree/BehaviorTree.h"
-#include "BehaviorTree/BlackboardData.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "GameplayTagAssetInterface.h"
 #include "AIBehavior.generated.h"
 
@@ -67,11 +67,14 @@ public:
 		float maxCooldownTime;
 
 protected:
+	UFUNCTION(BlueprintCallable)
+		bool IsValidBlackboard(UBlackboardComponent* blackboardComp);
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Behavior")
 		FString BehaviorName;
 
 	// Behavior tree for Behavior
-	UPROPERTY(EditAnywhere, Category = "Behavior")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Behavior")
 		TObjectPtr<UBehaviorTree> behaviorTree;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Behavior")
