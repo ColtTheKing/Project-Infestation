@@ -9,6 +9,7 @@
 #include "Components/CapsuleComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
 
+#include "AI/Behaviors/AIBehavior.h"
 #include "AI/PatrolPath.h"
 
 #include "EnemyCharacter.generated.h"
@@ -41,7 +42,7 @@ public:
 	FORCEINLINE float GetAttackRadius() { return attackRadius; }
 	FORCEINLINE FGameplayTagContainer GetAttackTargets() { return attackTargets; }
 	FORCEINLINE FGameplayTag GetEnemyState() { return currentState; }
-	FORCEINLINE UBehaviorTree* GetBehaviorTree() { return enemyBehaviorTree; }
+	FORCEINLINE UAIBehavior* GetDefaultBehavior() { return defaultBehavior; }
 	FORCEINLINE APatrolPath* GetPatrolPath() { return patrolPath; }
 	FORCEINLINE bool IsBiDirectional() { return biDirectional; }
 
@@ -58,9 +59,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="GameplayTags", meta=(Categories="Enemy.Type"))
 		FGameplayTag enemyType;
 
-	// Determines the behaviors of the enemy
-	UPROPERTY(EditAnywhere, Category = "AI")
-		UBehaviorTree* enemyBehaviorTree;
+	// Determines the default behaviors of the enemy
+	UPROPERTY(EditDefaultsOnly, Instanced, Category = "AI")
+		TObjectPtr<UAIBehavior> defaultBehavior;
 
 	// Behavior state of the enemy
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="AI", meta=(DisplayName="Starting State", Categories="Enemy.State"))

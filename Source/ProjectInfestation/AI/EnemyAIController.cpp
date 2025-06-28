@@ -125,17 +125,11 @@ void AEnemyAIController::OnPossess(APawn* inPawn)
 {
 	Super::OnPossess(inPawn);
 
-	// Set up blackboard and tree
+	// Setup and run default enemy behavior
 	AEnemyCharacter* enemy = Cast<AEnemyCharacter>(inPawn);
-	if (enemy && enemy->GetBehaviorTree())
+	if (enemy && enemy->GetDefaultBehavior())
 	{
-		if (enemy->GetBehaviorTree()->BlackboardAsset)
-		{
-			blackboardComp->InitializeBlackboard(*enemy->GetBehaviorTree()->BlackboardAsset);
-			blackboardComp->SetValueAsObject("SelfActor", enemy);
-		}
-
-		behaviorComp->StartTree(*(enemy->GetBehaviorTree()));
+		RunBehavior(enemy->GetDefaultBehavior());
 	}
 }
 

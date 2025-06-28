@@ -97,8 +97,4 @@ protected:
 	/* Current target actor of the enemy. */
 	UPROPERTY(BlueprintReadOnly)
 		AActor* targetActor;
-
-	// IMPORTANT: Delete before pushing to Develop
-	UPROPERTY(Instanced, EditAnywhere, BlueprintReadWrite, Category="AI")
-		TObjectPtr<UAIBehavior> defaultBehavior;
 };
