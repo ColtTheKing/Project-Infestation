@@ -63,26 +63,26 @@ public:
 	// From IGameplayTagAssetInterface
 	virtual void GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI Behavior")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Behavior")
 		float maxCooldownTime;
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI Behavior")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Behavior")
 		FString BehaviorName;
 
 	// Behavior tree for Behavior
-	UPROPERTY(EditAnywhere, Category = "AI Behavior")
+	UPROPERTY(EditAnywhere, Category = "Behavior")
 		TObjectPtr<UBehaviorTree> behaviorTree;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI Behavior")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Behavior")
 		FGameplayTag behaviorType;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI Behavior")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Behavior")
 		TEnumAsByte<BehaviorState> executionState;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI Behavior")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Behavior")
 		bool isInterruptible;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI Behavior")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Behavior")
 		float cooldownTimer;
 };
