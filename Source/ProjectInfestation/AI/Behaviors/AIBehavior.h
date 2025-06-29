@@ -5,9 +5,19 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BehaviorTreeTypes.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "GameplayTagAssetInterface.h"
 #include "AIBehavior.generated.h"
+
+// EBTExecutionMode in BehaviorTreeTypes isn't a UENUM and thus can't be a UPROPERTY.
+// This acts as a one-to-one representation of it that can be mapped to the original.
+UENUM() 
+enum BehaviorExecutionMode
+{
+	SingleRun,
+	Looped
+};
 
 UENUM(BlueprintType)
 enum BehaviorState
@@ -59,6 +69,11 @@ public:
 
 	FORCEINLINE UBehaviorTree* GetBehaviorTree() const { return behaviorTree; }
 	FORCEINLINE UBlackboardData* GetBlackboardAsset() const { return behaviorTree->GetBlackboardAsset(); }
+	
+	FORCEINLINE EBTExecutionMode::Type GetExecutionMode() const
+	{
+		return (executionMode == BehaviorExecutionMode::SingleRun) ? EBTExecutionMode::SingleRun : EBTExecutionMode::Looped;
+	}
 
 	// From IGameplayTagAssetInterface
 	virtual void GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const override;
@@ -77,8 +92,11 @@ protected:
 		FGameplayTag behaviorType;
 
 	// Behavior tree for Behavior
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Behavior")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Behavior")
 		TObjectPtr<UBehaviorTree> behaviorTree;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Behavior")
+		TEnumAsByte<BehaviorExecutionMode> executionMode;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Behavior")
 		TEnumAsByte<BehaviorState> executionState;

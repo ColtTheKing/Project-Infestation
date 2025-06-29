@@ -72,7 +72,7 @@ void AEnemyAIController::RunBehavior(UAIBehavior* behavior)
 	behavior->UpdateExternalBlackboard(blackboardComp);
 
 	// Run behavior.
-	behaviorComp->StartTree(*behavior->GetBehaviorTree());
+	behaviorComp->StartTree(*behavior->GetBehaviorTree(), behavior->GetExecutionMode());
 }
 
 void AEnemyAIController::AlertLocalEnemies(AActor* attackTarget)
