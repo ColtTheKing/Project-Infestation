@@ -58,7 +58,7 @@ bool AEnemyAIController::WasSuccussfullySensed(FAIStimulus const stimulus)
 void AEnemyAIController::RunBehavior(UAIBehavior* behavior)
 {
 	// If either is NULL then we don't want to continue.
-	if (!behavior->GetBehaviorTree() && !behavior->GetBehaviorTree()->GetBlackboardAsset())
+	if (!behavior->GetBehaviorTree() || !behavior->GetBehaviorTree()->GetBlackboardAsset())
 	{
 		UE_LOG(LogTemp, Error, TEXT("%s: Behavior Tree of Behavior or BlackboardAsset of Behavior's Behavior Tree is NULL. Aborted function call."), *this->GetFName().ToString());
 		return;
