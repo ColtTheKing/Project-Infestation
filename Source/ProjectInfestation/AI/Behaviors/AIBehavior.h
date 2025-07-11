@@ -8,6 +8,9 @@
 #include "BehaviorTree/BehaviorTreeTypes.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "GameplayTagAssetInterface.h"
+
+#include "../Objectives/AIObjective.h"
+
 #include "AIBehavior.generated.h"
 
 // EBTExecutionMode in BehaviorTreeTypes isn't a UENUM and thus can't be a UPROPERTY.
@@ -51,7 +54,7 @@ public:
 
 	// Are the conditions valid for this Behavior to be started
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	bool AreStartingConditionsMet();
+	bool AreStartingConditionsMet(AActor* aiActor, const TArray<UAIObjective*>& availableObjectives);
 
 	// Calculates a score used of Behavior selection when we have multiple options
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)

@@ -20,7 +20,8 @@ AEnemyAIController::AEnemyAIController(const FObjectInitializer& objectInitializ
 	BrainComponent = behaviorComp; // BrainComponent comes from the parent class.
 
 	perceptionComp = objectInitializer.CreateDefaultSubobject<UAIPerceptionComponent>(this, TEXT("AIPerceptionComponent"));
-	objectiveGenerationComp = objectInitializer.CreateDefaultSubobject<UAIObjectiveGenerationComponent>(this, TEXT("AIOObjectiveGenerationComponent"));
+	objectiveGenerationComp = objectInitializer.CreateDefaultSubobject<UAIObjectiveGenerationComponent>(this, TEXT("AIObjectiveGenerationComponent"));
+	behaviorSelectorComp = objectInitializer.CreateDefaultSubobject<UAIBehaviorSelectorComponent>(this, TEXT("AIBehaviorSelectorComponent"));
 }
 
 void AEnemyAIController::MeleeAttack()

@@ -36,7 +36,8 @@ TStatId UAIBehavior::GetStatId() const
 
 bool UAIBehavior::IsValidSelectionOption()
 {
-	return !IsCoolingDown() && AreStartingConditionsMet();
+	//return !IsCoolingDown() && AreStartingConditionsMet();
+	return true;
 }
 
 bool UAIBehavior::IsCoolingDown() const

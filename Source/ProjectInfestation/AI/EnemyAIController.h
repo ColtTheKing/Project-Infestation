@@ -10,6 +10,7 @@
 #include "Perception/AIPerceptionComponent.h"
 
 #include "AIObjectiveGenerationComponent.h"
+#include "AIBehaviorSelectorComponent.h"
 #include "Behaviors/AIBehavior.h"
 
 #include "EnemyAIController.generated.h"
@@ -40,6 +41,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Transient, meta = (AllowPrivateAccess))
 		UAIObjectiveGenerationComponent* objectiveGenerationComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Transient, meta = (AllowPrivateAccess))
+		UAIBehaviorSelectorComponent* behaviorSelectorComp;
 
 public:
 	/* Constructor */
