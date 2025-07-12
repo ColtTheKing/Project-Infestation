@@ -32,3 +32,8 @@ void UAIBehaviorSelectorComponent::TickComponent(float DeltaTime, ELevelTick Tic
 	// ...
 }
 
+UAIBehavior* UAIBehaviorSelectorComponent::SelectBehavior(const TArray<UAIObjective*>& availableObjectives)
+{
+	return nullptr;
+}
+

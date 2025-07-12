@@ -19,13 +19,6 @@ public:
 	// Sets default values for this component's properties
 	UAIObjectiveGenerationComponent();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Instanced, Category="AI Objective Generation")
-		TArray<TObjectPtr<UBaseAIObjectiveGenerator>> objectiveGenerators;
-
-private:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta=(AllowPrivateAccess=true))
-		float generatorsUpdateTimer;
-
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -44,4 +37,11 @@ public:
 	// TODO: If function ends up actually used for the game, change objectiveGenerators to hash table for fast search.
 	UFUNCTION(BlueprintCallable)
 		UBaseAIObjectiveGenerator* GetGenerator(TSubclassOf<UBaseAIObjectiveGenerator> objectiveGeneratorClass);
+
+private:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Instanced, meta=(AllowPrivateAccess=true))
+		TArray<TObjectPtr<UBaseAIObjectiveGenerator>> objectiveGenerators;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta=(AllowPrivateAccess=true))
+		float generatorsUpdateTimer;
 };

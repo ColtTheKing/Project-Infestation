@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 
 #include "Behaviors/AIBehavior.h"
+#include "Objectives/AIObjective.h"
 
 #include "AIBehaviorSelectorComponent.generated.h"
 
@@ -27,8 +28,19 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-private:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Instanced, meta = (AllowPrivateAccess))
-		TObjectPtr<UAIBehavior> DefaultBehavior;
+	UFUNCTION(BlueprintCallable)
+		UAIBehavior* SelectBehavior(const TArray<UAIObjective*>& availableObjectives);
 
+private:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced, meta=(AllowPrivateAccess=true))
+		TObjectPtr<UAIBehavior> defaultBehavior;
+
+	UPROPERTY(BlueprintReadWrite, Instanced, meta=(AllowPrivateAccess=true))
+		TObjectPtr<UAIBehavior> currentBehavior;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced, meta = (AllowPrivateAccess = true))
+		TArray<TObjectPtr<UAIBehavior>> hightPriorityBehaviors;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced, meta=(AllowPrivateAccess=true))
+		TArray<TObjectPtr<UAIBehavior>> behaviors;
 };
