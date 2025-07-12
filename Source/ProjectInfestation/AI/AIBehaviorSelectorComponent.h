@@ -31,6 +31,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 		UAIBehavior* SelectBehavior(const TArray<UAIObjective*>& availableObjectives);
 
+	FORCEINLINE UAIBehavior* GetDefaultBehavior() { return defaultBehavior; }
+
 private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced, meta=(AllowPrivateAccess=true))
 		TObjectPtr<UAIBehavior> defaultBehavior;

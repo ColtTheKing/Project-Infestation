@@ -126,11 +126,11 @@ void AEnemyAIController::OnPossess(APawn* inPawn)
 {
 	Super::OnPossess(inPawn);
 
-	// Setup and run default enemy behavior
+	// Only want to possess an enemy character for now
 	AEnemyCharacter* enemy = Cast<AEnemyCharacter>(inPawn);
-	if (enemy && enemy->GetDefaultBehavior())
+	if (enemy && behaviorSelectorComp->GetDefaultBehavior())
 	{
-		RunBehavior(enemy->GetDefaultBehavior());
+		RunBehavior(behaviorSelectorComp->GetDefaultBehavior());
 	}
 }
 

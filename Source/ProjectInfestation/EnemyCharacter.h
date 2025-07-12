@@ -42,7 +42,6 @@ public:
 	FORCEINLINE float GetAttackRadius() { return attackRadius; }
 	FORCEINLINE FGameplayTagContainer GetAttackTargets() { return attackTargets; }
 	FORCEINLINE FGameplayTag GetEnemyState() { return currentState; }
-	FORCEINLINE UAIBehavior* GetDefaultBehavior() { return defaultBehavior; }
 	FORCEINLINE APatrolPath* GetPatrolPath() { return patrolPath; }
 	FORCEINLINE bool IsBiDirectional() { return biDirectional; }
 
@@ -58,10 +57,6 @@ protected:
 	// Type of the enemy
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="GameplayTags", meta=(Categories="Enemy.Type"))
 		FGameplayTag enemyType;
-
-	// Determines the default behaviors of the enemy
-	UPROPERTY(EditDefaultsOnly, Instanced, Category = "AI")
-		TObjectPtr<UAIBehavior> defaultBehavior;
 
 	// Behavior state of the enemy
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="AI", meta=(DisplayName="Starting State", Categories="Enemy.State"))
