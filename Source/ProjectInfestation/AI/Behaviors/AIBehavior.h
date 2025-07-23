@@ -13,7 +13,7 @@
 
 #include "AIBehavior.generated.h"
 
-// EBTExecutionMode in BehaviorTreeTypes isn't a UENUM and thus can't be a UPROPERTY.
+// BTExecutionMode in BehaviorTreeTypes isn't a UENUM and thus can't be a UPROPERTY.
 // This acts as a one-to-one representation of it that can be mapped to the original.
 UENUM() 
 enum BehaviorExecutionMode
@@ -28,6 +28,24 @@ enum BehaviorState
 	RUNNING		UMETA(DisplayName = "RUNNING"), 
 	COMPLETED	UMETA(DisplayName = "COMPLETED"), 
 	FAILED		UMETA(DisplayName = "FAILED")
+};
+
+USTRUCT(BlueprintType)
+struct FAIBehaviorOption
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TWeakObjectPtr<UAIBehavior> behavior = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TWeakObjectPtr<UAIObjective> associatedObjective = nullptr;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int associatedObjectiveOptionIndex = -1;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float score = 0;
 };
 
 UCLASS(BlueprintType, Blueprintable, EditInlineNew, DefaultToInstanced)
@@ -58,11 +76,11 @@ public:
 
 	// Calculates a score used of Behavior selection when we have multiple options
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	int GetSelectionScore();
+	FAIBehaviorOption GetBestBehaviorOption(AActor* aiActor, const TArray<UAIObjective*>& availableObjectives);
 
 	// Function that takes a external blackboard component and sets variables in the blackboard asset
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void UpdateExternalBlackboard(UBlackboardComponent* blackboardComp);
+	void UpdateExternalBlackboard(UBlackboardComponent* blackboardComp, const FAIBehaviorOption& behaviorOption);
 
 	UFUNCTION(BlueprintCallable)
 	void StartBehavior();
