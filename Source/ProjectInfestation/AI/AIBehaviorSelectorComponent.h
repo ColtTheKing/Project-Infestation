@@ -34,6 +34,15 @@ public:
 	FORCEINLINE UAIBehavior* GetDefaultBehavior() { return defaultBehavior; }
 
 private:
+	/*
+		Default behavior that will run:
+		a. When the enemy spawns into the world.
+	    b. When the behavior selector has no valid behavior options.
+
+		Note that a default behavior will have no corresponding objective. Objectives state
+		what can be done in the world so no behaviors == no objectives generated. Default means
+		no other behavior was valid.
+	*/
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced, meta=(AllowPrivateAccess=true))
 		TObjectPtr<UAIBehavior> defaultBehavior;
 
