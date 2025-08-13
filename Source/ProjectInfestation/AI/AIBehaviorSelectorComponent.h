@@ -46,8 +46,8 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced, meta=(AllowPrivateAccess=true))
 		TObjectPtr<UAIBehavior> defaultBehavior;
 
-	UPROPERTY(BlueprintReadWrite, Instanced, meta=(AllowPrivateAccess=true))
-		TObjectPtr<UAIBehavior> currentBehavior;
+	UPROPERTY(BlueprintReadWrite, meta=(AllowPrivateAccess=true))
+		FAIBehaviorOption currentBehaviorOption;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced, meta = (AllowPrivateAccess = true))
 		TArray<TObjectPtr<UAIBehavior>> hightPriorityBehaviors;

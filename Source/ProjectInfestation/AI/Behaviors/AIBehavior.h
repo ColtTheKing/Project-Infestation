@@ -35,6 +35,13 @@ struct FAIBehaviorOption
 {
 	GENERATED_BODY()
 
+	FAIBehaviorOption() = default;
+
+	FAIBehaviorOption(TObjectPtr<UAIBehavior> behavior) : behavior(behavior) { }
+
+	// TODO: Add copy constructor.
+	// TODO: Add move constructor.
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TObjectPtr<UAIBehavior> behavior = nullptr;
 

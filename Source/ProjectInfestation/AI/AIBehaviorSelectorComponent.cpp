@@ -17,8 +17,8 @@ void UAIBehaviorSelectorComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// Current behavior will start as the default behavior.
-	currentBehavior = defaultBehavior;
+	// Current behavior will start as the default behavior with no corresponding objective option.
+	currentBehaviorOption = FAIBehaviorOption(defaultBehavior);
 }
 
 
