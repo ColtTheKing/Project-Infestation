@@ -76,6 +76,27 @@ void AEnemyAIController::RunBehavior(UAIBehavior* behavior)
 	behaviorComp->StartTree(*behavior->GetBehaviorTree(), behavior->GetExecutionMode());
 }
 
+void AEnemyAIController::RunBehaviorOption(const FAIBehaviorOption& behaviorOption)
+{
+	// If either is NULL then we don't want to continue.
+	TObjectPtr<UAIBehavior> behavior = behaviorOption.behavior;
+	if (!behavior->GetBehaviorTree() || !behavior->GetBehaviorTree()->GetBlackboardAsset())
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s: Behavior Tree of Behavior in Behavior Option or BlackboardAsset of Behavior's Behavior Tree is NULL. Aborted function call."), *this->GetFName().ToString());
+		return;
+	}
+
+	// Setup blackboard.
+	blackboardComp->InitializeBlackboard(*behavior->GetBlackboardAsset());
+	blackboardComp->SetValueAsObject("SelfActor", GetPawn());
+
+	// Update Blackboard variables to the ones in the Behavior.
+	behavior->UpdateExternalBlackboard(blackboardComp, behaviorOption);
+
+	// Run behavior.
+	behaviorComp->StartTree(*behavior->GetBehaviorTree(), behavior->GetExecutionMode());
+}
+
 void AEnemyAIController::AlertLocalEnemies(AActor* attackTarget)
 {
 	// Get overlapping actors

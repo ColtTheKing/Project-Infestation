@@ -36,10 +36,10 @@ struct FAIBehaviorOption
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TWeakObjectPtr<UAIBehavior> behavior = nullptr;
+		TObjectPtr<UAIBehavior> behavior = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TWeakObjectPtr<UAIObjective> associatedObjective = nullptr;
+		TObjectPtr<UAIObjective> associatedObjective = nullptr;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int associatedObjectiveOptionIndex = -1;

@@ -78,8 +78,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 		bool WasSuccussfullySensed(FAIStimulus const stimulus);
 
+	
+	// Runs a behavior with default variables.
 	UFUNCTION(BlueprintCallable)
 		void RunBehavior(UAIBehavior* behavior);
+
+	// Runs a behavior with a corresponding objective option.
+	UFUNCTION(BlueprintCallable)
+		void RunBehaviorOption(const FAIBehaviorOption& behaviorOption);
 
 	/**
 	 * Alerts enemies around the controller's pawn using a local combat area.

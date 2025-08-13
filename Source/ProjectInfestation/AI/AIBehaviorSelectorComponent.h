@@ -39,7 +39,7 @@ private:
 		a. When the enemy spawns into the world.
 	    b. When the behavior selector has no valid behavior options.
 
-		Note that a default behavior will have no corresponding objective. Objectives state
+		Note that a default behavior will have no corresponding objective option. Objectives state
 		what can be done in the world so no behaviors == no objectives generated. Default means
 		no other behavior was valid.
 	*/
