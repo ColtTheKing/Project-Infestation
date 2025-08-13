@@ -70,7 +70,7 @@ void AEnemyAIController::RunBehavior(UAIBehavior* behavior)
 	blackboardComp->SetValueAsObject("SelfActor", GetPawn());
 	
 	// Update Blackboard variables to the ones in the Behavior.
-	behavior->UpdateExternalBlackboard(blackboardComp, FAIBehaviorOption()); // TODO: Fix when run behavior function is updated.
+	behavior->UpdateExternalBlackboard(blackboardComp); 
 
 	// Run behavior.
 	behaviorComp->StartTree(*behavior->GetBehaviorTree(), behavior->GetExecutionMode());

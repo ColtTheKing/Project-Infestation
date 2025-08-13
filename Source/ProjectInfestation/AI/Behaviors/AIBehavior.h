@@ -80,7 +80,7 @@ public:
 
 	// Function that takes a external blackboard component and sets variables in the blackboard asset
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void UpdateExternalBlackboard(UBlackboardComponent* blackboardComp, const FAIBehaviorOption& behaviorOption);
+	void UpdateExternalBlackboard(UBlackboardComponent* blackboardComp, const FAIBehaviorOption& behaviorOption = FAIBehaviorOption());
 
 	UFUNCTION(BlueprintCallable)
 	void StartBehavior();
