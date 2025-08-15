@@ -30,8 +30,16 @@ void UAIBehaviorSelectorComponent::TickComponent(float DeltaTime, ELevelTick Tic
 	// ...
 }
 
-UAIBehavior* UAIBehaviorSelectorComponent::SelectBehavior(const TArray<UAIObjective*>& availableObjectives)
+FAIBehaviorOption UAIBehaviorSelectorComponent::SelectBehavior(const TArray<UAIObjective*>& availableObjectives)
 {
-	return nullptr;
+	// TODO: Return to later when we know how to track the state of the behavior tree. 
+	//       We only care if the behavior is interruptible if the behavior is still running.
+	if (!currentBehaviorOption.behavior->IsInterruptible())
+	{
+		UE_LOG(LogTemp, Display, TEXT("%s: Current running behavior %s is unable to be interrupted."), *this->GetFName().ToString(), *currentBehaviorOption.behavior->GetBehaviorName());
+		return FAIBehaviorOption();
+	}
+
+	return FAIBehaviorOption();
 }
 

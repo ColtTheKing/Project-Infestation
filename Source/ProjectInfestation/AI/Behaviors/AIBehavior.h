@@ -97,7 +97,9 @@ public:
 
 	FORCEINLINE UBehaviorTree* GetBehaviorTree() const { return behaviorTree; }
 	FORCEINLINE UBlackboardData* GetBlackboardAsset() const { return behaviorTree->GetBlackboardAsset(); }
-	
+	FORCEINLINE FString GetBehaviorName() const { return behaviorName; }
+	FORCEINLINE bool IsInterruptible() const { return isInterruptible; }
+
 	FORCEINLINE EBTExecutionMode::Type GetExecutionMode() const
 	{
 		return (executionMode == BehaviorExecutionMode::SingleRun) ? EBTExecutionMode::SingleRun : EBTExecutionMode::Looped;
@@ -114,7 +116,7 @@ protected:
 		bool IsValidBlackboard(UBlackboardComponent* blackboardComp);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Behavior")
-		FString BehaviorName;
+		FString behaviorName;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Behavior")
 		FGameplayTag behaviorType;

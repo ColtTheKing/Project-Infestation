@@ -28,8 +28,9 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	// If function fails to select a new behavior for any reason, it will return a empty FAIBehaviorOption.
 	UFUNCTION(BlueprintCallable)
-		UAIBehavior* SelectBehavior(const TArray<UAIObjective*>& availableObjectives);
+		FAIBehaviorOption SelectBehavior(const TArray<UAIObjective*>& availableObjectives);
 
 	FORCEINLINE UAIBehavior* GetDefaultBehavior() { return defaultBehavior; }
 
