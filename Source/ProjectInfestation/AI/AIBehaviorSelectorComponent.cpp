@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "AIBehaviorSelectorComponent.h"
+
+#include "AIController.h"
 
 // Sets default values for this component's properties
 UAIBehaviorSelectorComponent::UAIBehaviorSelectorComponent()
@@ -38,6 +39,31 @@ FAIBehaviorOption UAIBehaviorSelectorComponent::SelectBehavior(const TArray<UAIO
 	{
 		UE_LOG(LogTemp, Display, TEXT("%s: Current running behavior %s is unable to be interrupted."), *this->GetFName().ToString(), *currentBehaviorOption.behavior->GetBehaviorName());
 		return FAIBehaviorOption();
+	}
+
+	AAIController* ownerController = Cast<AAIController>(GetOwner());
+	if (ownerController == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s: Owner actor is not a controller."), *this->GetFName().ToString());
+		return FAIBehaviorOption();
+	}
+
+	AActor* ownerActor = ownerController->GetPawn();
+	if (ownerActor == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s: Function called in BeginPlay (before OnPossess call) or controller doesn't have controlled pawn."), *this->GetFName().ToString());
+		return FAIBehaviorOption();
+	}
+
+	// Find all valid behavior options
+	TArray<FAIBehaviorOption> validBehaviorOptions;
+	for (TObjectPtr<UAIBehavior> behavior : highPriorityBehaviors)
+	{
+		if (behavior->AreStartingConditionsMet(ownerActor, availableObjectives))
+		{
+			// Add behavior option to valid behavior option list.
+			UE_LOG(LogTemp, Error, TEXT("%s: Behavior is valid."), *this->GetFName().ToString());
+		}
 	}
 
 	return FAIBehaviorOption();

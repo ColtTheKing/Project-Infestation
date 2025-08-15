@@ -28,7 +28,12 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	// If function fails to select a new behavior for any reason, it will return a empty FAIBehaviorOption.
+	/* 
+		Selects a new behavior option from a collection of available objectives usually provided by
+		the objective generator component. If function fails to select a new behavior for any 
+		reason, it will return a empty FAIBehaviorOption. Function will not work if called in
+		BeginPlay (before OnPossess on the controller is called).
+	*/ 
 	UFUNCTION(BlueprintCallable)
 		FAIBehaviorOption SelectBehavior(const TArray<UAIObjective*>& availableObjectives);
 
@@ -51,7 +56,7 @@ private:
 		FAIBehaviorOption currentBehaviorOption;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced, meta = (AllowPrivateAccess = true))
-		TArray<TObjectPtr<UAIBehavior>> hightPriorityBehaviors;
+		TArray<TObjectPtr<UAIBehavior>> highPriorityBehaviors;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced, meta=(AllowPrivateAccess=true))
 		TArray<TObjectPtr<UAIBehavior>> behaviors;
