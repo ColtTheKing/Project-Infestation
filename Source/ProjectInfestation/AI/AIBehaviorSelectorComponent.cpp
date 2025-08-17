@@ -57,12 +57,14 @@ FAIBehaviorOption UAIBehaviorSelectorComponent::SelectBehavior(const TArray<UAIO
 
 	// Find all valid behavior options
 	TArray<FAIBehaviorOption> validBehaviorOptions;
+	validBehaviorOptions.Reserve(highPriorityBehaviors.Num() + behaviors.Num());
 	for (TObjectPtr<UAIBehavior> behavior : highPriorityBehaviors)
 	{
 		if (behavior->AreStartingConditionsMet(ownerActor, availableObjectives))
 		{
-			// Add behavior option to valid behavior option list.
-			UE_LOG(LogTemp, Error, TEXT("%s: Behavior is valid."), *this->GetFName().ToString());
+			auto bestBehaviorOption = behavior->GetBestBehaviorOption(ownerActor, availableObjectives);
+			validBehaviorOptions.Add(bestBehaviorOption);
+			UE_LOG(LogTemp, Error, TEXT("%s: Behavior is valid %d."), *this->GetFName().ToString(), validBehaviorOptions.Num());
 		}
 	}
 
