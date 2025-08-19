@@ -40,6 +40,13 @@ public:
 	FORCEINLINE UAIBehavior* GetDefaultBehavior() { return defaultBehavior; }
 
 private:
+	// Helper functions for better readability in SelectBehavior function.
+	bool GetValidBehaviorOptions(
+		TArray<FAIBehaviorOption>& validBehaviorOptions, 
+		const TArray<TObjectPtr<UAIBehavior>>& behaviors,
+		const TArray<UAIObjective*>& availableObjectives);
+	size_t GetBestBehaviorOptionIndex(const TArray<FAIBehaviorOption>& validBehaviorOptions);
+
 	/*
 		Default behavior that will run:
 		a. When the enemy spawns into the world.

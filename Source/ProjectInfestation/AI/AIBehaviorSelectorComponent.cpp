@@ -41,33 +41,85 @@ FAIBehaviorOption UAIBehaviorSelectorComponent::SelectBehavior(const TArray<UAIO
 		return FAIBehaviorOption();
 	}
 
+	// Find all valid high priority behavior options
+	TArray<FAIBehaviorOption> validBehaviorOptions;
+	if (!GetValidBehaviorOptions(validBehaviorOptions, highPriorityBehaviors, availableObjectives)) 
+		return FAIBehaviorOption(); // Function failed, will already log issue.
+
+	// If valid options exist return best one.
+	if (validBehaviorOptions.Num() == 1)
+	{
+		return validBehaviorOptions[0];
+	}
+	else if (validBehaviorOptions.Num() > 1)
+	{
+		size_t bestBehaviorOptionIndex = GetBestBehaviorOptionIndex(validBehaviorOptions);
+		return validBehaviorOptions[bestBehaviorOptionIndex];
+	}
+
+	// Find all valid normal priority behavior options.
+	if (!GetValidBehaviorOptions(validBehaviorOptions, behaviors, availableObjectives))
+		return FAIBehaviorOption();
+
+	// If valid options exist return best one, otherwise return default.
+	if (validBehaviorOptions.IsEmpty())
+	{
+		return FAIBehaviorOption(defaultBehavior);
+	}
+	else if (validBehaviorOptions.Num() == 1)
+	{
+		return validBehaviorOptions[0];
+	}
+	else if (validBehaviorOptions.Num() > 1)
+	{
+		size_t bestBehaviorOptionIndex = GetBestBehaviorOptionIndex(validBehaviorOptions);
+		UE_LOG(LogTemp, Error, TEXT("%s: Current bestBehaviorOptionIndex is %d"), *this->GetFName().ToString(), bestBehaviorOptionIndex);
+		return validBehaviorOptions[bestBehaviorOptionIndex];
+	}
+
+	// Invalid path (for compiler)
+	return FAIBehaviorOption();
+}
+
+bool UAIBehaviorSelectorComponent::GetValidBehaviorOptions(
+	TArray<FAIBehaviorOption>& validBehaviorOptions, 
+	const TArray<TObjectPtr<UAIBehavior>>& behaviorList, 
+	const TArray<UAIObjective*>& availableObjectives)
+{
+	// Error checking
 	AAIController* ownerController = Cast<AAIController>(GetOwner());
 	if (ownerController == nullptr)
 	{
 		UE_LOG(LogTemp, Error, TEXT("%s: Owner actor is not a controller."), *this->GetFName().ToString());
-		return FAIBehaviorOption();
+		return false;
 	}
 
 	AActor* ownerActor = ownerController->GetPawn();
 	if (ownerActor == nullptr)
 	{
 		UE_LOG(LogTemp, Error, TEXT("%s: Function called in BeginPlay (before OnPossess call) or controller doesn't have controlled pawn."), *this->GetFName().ToString());
-		return FAIBehaviorOption();
+		return false;
 	}
 
-	// Find all valid behavior options
-	TArray<FAIBehaviorOption> validBehaviorOptions;
-	validBehaviorOptions.Reserve(highPriorityBehaviors.Num() + behaviors.Num());
-	for (TObjectPtr<UAIBehavior> behavior : highPriorityBehaviors)
+	// Get valid behaviors
+	for (TObjectPtr<UAIBehavior> behavior : behaviorList)
 	{
 		if (behavior->AreStartingConditionsMet(ownerActor, availableObjectives))
 		{
 			auto bestBehaviorOption = behavior->GetBestBehaviorOption(ownerActor, availableObjectives);
 			validBehaviorOptions.Add(bestBehaviorOption);
-			UE_LOG(LogTemp, Error, TEXT("%s: Behavior is valid %d."), *this->GetFName().ToString(), validBehaviorOptions.Num());
 		}
 	}
-
-	return FAIBehaviorOption();
+	return true;
 }
 
+size_t UAIBehaviorSelectorComponent::GetBestBehaviorOptionIndex(const TArray<FAIBehaviorOption>& validBehaviorOptions)
+{
+	size_t bestBehaviorOptionIndex = 0;
+	for (int i = 1; i < validBehaviorOptions.Num(); ++i)
+	{
+		if (validBehaviorOptions[i].score > validBehaviorOptions[bestBehaviorOptionIndex].score)
+			bestBehaviorOptionIndex = i;
+	}
+	return bestBehaviorOptionIndex;
+}
