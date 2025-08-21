@@ -24,10 +24,10 @@ class PROJECTINFESTATION_API AEnemyAIController : public AAIController
 	GENERATED_BODY()
 
 private:
-	UPROPERTY(BlueprintReadWrite, Transient, meta = (AllowPrivateAccess))
+	UPROPERTY(BlueprintReadOnly, Transient, meta = (AllowPrivateAccess))
 		UBlackboardComponent* blackboardComp;
 
-	UPROPERTY(Transient)
+	UPROPERTY(BlueprintReadOnly, Transient, meta = (AllowPrivateAccess))
 		UBehaviorTreeComponent* behaviorComp;
 
 	/**

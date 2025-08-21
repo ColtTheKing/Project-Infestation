@@ -45,17 +45,6 @@ bool UAIBehavior::IsCoolingDown() const
 	return cooldownTimer > 0;
 }
 
-void UAIBehavior::StartBehavior()
-{
-	executionState = BehaviorState::RUNNING;
-}
-
-void UAIBehavior::StopBehavior()
-{
-	executionState = BehaviorState::COMPLETED;
-	cooldownTimer = maxCooldownTime;
-}
-
 void UAIBehavior::GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const
 {
 	TagContainer.AddTag(behaviorType);

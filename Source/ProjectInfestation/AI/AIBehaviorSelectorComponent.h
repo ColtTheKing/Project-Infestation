@@ -33,9 +33,11 @@ public:
 		the objective generator component. If function fails to select a new behavior for any 
 		reason, it will return a empty FAIBehaviorOption. Function will not work if called in
 		BeginPlay (before OnPossess on the controller is called).
+
+		Current behavior running is provided by the bahavior tree component on the AI controller.
 	*/ 
 	UFUNCTION(BlueprintCallable)
-		FAIBehaviorOption SelectBehavior(const TArray<UAIObjective*>& availableObjectives);
+		FAIBehaviorOption SelectBehavior(const TArray<UAIObjective*>& availableObjectives, bool currentBehaviorRunning);
 
 	FORCEINLINE UAIBehavior* GetDefaultBehavior() { return defaultBehavior; }
 

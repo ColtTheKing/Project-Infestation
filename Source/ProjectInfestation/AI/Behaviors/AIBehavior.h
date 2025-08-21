@@ -22,14 +22,6 @@ enum BehaviorExecutionMode
 	Looped
 };
 
-UENUM(BlueprintType)
-enum BehaviorState
-{
-	RUNNING		UMETA(DisplayName = "RUNNING"), 
-	COMPLETED	UMETA(DisplayName = "COMPLETED"), 
-	FAILED		UMETA(DisplayName = "FAILED")
-};
-
 USTRUCT(BlueprintType)
 struct FAIBehaviorOption
 {
@@ -89,12 +81,6 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void UpdateExternalBlackboard(UBlackboardComponent* blackboardComp, const FAIBehaviorOption& behaviorOption = FAIBehaviorOption());
 
-	UFUNCTION(BlueprintCallable)
-	void StartBehavior();
-
-	UFUNCTION(BlueprintCallable)
-	void StopBehavior();
-
 	FORCEINLINE UBehaviorTree* GetBehaviorTree() const { return behaviorTree; }
 	FORCEINLINE UBlackboardData* GetBlackboardAsset() const { return behaviorTree->GetBlackboardAsset(); }
 	FORCEINLINE FString GetBehaviorName() const { return behaviorName; }
@@ -127,9 +113,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Behavior")
 		TEnumAsByte<BehaviorExecutionMode> executionMode;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Behavior")
-		TEnumAsByte<BehaviorState> executionState;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Behavior")
 		bool isInterruptible;

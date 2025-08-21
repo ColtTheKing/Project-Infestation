@@ -31,22 +31,19 @@ void UAIBehaviorSelectorComponent::TickComponent(float DeltaTime, ELevelTick Tic
 	// ...
 }
 
-FAIBehaviorOption UAIBehaviorSelectorComponent::SelectBehavior(const TArray<UAIObjective*>& availableObjectives)
+FAIBehaviorOption UAIBehaviorSelectorComponent::SelectBehavior(const TArray<UAIObjective*>& availableObjectives, bool currentBehaviorRunning)
 {
-	// TODO: Return to later when we know how to track the state of the behavior tree. 
-	//       We only care if the behavior is interruptible if the behavior is still running.
-	if (!currentBehaviorOption.behavior->IsInterruptible())
+	if (currentBehaviorRunning && !currentBehaviorOption.behavior->IsInterruptible())
 	{
 		UE_LOG(LogTemp, Display, TEXT("%s: Current running behavior %s is unable to be interrupted."), *this->GetFName().ToString(), *currentBehaviorOption.behavior->GetBehaviorName());
 		return FAIBehaviorOption();
 	}
 
-	// Find all valid high priority behavior options
+	// Find all valid high priority behavior options and return best one.
 	TArray<FAIBehaviorOption> validBehaviorOptions;
 	if (!GetValidBehaviorOptions(validBehaviorOptions, highPriorityBehaviors, availableObjectives)) 
 		return FAIBehaviorOption(); // Function failed, will already log issue.
 
-	// If valid options exist return best one.
 	if (validBehaviorOptions.Num() == 1)
 	{
 		return validBehaviorOptions[0];
@@ -57,11 +54,10 @@ FAIBehaviorOption UAIBehaviorSelectorComponent::SelectBehavior(const TArray<UAIO
 		return validBehaviorOptions[bestBehaviorOptionIndex];
 	}
 
-	// Find all valid normal priority behavior options.
+	// Find all valid normal priority behavior options and return best one.
 	if (!GetValidBehaviorOptions(validBehaviorOptions, behaviors, availableObjectives))
 		return FAIBehaviorOption();
 
-	// If valid options exist return best one, otherwise return default.
 	if (validBehaviorOptions.IsEmpty())
 	{
 		return FAIBehaviorOption(defaultBehavior);
@@ -73,7 +69,6 @@ FAIBehaviorOption UAIBehaviorSelectorComponent::SelectBehavior(const TArray<UAIO
 	else if (validBehaviorOptions.Num() > 1)
 	{
 		size_t bestBehaviorOptionIndex = GetBestBehaviorOptionIndex(validBehaviorOptions);
-		UE_LOG(LogTemp, Error, TEXT("%s: Current bestBehaviorOptionIndex is %d"), *this->GetFName().ToString(), bestBehaviorOptionIndex);
 		return validBehaviorOptions[bestBehaviorOptionIndex];
 	}
 
