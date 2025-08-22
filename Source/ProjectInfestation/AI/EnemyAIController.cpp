@@ -97,6 +97,38 @@ void AEnemyAIController::RunBehaviorOption(const FAIBehaviorOption& behaviorOpti
 	behaviorComp->StartTree(*behavior->GetBehaviorTree(), behavior->GetExecutionMode());
 }
 
+FAIBehaviorOption AEnemyAIController::CreateTestBehaviorOption(
+	TSubclassOf<UAIBehavior> behaviorType, 
+	TSubclassOf<UAIObjective> objectiveType)
+{
+	if (behaviorType == nullptr || objectiveType == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s: BehaviorType or ObjectiveType is invalid type."), *this->GetFName().ToString());
+		return FAIBehaviorOption();
+	}
+
+	auto* newBehavior = NewObject<UAIBehavior>(this, behaviorType);
+	if (newBehavior == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s: Behavior failed to be created."), *this->GetFName().ToString());
+		return FAIBehaviorOption();
+	}
+
+	auto* newObjective = NewObject<UAIObjective>(this, objectiveType);
+	if (newObjective == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s: Objective failed to be created."), *this->GetFName().ToString());
+		return FAIBehaviorOption();
+	}
+
+	// Note: Objective option needs to be manually added to the objective in the blueprint.
+	FAIBehaviorOption behaviorOption;
+	behaviorOption.behavior = newBehavior;
+	behaviorOption.associatedObjective = newObjective;
+	behaviorOption.associatedObjectiveOptionIndex = 0;
+	return behaviorOption;
+}
+
 void AEnemyAIController::AlertLocalEnemies(AActor* attackTarget)
 {
 	// Get overlapping actors

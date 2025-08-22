@@ -87,6 +87,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void RunBehaviorOption(const FAIBehaviorOption& behaviorOption);
 
+	// Function meant for creating a behavior option for testing individual behaviors.
+	// Note: Objective option needs to be manually in the blueprint
+	//       to test behavior option as you can't cast USTRUCTs.
+	UFUNCTION(BlueprintCallable)
+		FAIBehaviorOption CreateTestBehaviorOption(
+			TSubclassOf<UAIBehavior> behaviorType, 
+			TSubclassOf<UAIObjective> objectiveType);
+
 	/**
 	 * Alerts enemies around the controller's pawn using a local combat area.
 	 * TODO: Shouldn't take a target actor, the combat manager should decide what the attack target is. 
