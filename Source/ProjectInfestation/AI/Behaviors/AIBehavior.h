@@ -30,9 +30,23 @@ struct FAIBehaviorOption
 	FAIBehaviorOption() = default;
 
 	FAIBehaviorOption(TObjectPtr<UAIBehavior> behavior) : behavior(behavior) { }
+	
+	FAIBehaviorOption(const FAIBehaviorOption& other) noexcept = default;
+	
+	FAIBehaviorOption(FAIBehaviorOption&& other) noexcept
+	{
+		behavior = other.behavior;
+		associatedObjective = other.associatedObjective;
+		associatedObjectiveOptionIndex = other.associatedObjectiveOptionIndex;
+		score = other.score;
 
-	// TODO: Add copy constructor.
-	// TODO: Add move constructor.
+		other.behavior = nullptr;
+		other.associatedObjective = nullptr;
+		other.associatedObjectiveOptionIndex = -1;
+		other.score = 0;
+	}
+
+	FAIBehaviorOption& operator=(const FAIBehaviorOption& other) = default;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TObjectPtr<UAIBehavior> behavior = nullptr;
