@@ -2,6 +2,7 @@
 
 #include "AIBehaviorSelectorComponent.h"
 
+#include "Kismet/KismetMathLibrary.h"
 #include "AIController.h"
 
 // Sets default values for this component's properties
@@ -51,6 +52,7 @@ FAIBehaviorOption UAIBehaviorSelectorComponent::SelectBehavior(const TArray<UAIO
 	else if (validBehaviorOptions.Num() > 1)
 	{
 		size_t bestBehaviorOptionIndex = GetBestBehaviorOptionIndex(validBehaviorOptions);
+		if (bestBehaviorOptionIndex < 0) return FAIBehaviorOption(); // Function failed, will already log issue.
 		return validBehaviorOptions[bestBehaviorOptionIndex];
 	}
 
@@ -69,6 +71,7 @@ FAIBehaviorOption UAIBehaviorSelectorComponent::SelectBehavior(const TArray<UAIO
 	else if (validBehaviorOptions.Num() > 1)
 	{
 		size_t bestBehaviorOptionIndex = GetBestBehaviorOptionIndex(validBehaviorOptions);
+		if (bestBehaviorOptionIndex < 0) return FAIBehaviorOption();
 		return validBehaviorOptions[bestBehaviorOptionIndex];
 	}
 
@@ -110,11 +113,31 @@ bool UAIBehaviorSelectorComponent::GetValidBehaviorOptions(
 
 size_t UAIBehaviorSelectorComponent::GetBestBehaviorOptionIndex(const TArray<FAIBehaviorOption>& validBehaviorOptions)
 {
-	size_t bestBehaviorOptionIndex = 0;
+	TArray<size_t> bestBehaviorOptionIndices({ 0 });
 	for (int i = 1; i < validBehaviorOptions.Num(); ++i)
 	{
+		size_t bestBehaviorOptionIndex = bestBehaviorOptionIndices[0];
 		if (validBehaviorOptions[i].score > validBehaviorOptions[bestBehaviorOptionIndex].score)
-			bestBehaviorOptionIndex = i;
+		{
+			bestBehaviorOptionIndices.Empty(1);
+			bestBehaviorOptionIndices.Add(i);
+		}
+		else if (validBehaviorOptions[i].score == validBehaviorOptions[bestBehaviorOptionIndex].score)
+		{
+			bestBehaviorOptionIndices.Add(i);
+		}
 	}
-	return bestBehaviorOptionIndex;
+
+	if (bestBehaviorOptionIndices.Num() == 0)
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s: no best behavior option found, this is a bug."), *this->GetFName().ToString());
+		return -1;
+	}
+
+	if (bestBehaviorOptionIndices.Num() == 1)
+		return bestBehaviorOptionIndices[0];
+
+	int32 index = UKismetMathLibrary::RandomInteger(bestBehaviorOptionIndices.Num());
+	return bestBehaviorOptionIndices[index];
 }
+
