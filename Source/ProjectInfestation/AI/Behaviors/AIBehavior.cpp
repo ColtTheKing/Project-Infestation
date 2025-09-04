@@ -6,6 +6,7 @@
 UAIBehavior::UAIBehavior()
 {
 	cooldownTimer = 0;
+	executionMode = BehaviorExecutionMode::Looped;
 }
 
 void UAIBehavior::Tick(float DeltaTime)
