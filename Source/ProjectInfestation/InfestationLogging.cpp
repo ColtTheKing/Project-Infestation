@@ -12,5 +12,8 @@ DEFINE_LOG_CATEGORY(LogInfestationInit);
 // Logging for your AI system
 DEFINE_LOG_CATEGORY(LogInfestationAISystem);
 
+// Logging for Errors that must always be addressed
+DEFINE_LOG_CATEGORY(LogInfestationError);
+
 // Logging for Critical Errors that must always be addressed
 DEFINE_LOG_CATEGORY(LogInfestationCriticalError);

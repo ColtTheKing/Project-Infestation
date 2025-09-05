@@ -14,4 +14,7 @@ PROJECTINFESTATION_API DECLARE_LOG_CATEGORY_EXTERN(LogInfestationInit, Log, All)
 PROJECTINFESTATION_API DECLARE_LOG_CATEGORY_EXTERN(LogInfestationAISystem, Log, All);
 
 // Logging for Critical Errors that must always be addressed
-PROJECTINFESTATION_API DECLARE_LOG_CATEGORY_EXTERN(LogInfestationCriticalError, Log, All);
+PROJECTINFESTATION_API DECLARE_LOG_CATEGORY_EXTERN(LogInfestationError, Error, All);
+
+// Logging for Critical Errors that must always be addressed
+PROJECTINFESTATION_API DECLARE_LOG_CATEGORY_EXTERN(LogInfestationCriticalError, Fatal, All);
