@@ -4,6 +4,7 @@
 
 #include "Kismet/KismetMathLibrary.h"
 #include "AIController.h"
+#include "../InfestationLogging.h"
 
 // Sets default values for this component's properties
 UAIBehaviorSelectorComponent::UAIBehaviorSelectorComponent()
@@ -36,7 +37,7 @@ FAIBehaviorOption UAIBehaviorSelectorComponent::SelectBehavior(const TArray<UAIO
 {
 	if (currentBehaviorRunning && !currentBehaviorOption.behavior->IsInterruptible())
 	{
-		UE_LOG(LogTemp, Display, TEXT("%s: Current running behavior %s is unable to be interrupted."), *this->GetFName().ToString(), *currentBehaviorOption.behavior->GetBehaviorName());
+		UE_LOG(LogInfestationAISystem, Display, TEXT("%s: Current running behavior %s is unable to be interrupted."), *this->GetFName().ToString(), *currentBehaviorOption.behavior->GetBehaviorName());
 		return FAIBehaviorOption();
 	}
 
@@ -88,14 +89,14 @@ bool UAIBehaviorSelectorComponent::GetValidBehaviorOptions(
 	AAIController* ownerController = Cast<AAIController>(GetOwner());
 	if (ownerController == nullptr)
 	{
-		UE_LOG(LogTemp, Error, TEXT("%s: Owner actor is not a controller."), *this->GetFName().ToString());
+		UE_LOG(LogInfestationAISystem, Error, TEXT("%s: Owner actor is not a controller."), *this->GetFName().ToString());
 		return false;
 	}
 
 	AActor* ownerActor = ownerController->GetPawn();
 	if (ownerActor == nullptr)
 	{
-		UE_LOG(LogTemp, Error, TEXT("%s: Function called in BeginPlay (before OnPossess call) or controller doesn't have controlled pawn."), *this->GetFName().ToString());
+		UE_LOG(LogInfestationAISystem, Error, TEXT("%s: Function called in BeginPlay (before OnPossess call) or controller doesn't have controlled pawn."), *this->GetFName().ToString());
 		return false;
 	}
 
@@ -130,7 +131,7 @@ size_t UAIBehaviorSelectorComponent::GetBestBehaviorOptionIndex(const TArray<FAI
 
 	if (bestBehaviorOptionIndices.Num() == 0)
 	{
-		UE_LOG(LogTemp, Error, TEXT("%s: no best behavior option found, this is a bug."), *this->GetFName().ToString());
+		UE_LOG(LogInfestationAISystem, Error, TEXT("%s: no best behavior option found, this is a bug."), *this->GetFName().ToString());
 		return -1;
 	}
 

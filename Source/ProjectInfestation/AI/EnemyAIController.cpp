@@ -7,6 +7,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Navigation/CrowdFollowingComponent.h"
 
+#include "../InfestationLogging.h"
 #include "../InfestationGameState.h"
 #include "../EnemyCharacter.h"
 #include "../CombatArea.h"
@@ -61,7 +62,7 @@ void AEnemyAIController::RunBehavior(UAIBehavior* behavior)
 	// If either is NULL then we don't want to continue.
 	if (!behavior->GetBehaviorTree() || !behavior->GetBehaviorTree()->GetBlackboardAsset())
 	{
-		UE_LOG(LogTemp, Error, TEXT("%s: Behavior Tree of Behavior or BlackboardAsset of Behavior's Behavior Tree is NULL. Aborted function call."), *this->GetFName().ToString());
+		UE_LOG(LogInfestationAISystem, Error, TEXT("%s: Behavior Tree of Behavior or BlackboardAsset of Behavior's Behavior Tree is NULL. Aborted function call."), *this->GetFName().ToString());
 		return;
 	}
 
@@ -82,7 +83,7 @@ void AEnemyAIController::RunBehaviorOption(const FAIBehaviorOption& behaviorOpti
 	TObjectPtr<UAIBehavior> behavior = behaviorOption.behavior;
 	if (!behavior->GetBehaviorTree() || !behavior->GetBehaviorTree()->GetBlackboardAsset())
 	{
-		UE_LOG(LogTemp, Error, TEXT("%s: Behavior Tree of Behavior in Behavior Option or BlackboardAsset of Behavior's Behavior Tree is NULL. Aborted function call."), *this->GetFName().ToString());
+		UE_LOG(LogInfestationAISystem, Error, TEXT("%s: Behavior Tree of Behavior in Behavior Option or BlackboardAsset of Behavior's Behavior Tree is NULL. Aborted function call."), *this->GetFName().ToString());
 		return;
 	}
 
@@ -103,21 +104,21 @@ FAIBehaviorOption AEnemyAIController::CreateTestBehaviorOption(
 {
 	if (behaviorType == nullptr || objectiveType == nullptr)
 	{
-		UE_LOG(LogTemp, Error, TEXT("%s: BehaviorType or ObjectiveType is invalid type."), *this->GetFName().ToString());
+		UE_LOG(LogInfestationAISystem, Error, TEXT("%s: BehaviorType or ObjectiveType is invalid type."), *this->GetFName().ToString());
 		return FAIBehaviorOption();
 	}
 
 	auto* newBehavior = NewObject<UAIBehavior>(this, behaviorType);
 	if (newBehavior == nullptr)
 	{
-		UE_LOG(LogTemp, Error, TEXT("%s: Behavior failed to be created."), *this->GetFName().ToString());
+		UE_LOG(LogInfestationAISystem, Error, TEXT("%s: Behavior failed to be created."), *this->GetFName().ToString());
 		return FAIBehaviorOption();
 	}
 
 	auto* newObjective = NewObject<UAIObjective>(this, objectiveType);
 	if (newObjective == nullptr)
 	{
-		UE_LOG(LogTemp, Error, TEXT("%s: Objective failed to be created."), *this->GetFName().ToString());
+		UE_LOG(LogInfestationAISystem, Error, TEXT("%s: Objective failed to be created."), *this->GetFName().ToString());
 		return FAIBehaviorOption();
 	}
 

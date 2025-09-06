@@ -3,6 +3,7 @@
 #include "AIObjectiveGenerationComponent.h"
 
 #include "Perception/AIPerceptionComponent.h"
+#include "../InfestationLogging.h"
 
 // Sets default values for this component's properties
 UAIObjectiveGenerationComponent::UAIObjectiveGenerationComponent()
@@ -23,7 +24,7 @@ void UAIObjectiveGenerationComponent::BeginPlay()
 	UAIPerceptionComponent* perceptionComponent = GetOwner()->GetComponentByClass<UAIPerceptionComponent>();
 	if (perceptionComponent == nullptr)
 	{
-		UE_LOG(LogTemp, Error, 
+		UE_LOG(LogInfestationAISystem, Error,
 			TEXT("%s: Perception component is null. Using a ObjectiveGenerationComponent requires the actor have a AIPerceptionComponent."), 
 			*this->GetFName().ToString());
 		return;
@@ -45,7 +46,7 @@ void UAIObjectiveGenerationComponent::TickComponent(float DeltaTime, ELevelTick 
 void UAIObjectiveGenerationComponent::UpdateGenerators()
 {
 	if (objectiveGenerators.IsEmpty())
-		UE_LOG(LogTemp, Warning, TEXT("%s: No generators added to call update on."), *this->GetFName().ToString());
+		UE_LOG(LogInfestationAISystem, Warning, TEXT("%s: No generators added to call update on."), *this->GetFName().ToString());
 
 	for (auto& generator : objectiveGenerators)
 		generator->OnUpdate();
@@ -64,7 +65,7 @@ TArray<UAIObjective*> UAIObjectiveGenerationComponent::GetGeneratedObjectives()
 UBaseAIObjectiveGenerator* UAIObjectiveGenerationComponent::GetGenerator(TSubclassOf<UBaseAIObjectiveGenerator> objectiveGeneratorClass)
 {
 	if (objectiveGenerators.IsEmpty())
-		UE_LOG(LogTemp, Warning, TEXT("%s: OpportunityGenerators array is empty."), *this->GetFName().ToString());
+		UE_LOG(LogInfestationAISystem, Warning, TEXT("%s: OpportunityGenerators array is empty."), *this->GetFName().ToString());
 
 	for (auto& generator : objectiveGenerators)
 	{
