@@ -69,15 +69,12 @@ FAIBehaviorOption UAIBehaviorSelectorComponent::SelectBehavior(const TArray<UAIO
 	{
 		return validBehaviorOptions[0];
 	}
-	else if (validBehaviorOptions.Num() > 1)
+	else // validBehaviorOptions.Num() > 1
 	{
 		size_t bestBehaviorOptionIndex = GetBestBehaviorOptionIndex(validBehaviorOptions);
 		if (bestBehaviorOptionIndex < 0) return FAIBehaviorOption();
 		return validBehaviorOptions[bestBehaviorOptionIndex];
 	}
-
-	// Invalid path (for compiler)
-	return FAIBehaviorOption();
 }
 
 bool UAIBehaviorSelectorComponent::GetValidBehaviorOptions(
@@ -103,7 +100,8 @@ bool UAIBehaviorSelectorComponent::GetValidBehaviorOptions(
 	// Get valid behaviors
 	for (TObjectPtr<UAIBehavior> behavior : behaviorList)
 	{
-		if (behavior->AreStartingConditionsMet(ownerActor, availableObjectives))
+		if (behavior != nullptr && 
+			behavior->AreStartingConditionsMet(ownerActor, availableObjectives))
 		{
 			auto bestBehaviorOption = behavior->GetBestBehaviorOption(ownerActor, availableObjectives);
 			validBehaviorOptions.Add(bestBehaviorOption);
