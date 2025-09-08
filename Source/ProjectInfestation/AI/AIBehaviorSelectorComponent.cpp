@@ -61,20 +61,19 @@ FAIBehaviorOption UAIBehaviorSelectorComponent::SelectBehavior(const TArray<UAIO
 	if (!GetValidBehaviorOptions(validBehaviorOptions, behaviors, availableObjectives))
 		return FAIBehaviorOption();
 
-	if (validBehaviorOptions.IsEmpty())
-	{
-		return FAIBehaviorOption(defaultBehavior);
-	}
-	else if (validBehaviorOptions.Num() == 1)
+	if (validBehaviorOptions.Num() == 1)
 	{
 		return validBehaviorOptions[0];
 	}
-	else // validBehaviorOptions.Num() > 1
+	else if (validBehaviorOptions.Num() > 1)
 	{
 		size_t bestBehaviorOptionIndex = GetBestBehaviorOptionIndex(validBehaviorOptions);
 		if (bestBehaviorOptionIndex < 0) return FAIBehaviorOption();
 		return validBehaviorOptions[bestBehaviorOptionIndex];
 	}
+
+	// No valid behavior options found.
+	return FAIBehaviorOption(defaultBehavior);
 }
 
 bool UAIBehaviorSelectorComponent::GetValidBehaviorOptions(
