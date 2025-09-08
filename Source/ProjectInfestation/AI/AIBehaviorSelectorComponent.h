@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 
-#include "Behaviors/AIBehavior.h"
+#include "AIBehavior.h"
 #include "Objectives/AIObjective.h"
 
 #include "AIBehaviorSelectorComponent.generated.h"

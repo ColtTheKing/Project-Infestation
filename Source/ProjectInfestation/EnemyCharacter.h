@@ -9,7 +9,6 @@
 #include "Components/CapsuleComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
 
-#include "AI/Behaviors/AIBehavior.h"
 #include "AI/PatrolPath.h"
 
 #include "EnemyCharacter.generated.h"

@@ -9,7 +9,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "GameplayTagAssetInterface.h"
 
-#include "../Objectives/AIObjective.h"
+#include "Objectives/AIObjective.h"
 
 #include "AIBehavior.generated.h"
 

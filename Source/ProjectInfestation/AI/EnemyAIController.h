@@ -11,7 +11,7 @@
 
 #include "AIObjectiveGenerationComponent.h"
 #include "AIBehaviorSelectorComponent.h"
-#include "Behaviors/AIBehavior.h"
+#include "AIBehavior.h"
 
 #include "EnemyAIController.generated.h"
 
