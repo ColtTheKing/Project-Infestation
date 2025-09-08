@@ -59,10 +59,11 @@ bool AEnemyAIController::WasSuccussfullySensed(FAIStimulus const stimulus)
 
 void AEnemyAIController::RunBehavior(UAIBehavior* behavior)
 {
-	// If either is NULL then we don't want to continue.
-	if (!behavior->GetBehaviorTree() || !behavior->GetBehaviorTree()->GetBlackboardAsset())
+	// If anything related to behavior is NULL we don't want to continue.
+	if (behavior == nullptr || 
+		!behavior->GetBehaviorTree() || !behavior->GetBehaviorTree()->GetBlackboardAsset())
 	{
-		UE_LOG(LogInfestationAISystem, Error, TEXT("%s: Behavior Tree of Behavior or BlackboardAsset of Behavior's Behavior Tree is NULL. Aborted function call."), *this->GetFName().ToString());
+		UE_LOG(LogInfestationAISystem, Error, TEXT("%s: Behavior, Behavior Tree of Behavior, or BlackboardAsset of Behavior's Behavior Tree is NULL. Aborted run behavior function."), *this->GetFName().ToString());
 		return;
 	}
 
@@ -81,9 +82,10 @@ void AEnemyAIController::RunBehaviorOption(const FAIBehaviorOption& behaviorOpti
 {
 	// If either is NULL then we don't want to continue.
 	TObjectPtr<UAIBehavior> behavior = behaviorOption.behavior;
-	if (!behavior->GetBehaviorTree() || !behavior->GetBehaviorTree()->GetBlackboardAsset())
+	if (behavior == nullptr ||
+		!behavior->GetBehaviorTree() || !behavior->GetBehaviorTree()->GetBlackboardAsset())
 	{
-		UE_LOG(LogInfestationAISystem, Error, TEXT("%s: Behavior Tree of Behavior in Behavior Option or BlackboardAsset of Behavior's Behavior Tree is NULL. Aborted function call."), *this->GetFName().ToString());
+		UE_LOG(LogInfestationAISystem, Error, TEXT("%s: Behavior, Behavior Tree of Behavior, or BlackboardAsset of Behavior's Behavior Tree is NULL. Aborted run behavior option function."), *this->GetFName().ToString());
 		return;
 	}
 
