@@ -41,7 +41,4 @@ public:
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Instanced, meta=(AllowPrivateAccess=true))
 		TArray<TObjectPtr<UBaseAIObjectiveGenerator>> objectiveGenerators;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta=(AllowPrivateAccess=true))
-		float generatorsUpdateTimer;
 };

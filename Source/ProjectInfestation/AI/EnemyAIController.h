@@ -115,4 +115,8 @@ protected:
 	/* Current target actor of the enemy. */
 	UPROPERTY(BlueprintReadOnly)
 		AActor* targetActor;
+
+	/* How often to run the AI system components and attempt to run a new behavior. */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI System")
+		float runNewBehaviorTimer;
 };
