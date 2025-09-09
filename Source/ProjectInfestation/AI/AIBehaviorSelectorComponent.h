@@ -41,12 +41,22 @@ public:
 
 	FORCEINLINE UAIBehavior* GetDefaultBehavior() { return defaultBehavior; }
 
-private:
-	// Helper functions for better readability in SelectBehavior function.
+private:  
+	/*
+		Helper functions for better readability in SelectBehavior function. Checks which behaviors
+		are valid and then stores the valid behaviors with their objectives (in behavior options) 
+		in the inputted list.  
+	*/
 	bool GetValidBehaviorOptions(
 		TArray<FAIBehaviorOption>& validBehaviorOptions, 
 		const TArray<TObjectPtr<UAIBehavior>>& behaviors,
 		const TArray<UAIObjective*>& availableObjectives);
+
+	/*
+		Helper functions for better readability in SelectBehavior function. Returns the index of 
+		the behavior option with the highest score. If multiple have the highest score, the returned
+		index will be random between the highest ones.
+	*/
 	size_t GetBestBehaviorOptionIndex(const TArray<FAIBehaviorOption>& validBehaviorOptions);
 
 	/*
@@ -61,12 +71,15 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced, meta=(AllowPrivateAccess=true))
 		TObjectPtr<UAIBehavior> defaultBehavior;
 
+	// Current Behavior Option that is running.
 	UPROPERTY(BlueprintReadWrite, meta=(AllowPrivateAccess=true))
 		FAIBehaviorOption currentBehaviorOption;
 
+	// Behaviors of the AI that should always run when valid.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced, meta = (AllowPrivateAccess = true))
 		TArray<TObjectPtr<UAIBehavior>> highPriorityBehaviors;
 
+	// Behaviors of the AI.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced, meta=(AllowPrivateAccess=true))
 		TArray<TObjectPtr<UAIBehavior>> behaviors;
 };

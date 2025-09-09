@@ -13,8 +13,10 @@
 
 #include "AIBehavior.generated.h"
 
-// BTExecutionMode in BehaviorTreeTypes isn't a UENUM and thus can't be a UPROPERTY.
-// This acts as a one-to-one representation of it that can be mapped to the original.
+/*
+	BTExecutionMode in BehaviorTreeTypes isn't a UENUM and thus can't be a UPROPERTY.
+	This acts as a one-to-one representation of it that can be mapped to the original.
+*/
 UENUM() 
 enum BehaviorExecutionMode
 {
@@ -22,6 +24,11 @@ enum BehaviorExecutionMode
 	Looped
 };
 
+/*
+	The BehaviorOption struct groups a behavior with an objective/objective option together.
+	This allows us to run behaviors with the information stored in objective options. Score is
+	included for behavior selection and isn't necessary for behavior execution. 
+*/
 USTRUCT(BlueprintType)
 struct FAIBehaviorOption
 {
@@ -112,12 +119,16 @@ public:
 		float maxCooldownTime;
 
 protected:
+	// Helper function for determining if the blackboard component's blackboard asset 
+	// is the same as this behavior's blackboard asset.
 	UFUNCTION(BlueprintCallable)
 		bool IsValidBlackboard(UBlackboardComponent* blackboardComp);
 
+	// Name of the behavior
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Behavior")
 		FString behaviorName;
 
+	// Type of behavior (e.g. Combat)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Behavior")
 		FGameplayTag behaviorType;
 
@@ -125,9 +136,11 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Behavior")
 		TObjectPtr<UBehaviorTree> behaviorTree;
 
+	// Execution mode of this behavior.
 	UPROPERTY(EditDefaultsOnly, Category = "Behavior")
 		TEnumAsByte<BehaviorExecutionMode> executionMode;
 
+	// Can this behavior be interrupted while it is running.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Behavior")
 		bool isInterruptible;
 
