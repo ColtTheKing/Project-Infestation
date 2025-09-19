@@ -7,7 +7,7 @@
 #include "AIObjective_MeleeTarget.generated.h"
 
 USTRUCT(BlueprintType)
-struct FUAIOpportunity_MeleeTarget
+struct FAIObjectiveOption_MeleeTarget
 {
 	GENERATED_BODY()
 
@@ -28,5 +28,5 @@ class PROJECTINFESTATION_API UAIObjective_MeleeTarget : public UAIObjective
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TArray<FUAIOpportunity_MeleeTarget> meleeTargetOpportunities = {};
+		TArray<FAIObjectiveOption_MeleeTarget> meleeTargetOptions = {};
 };

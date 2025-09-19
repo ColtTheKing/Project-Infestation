@@ -7,6 +7,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Navigation/CrowdFollowingComponent.h"
 
+#include "../InfestationLogging.h"
 #include "../InfestationGameState.h"
 #include "../EnemyCharacter.h"
 #include "../CombatArea.h"
@@ -20,7 +21,8 @@ AEnemyAIController::AEnemyAIController(const FObjectInitializer& objectInitializ
 	BrainComponent = behaviorComp; // BrainComponent comes from the parent class.
 
 	perceptionComp = objectInitializer.CreateDefaultSubobject<UAIPerceptionComponent>(this, TEXT("AIPerceptionComponent"));
-	objectiveGenerationComp = objectInitializer.CreateDefaultSubobject<UAIObjectiveGenerationComponent>(this, TEXT("AIOObjectiveGenerationComponent"));
+	objectiveGenerationComp = objectInitializer.CreateDefaultSubobject<UAIObjectiveGenerationComponent>(this, TEXT("AIObjectiveGenerationComponent"));
+	behaviorSelectorComp = objectInitializer.CreateDefaultSubobject<UAIBehaviorSelectorComponent>(this, TEXT("AIBehaviorSelectorComponent"));
 }
 
 void AEnemyAIController::MeleeAttack()
@@ -53,6 +55,81 @@ void AEnemyAIController::SetAttackTarget(AActor* attackTarget)
 bool AEnemyAIController::WasSuccussfullySensed(FAIStimulus const stimulus)
 {
 	return stimulus.WasSuccessfullySensed();
+}
+
+void AEnemyAIController::RunBehavior(UAIBehavior* behavior)
+{
+	// If anything related to behavior is NULL we don't want to continue.
+	if (behavior == nullptr || 
+		!behavior->GetBehaviorTree() || !behavior->GetBehaviorTree()->GetBlackboardAsset())
+	{
+		UE_LOG(LogInfestationAISystem, Error, TEXT("%s: Behavior, Behavior Tree of Behavior, or BlackboardAsset of Behavior's Behavior Tree is NULL. Aborted run behavior function."), *this->GetFName().ToString());
+		return;
+	}
+
+	// Setup blackboard.
+	blackboardComp->InitializeBlackboard(*behavior->GetBlackboardAsset());
+	blackboardComp->SetValueAsObject("SelfActor", GetPawn());
+	
+	// Update Blackboard variables to the ones in the Behavior.
+	behavior->UpdateExternalBlackboard(blackboardComp); 
+
+	// Run behavior.
+	behaviorComp->StartTree(*behavior->GetBehaviorTree(), behavior->GetExecutionMode());
+}
+
+void AEnemyAIController::RunBehaviorOption(const FAIBehaviorOption& behaviorOption)
+{
+	// If either is NULL then we don't want to continue.
+	TObjectPtr<UAIBehavior> behavior = behaviorOption.behavior;
+	if (behavior == nullptr ||
+		!behavior->GetBehaviorTree() || !behavior->GetBehaviorTree()->GetBlackboardAsset())
+	{
+		UE_LOG(LogInfestationAISystem, Error, TEXT("%s: Behavior, Behavior Tree of Behavior, or BlackboardAsset of Behavior's Behavior Tree is NULL. Aborted run behavior option function."), *this->GetFName().ToString());
+		return;
+	}
+
+	// Setup blackboard.
+	blackboardComp->InitializeBlackboard(*behavior->GetBlackboardAsset());
+	blackboardComp->SetValueAsObject("SelfActor", GetPawn());
+
+	// Update Blackboard variables to the ones in the Behavior.
+	behavior->UpdateExternalBlackboard(blackboardComp, behaviorOption);
+
+	// Run behavior.
+	behaviorComp->StartTree(*behavior->GetBehaviorTree(), behavior->GetExecutionMode());
+}
+
+FAIBehaviorOption AEnemyAIController::CreateTestBehaviorOption(
+	TSubclassOf<UAIBehavior> behaviorType, 
+	TSubclassOf<UAIObjective> objectiveType)
+{
+	if (behaviorType == nullptr || objectiveType == nullptr)
+	{
+		UE_LOG(LogInfestationAISystem, Error, TEXT("%s: BehaviorType or ObjectiveType is invalid type."), *this->GetFName().ToString());
+		return FAIBehaviorOption();
+	}
+
+	auto* newBehavior = NewObject<UAIBehavior>(this, behaviorType);
+	if (newBehavior == nullptr)
+	{
+		UE_LOG(LogInfestationAISystem, Error, TEXT("%s: Behavior failed to be created."), *this->GetFName().ToString());
+		return FAIBehaviorOption();
+	}
+
+	auto* newObjective = NewObject<UAIObjective>(this, objectiveType);
+	if (newObjective == nullptr)
+	{
+		UE_LOG(LogInfestationAISystem, Error, TEXT("%s: Objective failed to be created."), *this->GetFName().ToString());
+		return FAIBehaviorOption();
+	}
+
+	// Note: Objective option needs to be manually added to the objective in the blueprint.
+	FAIBehaviorOption behaviorOption;
+	behaviorOption.behavior = newBehavior;
+	behaviorOption.associatedObjective = newObjective;
+	behaviorOption.associatedObjectiveOptionIndex = 0;
+	return behaviorOption;
 }
 
 void AEnemyAIController::AlertLocalEnemies(AActor* attackTarget)
@@ -105,17 +182,11 @@ void AEnemyAIController::OnPossess(APawn* inPawn)
 {
 	Super::OnPossess(inPawn);
 
-	// Set up blackboard and tree
+	// Only want to possess an enemy character for now
 	AEnemyCharacter* enemy = Cast<AEnemyCharacter>(inPawn);
-	if (enemy && enemy->GetBehaviorTree())
+	if (enemy && behaviorSelectorComp->GetDefaultBehavior())
 	{
-		if (enemy->GetBehaviorTree()->BlackboardAsset)
-		{
-			blackboardComp->InitializeBlackboard(*enemy->GetBehaviorTree()->BlackboardAsset);
-			blackboardComp->SetValueAsObject("SelfActor", enemy);
-		}
-
-		behaviorComp->StartTree(*(enemy->GetBehaviorTree()));
+		RunBehavior(behaviorSelectorComp->GetDefaultBehavior());
 	}
 }
 

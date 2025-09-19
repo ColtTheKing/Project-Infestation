@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "BaseAIObjectiveGenerator.h"
+
+#include "../../InfestationLogging.h"
 
 UBaseAIObjectiveGenerator::UBaseAIObjectiveGenerator()
 {
@@ -12,7 +13,7 @@ UAIObjective* UBaseAIObjectiveGenerator::GetOrCreateObjective(TSubclassOf<UAIObj
 {
 	if (objectiveType == nullptr)
 	{
-		UE_LOG(LogTemp, Error, TEXT("%s: ObjectiveType is invalid type."), *this->GetFName().ToString());
+		UE_LOG(LogInfestationAISystem, Error, TEXT("%s: ObjectiveType is invalid type."), *this->GetFName().ToString());
 		return nullptr;
 	}
 
