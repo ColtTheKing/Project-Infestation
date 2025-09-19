@@ -39,6 +39,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		FAIBehaviorOption SelectBehavior(const TArray<UAIObjective*>& availableObjectives, bool currentBehaviorRunning);
 
+	UFUNCTION(BlueprintCallable)
+		bool IsBehaviorCoolingDown(UAIBehavior* behavior);
+
 	FORCEINLINE UAIBehavior* GetDefaultBehavior() { return defaultBehavior; }
 
 private:  
@@ -82,4 +85,15 @@ private:
 	// Behaviors of the AI.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced, meta=(AllowPrivateAccess=true))
 		TArray<TObjectPtr<UAIBehavior>> behaviors;
+
+	/****** Cooldown System ******/
+	/*
+		Collection of behaviors (names) and the time (seconds) they were last used by the AI. Used for
+		the behavior's cooldown system.
+	*/
+	TMap<FString, double> lastTimeBehaviorsSelected;
+
+	// Is the cooldown system for behaviors active.
+	UPROPERTY(EditDefaultsOnly)
+		bool isCooldownSystemActive;
 };

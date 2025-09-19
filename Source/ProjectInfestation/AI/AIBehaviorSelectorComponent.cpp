@@ -12,6 +12,7 @@ UAIBehaviorSelectorComponent::UAIBehaviorSelectorComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
+	isCooldownSystemActive = true;
 }
 
 
@@ -74,6 +75,11 @@ FAIBehaviorOption UAIBehaviorSelectorComponent::SelectBehavior(const TArray<UAIO
 
 	// No valid behavior options found.
 	return FAIBehaviorOption(defaultBehavior);
+}
+
+bool UAIBehaviorSelectorComponent::IsBehaviorCoolingDown(UAIBehavior* behavior)
+{
+	return false;
 }
 
 bool UAIBehaviorSelectorComponent::GetValidBehaviorOptions(
