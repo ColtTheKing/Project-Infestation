@@ -5,45 +5,8 @@
 
 UAIBehavior::UAIBehavior()
 {
-	cooldownTimer = 0;
 	executionMode = BehaviorExecutionMode::Looped;
-}
-
-void UAIBehavior::Tick(float DeltaTime)
-{
-	if(IsCoolingDown())
-		cooldownTimer -= DeltaTime;
-}
-
-bool UAIBehavior::IsTickable() const
-{
-	return true;
-}
-
-bool UAIBehavior::IsTickableInEditor() const
-{
-	return false;
-}
-
-bool UAIBehavior::IsTickableWhenPaused() const
-{
-	return false;
-}
-
-TStatId UAIBehavior::GetStatId() const
-{
-	return TStatId();
-}
-
-bool UAIBehavior::IsValidSelectionOption()
-{
-	//return !IsCoolingDown() && AreStartingConditionsMet();
-	return true;
-}
-
-bool UAIBehavior::IsCoolingDown() const
-{
-	return cooldownTimer > 0;
+	weight = 1;
 }
 
 void UAIBehavior::GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const

@@ -69,26 +69,12 @@ struct FAIBehaviorOption
 };
 
 UCLASS(BlueprintType, Blueprintable, EditInlineNew, DefaultToInstanced)
-class PROJECTINFESTATION_API UAIBehavior : public UObject, public IGameplayTagAssetInterface, public FTickableGameObject
+class PROJECTINFESTATION_API UAIBehavior : public UObject, public IGameplayTagAssetInterface
 {
 	GENERATED_BODY()
 
 public:
 	UAIBehavior();
-
-	void Tick(float DeltaTime) override;
-	bool IsTickable() const override;
-	bool IsTickableInEditor() const override;
-	bool IsTickableWhenPaused() const override;
-	TStatId GetStatId() const override;
-
-	// Can this Behavior be started i.e. is it valid option for selection?
-	UFUNCTION(BlueprintCallable)
-	bool IsValidSelectionOption();
-
-	// Is the Behavior currently cooling down?
-	UFUNCTION(BlueprintCallable)
-	bool IsCoolingDown() const;
 
 	// Are the conditions valid for this Behavior to be started
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
@@ -114,9 +100,6 @@ public:
 
 	// From IGameplayTagAssetInterface
 	virtual void GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const override;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Behavior")
-		float maxCooldownTime;
 
 protected:
 	// Helper function for determining if the blackboard component's blackboard asset 
@@ -145,5 +128,5 @@ protected:
 		bool isInterruptible;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Behavior")
-		float cooldownTimer;
+		float weight;
 };
