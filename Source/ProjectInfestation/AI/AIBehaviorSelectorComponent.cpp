@@ -79,7 +79,13 @@ FAIBehaviorOption UAIBehaviorSelectorComponent::SelectBehavior(const TArray<UAIO
 
 bool UAIBehaviorSelectorComponent::IsBehaviorCoolingDown(UAIBehavior* behavior)
 {
-	return false;
+	// Behavior has never been selected before.
+	FString behaviorName = behavior->GetBehaviorName();
+	if (lastTimeBehaviorsSelected.Find(behaviorName) == nullptr)
+		return false;
+
+	const double TimePassed = (GetWorld()->GetTimeSeconds() - lastTimeBehaviorsSelected[behaviorName]);
+	return TimePassed < behavior->CooldownTime();
 }
 
 bool UAIBehaviorSelectorComponent::GetValidBehaviorOptions(
@@ -106,6 +112,7 @@ bool UAIBehaviorSelectorComponent::GetValidBehaviorOptions(
 	for (TObjectPtr<UAIBehavior> behavior : behaviorList)
 	{
 		if (behavior != nullptr && 
+			!IsBehaviorCoolingDown(behavior) &&
 			behavior->AreStartingConditionsMet(ownerActor, availableObjectives))
 		{
 			auto bestBehaviorOption = behavior->GetBestBehaviorOption(ownerActor, availableObjectives);
