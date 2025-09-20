@@ -12,7 +12,6 @@ UAIBehaviorSelectorComponent::UAIBehaviorSelectorComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
-	isCooldownSystemActive = true;
 }
 
 
@@ -75,6 +74,21 @@ FAIBehaviorOption UAIBehaviorSelectorComponent::SelectBehavior(const TArray<UAIO
 
 	// No valid behavior options found.
 	return FAIBehaviorOption(defaultBehavior);
+}
+
+void UAIBehaviorSelectorComponent::UpdateCooldownSystem(const FAIBehaviorOption& behaviorOption)
+{
+	if (behaviorOption.behavior == nullptr)
+	{
+		UE_LOG(LogInfestationAISystem, Error, TEXT("%s: Trying to update cooldown system with null behavior from behavior option."), *this->GetFName().ToString());
+		return;
+	}
+
+	FString behaviorName = behaviorOption.behavior->GetBehaviorName();
+	if (lastTimeBehaviorsSelected.Find(behaviorName) == nullptr)
+		lastTimeBehaviorsSelected.Add(behaviorName);
+
+	lastTimeBehaviorsSelected[behaviorName] = GetWorld()->GetTimeSeconds();
 }
 
 bool UAIBehaviorSelectorComponent::IsBehaviorCoolingDown(UAIBehavior* behavior)
