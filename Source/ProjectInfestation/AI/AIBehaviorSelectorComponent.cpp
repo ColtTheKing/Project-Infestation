@@ -76,6 +76,32 @@ FAIBehaviorOption UAIBehaviorSelectorComponent::SelectBehavior(const TArray<UAIO
 	return FAIBehaviorOption(defaultBehavior);
 }
 
+void UAIBehaviorSelectorComponent::UpdateCooldownSystem(const FAIBehaviorOption& behaviorOption)
+{
+	if (behaviorOption.behavior == nullptr)
+	{
+		UE_LOG(LogInfestationAISystem, Error, TEXT("%s: Trying to update cooldown system with null behavior from behavior option."), *this->GetFName().ToString());
+		return;
+	}
+
+	FString behaviorName = behaviorOption.behavior->GetBehaviorName();
+	if (lastTimeBehaviorsSelected.Find(behaviorName) == nullptr)
+		lastTimeBehaviorsSelected.Add(behaviorName);
+
+	lastTimeBehaviorsSelected[behaviorName] = GetWorld()->GetTimeSeconds();
+}
+
+bool UAIBehaviorSelectorComponent::IsBehaviorCoolingDown(UAIBehavior* behavior)
+{
+	// Behavior has never been selected before.
+	FString behaviorName = behavior->GetBehaviorName();
+	if (lastTimeBehaviorsSelected.Find(behaviorName) == nullptr)
+		return false;
+
+	const double TimePassed = (GetWorld()->GetTimeSeconds() - lastTimeBehaviorsSelected[behaviorName]);
+	return TimePassed < behavior->CooldownTime();
+}
+
 bool UAIBehaviorSelectorComponent::GetValidBehaviorOptions(
 	TArray<FAIBehaviorOption>& validBehaviorOptions, 
 	const TArray<TObjectPtr<UAIBehavior>>& behaviorList, 
@@ -100,6 +126,7 @@ bool UAIBehaviorSelectorComponent::GetValidBehaviorOptions(
 	for (TObjectPtr<UAIBehavior> behavior : behaviorList)
 	{
 		if (behavior != nullptr && 
+			!IsBehaviorCoolingDown(behavior) &&
 			behavior->AreStartingConditionsMet(ownerActor, availableObjectives))
 		{
 			auto bestBehaviorOption = behavior->GetBestBehaviorOption(ownerActor, availableObjectives);

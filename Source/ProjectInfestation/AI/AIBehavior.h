@@ -92,6 +92,7 @@ public:
 	FORCEINLINE UBlackboardData* GetBlackboardAsset() const { return behaviorTree->GetBlackboardAsset(); }
 	FORCEINLINE FString GetBehaviorName() const { return behaviorName; }
 	FORCEINLINE bool IsInterruptible() const { return isInterruptible; }
+	FORCEINLINE double CooldownTime() const { return cooldownTime; }
 
 	FORCEINLINE EBTExecutionMode::Type GetExecutionMode() const
 	{
@@ -129,4 +130,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Behavior")
 		float weight;
+
+	// Cooldown time between when this behavior can be selected again.
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Behavior")
+		double cooldownTime;
 };
