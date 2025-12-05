@@ -37,12 +37,23 @@ void AMyPlayerCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	weaponArsenal->SetupWeapons(playerArms);
+	currentEnergy = maxEnergy;
 }
 
 // Called every frame
 void AMyPlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (currentlyThrusting)
+	{
+		AddMovementInput(thrustDirection, 1);
+		timeSinceStartingThrust += DeltaTime;
+
+		//If the player let go of thrust and enough time is elapsed we can slow down
+		if (shouldDeactivateThruster && timeSinceStartingThrust >= startupDuration)
+			StartDecelerating();
+	}
 
 	// If the weapon attack button is being held down, try to do it every frame
 	if (GetActiveWeapon())
@@ -68,6 +79,9 @@ void AMyPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+
+	PlayerInputComponent->BindAction("Thrust", IE_Pressed, this, &AMyPlayerCharacter::ActivateThruster);
+	PlayerInputComponent->BindAction("Thrust", IE_Released, this, &AMyPlayerCharacter::DeactivateThruster);
 
 	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &AMyPlayerCharacter::StartCrouching);
 	PlayerInputComponent->BindAction("Crouch", IE_Released, this, &AMyPlayerCharacter::StopCrouching);
@@ -97,6 +111,9 @@ void AMyPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 void AMyPlayerCharacter::MoveForward(float axis)
 {
+	if (currentlyThrusting)
+		return;
+	
 	const FRotator rotation = Controller->GetControlRotation();
 	const FRotator yawRotation(0, rotation.Yaw, 0);
 
@@ -106,11 +123,54 @@ void AMyPlayerCharacter::MoveForward(float axis)
 
 void AMyPlayerCharacter::MoveRight(float axis)
 {
+	if (currentlyThrusting)
+		return;
+
 	const FRotator rotation = Controller->GetControlRotation();
 	const FRotator yawRotation(0, rotation.Yaw, 0);
 
 	const FVector direction = FRotationMatrix(yawRotation).GetUnitAxis(EAxis::Y);
 	AddMovementInput(direction, axis);
+}
+
+void AMyPlayerCharacter::ActivateThruster()
+{
+	if (currentEnergy < thrustEnergyCost || currentEnergy < minEnergyRequiredToThrust)
+		return; //give player some indication that they can't activate due to low energy
+
+	FVector direction = GetLastMovementInputVector();
+	direction.Normalize();
+
+	currentlyThrusting = true;
+	thrustDirection = direction;
+	timeSinceStartingThrust = 0;
+	shouldDeactivateThruster = false;
+	GetCharacterMovement()->MaxWalkSpeed = 3000.0f;
+	GetCharacterMovement()->MaxAcceleration = 10000.0f;
+
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Direction = %f, %f"), direction.X, direction.Y));
+}
+
+void AMyPlayerCharacter::DeactivateThruster()
+{
+	//Delay deceleration if the startup period has not ended yet
+	if (timeSinceStartingThrust < startupDuration)
+	{
+		shouldDeactivateThruster = true;
+		return;
+	}
+
+	//actually start decelerating if it has been enough time since starting
+	StartDecelerating();
+}
+
+void AMyPlayerCharacter::StartDecelerating()
+{
+	shouldDeactivateThruster = false;
+	currentlyThrusting = false;
+	GetCharacterMovement()->MaxWalkSpeed = 600.0f;
+	GetCharacterMovement()->MaxAcceleration = 2048.0f;
 }
 
 void AMyPlayerCharacter::StartCrouching()
