@@ -45,6 +45,16 @@ void AMyPlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// Regenerate energy if missing any
+	if (currentEnergy < maxEnergy)
+	{
+		currentEnergy += energyRegenRate * DeltaTime;
+
+		if (currentEnergy > maxEnergy)
+			currentEnergy = maxEnergy;
+	}
+
+	// Deal with thrust movement if currently thrusting
 	if (currentlyThrusting)
 	{
 		AddMovementInput(thrustDirection, 1);
@@ -137,6 +147,8 @@ void AMyPlayerCharacter::ActivateThruster()
 {
 	if (currentEnergy < thrustEnergyCost || currentEnergy < minEnergyRequiredToThrust)
 		return; //give player some indication that they can't activate due to low energy
+
+	currentEnergy -= thrustEnergyCost;
 
 	FVector direction = GetLastMovementInputVector();
 	direction.Normalize();
