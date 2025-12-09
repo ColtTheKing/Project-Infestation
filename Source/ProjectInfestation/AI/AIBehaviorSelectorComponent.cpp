@@ -76,7 +76,7 @@ FAIBehaviorOption UAIBehaviorSelectorComponent::SelectBehavior(const TArray<UAIO
 	return FAIBehaviorOption(defaultBehavior);
 }
 
-void UAIBehaviorSelectorComponent::UpdateCooldownSystem(const FAIBehaviorOption& behaviorOption)
+void UAIBehaviorSelectorComponent::StartBehaviorCooldown(const FAIBehaviorOption& behaviorOption)
 {
 	if (behaviorOption.behavior == nullptr)
 	{
@@ -85,22 +85,23 @@ void UAIBehaviorSelectorComponent::UpdateCooldownSystem(const FAIBehaviorOption&
 	}
 
 	FString behaviorName = behaviorOption.behavior->GetBehaviorName();
-	if (lastTimeBehaviorsSelected.Find(behaviorName) == nullptr)
-		lastTimeBehaviorsSelected.Add(behaviorName);
+	if (lastTimeBehaviorsCooldownStarted.Find(behaviorName) == nullptr)
+		lastTimeBehaviorsCooldownStarted.Add(behaviorName);
 
-	lastTimeBehaviorsSelected[behaviorName] = GetWorld()->GetTimeSeconds();
+	lastTimeBehaviorsCooldownStarted[behaviorName] = GetWorld()->GetTimeSeconds();
 }
 
 bool UAIBehaviorSelectorComponent::IsBehaviorCoolingDown(UAIBehavior* behavior)
 {
 	// Behavior has never been selected before.
 	FString behaviorName = behavior->GetBehaviorName();
-	if (lastTimeBehaviorsSelected.Find(behaviorName) == nullptr)
+	if (lastTimeBehaviorsCooldownStarted.Find(behaviorName) == nullptr)
 		return false;
 
-	const double TimePassed = (GetWorld()->GetTimeSeconds() - lastTimeBehaviorsSelected[behaviorName]);
+	const double TimePassed = (GetWorld()->GetTimeSeconds() - lastTimeBehaviorsCooldownStarted[behaviorName]);
 	return TimePassed < behavior->CooldownTime();
 }
+
 
 bool UAIBehaviorSelectorComponent::GetValidBehaviorOptions(
 	TArray<FAIBehaviorOption>& validBehaviorOptions, 
