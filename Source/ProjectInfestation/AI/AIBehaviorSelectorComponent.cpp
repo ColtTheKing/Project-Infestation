@@ -80,7 +80,7 @@ void UAIBehaviorSelectorComponent::StartBehaviorCooldown(const FAIBehaviorOption
 {
 	if (behaviorOption.behavior == nullptr)
 	{
-		UE_LOG(LogInfestationAISystem, Error, TEXT("%s: Trying to update cooldown system with null behavior from behavior option."), *this->GetFName().ToString());
+		UE_LOG(LogInfestationAISystem, Error, TEXT("%s: Trying to start behavior cooldown with null behavior from behavior option."), *this->GetFName().ToString());
 		return;
 	}
 
