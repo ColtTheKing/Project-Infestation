@@ -45,13 +45,24 @@ void AMyPlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// Regenerate energy if missing any
-	if (currentEnergy < maxEnergy)
-	{
-		currentEnergy += energyRegenRate * DeltaTime;
+	ThrusterTick(DeltaTime);
 
-		if (currentEnergy > maxEnergy)
-			currentEnergy = maxEnergy;
+	// If the weapon attack button is being held down, try to do it every frame
+	if (GetActiveWeapon())
+	{
+		AGun* myGun = Cast<AGun>(GetActiveWeapon());
+		if (myGun && myGun->constantlyShooting)
+			myGun->UseWeapon(this);
+	}
+}
+
+void AMyPlayerCharacter::ThrusterTick(float DeltaTime)
+{
+	//If the player let go of thrust and enough time is elapsed we can slow down
+	if (shouldDeactivateThrusterLater && timeSinceStartingThrust >= startupDuration)
+	{
+		DeactivateThruster();
+		return;
 	}
 
 	// Deal with thrust movement if currently thrusting
@@ -60,17 +71,24 @@ void AMyPlayerCharacter::Tick(float DeltaTime)
 		AddMovementInput(thrustDirection, 1);
 		timeSinceStartingThrust += DeltaTime;
 
-		//If the player let go of thrust and enough time is elapsed we can slow down
-		if (shouldDeactivateThruster && timeSinceStartingThrust >= startupDuration)
-			StartDecelerating();
-	}
+		//If still thrusting after startup, drain energy over time
+		if (timeSinceStartingThrust >= startupDuration)
+		{
+			currentEnergy -= thrustEnergyCostPerSecond * DeltaTime;
 
-	// If the weapon attack button is being held down, try to do it every frame
-	if (GetActiveWeapon())
+			if (currentEnergy <= 0)
+			{
+				currentEnergy = 0;
+				DeactivateThruster();
+			}
+		}
+	}// Regenerate energy if missing any while not thrusting
+	else if (currentEnergy < maxEnergy)
 	{
-		AGun* myGun = Cast<AGun>(GetActiveWeapon());
-		if (myGun && myGun->constantlyShooting)
-			myGun->UseWeapon(this);
+		currentEnergy += energyRegenRate * DeltaTime;
+
+		if (currentEnergy > maxEnergy)
+			currentEnergy = maxEnergy;
 	}
 }
 
@@ -145,10 +163,10 @@ void AMyPlayerCharacter::MoveRight(float axis)
 
 void AMyPlayerCharacter::ActivateThruster()
 {
-	if (currentEnergy < thrustEnergyCost || currentEnergy < minEnergyRequiredToThrust)
+	if (currentEnergy < thrustInitalEnergyCost || currentEnergy < minEnergyRequiredToThrust)
 		return; //give player some indication that they can't activate due to low energy
 
-	currentEnergy -= thrustEnergyCost;
+	currentEnergy -= thrustInitalEnergyCost;
 
 	FVector direction = GetLastMovementInputVector();
 	direction.Normalize();
@@ -156,7 +174,7 @@ void AMyPlayerCharacter::ActivateThruster()
 	currentlyThrusting = true;
 	thrustDirection = direction;
 	timeSinceStartingThrust = 0;
-	shouldDeactivateThruster = false;
+	shouldDeactivateThrusterLater = false;
 	GetCharacterMovement()->MaxWalkSpeed = 3000.0f;
 	GetCharacterMovement()->MaxAcceleration = 10000.0f;
 
@@ -166,10 +184,10 @@ void AMyPlayerCharacter::ActivateThruster()
 
 void AMyPlayerCharacter::DeactivateThruster()
 {
-	//Delay deceleration if the startup period has not ended yet
+	//Delay deactivation if the startup period has not ended yet
 	if (timeSinceStartingThrust < startupDuration)
 	{
-		shouldDeactivateThruster = true;
+		shouldDeactivateThrusterLater = true;
 		return;
 	}
 
@@ -179,7 +197,7 @@ void AMyPlayerCharacter::DeactivateThruster()
 
 void AMyPlayerCharacter::StartDecelerating()
 {
-	shouldDeactivateThruster = false;
+	shouldDeactivateThrusterLater = false;
 	currentlyThrusting = false;
 	GetCharacterMovement()->MaxWalkSpeed = 600.0f;
 	GetCharacterMovement()->MaxAcceleration = 2048.0f;

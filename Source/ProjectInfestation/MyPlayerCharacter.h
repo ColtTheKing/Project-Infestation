@@ -83,7 +83,10 @@ public:
 		float energyRegenRate;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Thruster", meta = (AllowPrivateAccess))
-		float thrustEnergyCost;
+		float thrustInitalEnergyCost;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Thruster", meta = (AllowPrivateAccess))
+		float thrustEnergyCostPerSecond;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Thruster", meta = (AllowPrivateAccess))
 		float minEnergyRequiredToThrust;
@@ -99,6 +102,7 @@ public:
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	void ThrusterTick(float DeltaTime);
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -144,7 +148,7 @@ private:
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		float currentEnergy;
 
-	bool shouldDeactivateThruster; //true when player lets go of thrust key, to wait for initial thrust to finish
+	bool shouldDeactivateThrusterLater; //true when player lets go of thrust key, to wait for initial thrust to finish
 	bool currentlyThrusting;
 	float timeSinceStartingThrust;
 	FVector thrustDirection;
