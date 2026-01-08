@@ -71,7 +71,7 @@ void AMyPlayerCharacter::ThrusterTick(float DeltaTime)
 		AddMovementInput(thrustDirection, 1);
 		timeSinceStartingThrust += DeltaTime;
 
-		//If still thrusting after startup, drain energy over time
+		//If still thrusting after startup, drain energy over time and increase acceleration
 		if (timeSinceStartingThrust >= startupDuration)
 		{
 			currentEnergy -= thrustEnergyCostPerSecond * DeltaTime;
@@ -81,6 +81,21 @@ void AMyPlayerCharacter::ThrusterTick(float DeltaTime)
 				currentEnergy = 0;
 				DeactivateThruster();
 			}
+			else
+			{
+				GetCharacterMovement()->MaxWalkSpeed += postStartupAcceleration * DeltaTime;
+				//GetCharacterMovement()->MaxAcceleration += accelerationMagnitude * DeltaTime;
+				
+				if (GEngine)
+					GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Speed = %f"), GetCharacterMovement()->MaxWalkSpeed));
+			}
+		}
+		else //Ramp up speed faster while still in startup
+		{
+			GetCharacterMovement()->MaxWalkSpeed += startupAcceleration * DeltaTime;
+
+			if (GEngine)
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Speed = %f"), GetCharacterMovement()->MaxWalkSpeed));
 		}
 	}// Regenerate energy if missing any while not thrusting
 	else if (currentEnergy < maxEnergy)
@@ -175,8 +190,9 @@ void AMyPlayerCharacter::ActivateThruster()
 	thrustDirection = direction;
 	timeSinceStartingThrust = 0;
 	shouldDeactivateThrusterLater = false;
-	GetCharacterMovement()->MaxWalkSpeed = 3000.0f;
-	GetCharacterMovement()->MaxAcceleration = 10000.0f;
+	GetCharacterMovement()->MaxWalkSpeed = startingThrustSpeed;
+	GetCharacterMovement()->MaxAcceleration = thrusterMaxAcceleration;
+	GetCharacterMovement()->AirControl = 1.0f;
 
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Direction = %f, %f"), direction.X, direction.Y));
@@ -201,6 +217,7 @@ void AMyPlayerCharacter::StartDecelerating()
 	currentlyThrusting = false;
 	GetCharacterMovement()->MaxWalkSpeed = 600.0f;
 	GetCharacterMovement()->MaxAcceleration = 2048.0f;
+	GetCharacterMovement()->AirControl = 0.2f;
 }
 
 void AMyPlayerCharacter::StartCrouching()

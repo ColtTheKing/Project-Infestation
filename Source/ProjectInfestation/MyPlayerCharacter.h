@@ -63,12 +63,18 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess))
 		int maxNumberOfAttackers;
+		
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Thruster", meta = (AllowPrivateAccess))
+		float startupAcceleration;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Thruster", meta = (AllowPrivateAccess))
-		float accelerationMagnitude;
+		float postStartupAcceleration;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Thruster", meta = (AllowPrivateAccess))
-		float decelerationMagnitude;
+		float startingThrustSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Thruster", meta = (AllowPrivateAccess))
+		float thrusterMaxAcceleration;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Thruster", meta = (AllowPrivateAccess))
 		float percentControlDuringThrust;
