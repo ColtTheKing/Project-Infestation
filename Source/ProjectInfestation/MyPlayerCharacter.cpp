@@ -154,26 +154,42 @@ void AMyPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 void AMyPlayerCharacter::MoveForward(float axis)
 {
-	if (currentlyThrusting)
-		return;
-	
 	const FRotator rotation = Controller->GetControlRotation();
 	const FRotator yawRotation(0, rotation.Yaw, 0);
 
 	const FVector direction = FRotationMatrix(yawRotation).GetUnitAxis(EAxis::X);
-	AddMovementInput(direction, axis);
+
+	//If thrusting, adjust the thrust direction a bit
+	if (currentlyThrusting)
+	{
+		FVector desiredDirection = (percentControlDuringThrust * axis * direction) + thrustDirection;
+		desiredDirection.Normalize();
+		thrustDirection = desiredDirection;
+	}
+	else //Otherwise, move normally
+	{
+		AddMovementInput(direction, axis);
+	}
 }
 
 void AMyPlayerCharacter::MoveRight(float axis)
 {
-	if (currentlyThrusting)
-		return;
-
 	const FRotator rotation = Controller->GetControlRotation();
 	const FRotator yawRotation(0, rotation.Yaw, 0);
 
 	const FVector direction = FRotationMatrix(yawRotation).GetUnitAxis(EAxis::Y);
-	AddMovementInput(direction, axis);
+
+	//If thrusting, adjust the thrust direction a bit
+	if (currentlyThrusting)
+	{
+		FVector desiredDirection = (percentControlDuringThrust * axis * direction) + thrustDirection;
+		desiredDirection.Normalize();
+		thrustDirection = desiredDirection;
+	}
+	else //Otherwise, move normally
+	{
+		AddMovementInput(direction, axis);
+	}
 }
 
 void AMyPlayerCharacter::ActivateThruster()
