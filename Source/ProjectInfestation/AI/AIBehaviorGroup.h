@@ -13,7 +13,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType, Blueprintable, EditInlineNew, DefaultToInstanced)
 class PROJECTINFESTATION_API UAIBehaviorGroup : public UObject
 {
 	GENERATED_BODY()
