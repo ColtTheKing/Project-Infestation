@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 
 #include "AIBehavior.h"
+#include "AIBehaviorGroup.h"
 #include "Objectives/AIObjective.h"
 
 #include "AIBehaviorSelectorComponent.generated.h"
@@ -38,6 +39,13 @@ public:
 	*/ 
 	UFUNCTION(BlueprintCallable)
 		FAIBehaviorOption SelectBehavior(const TArray<UAIObjective*>& availableObjectives, bool currentBehaviorRunning);
+	
+	/*
+		Temp function for selecting behaviors with behavior groups. Will replace SelectBehavior once
+		properly implemented and tested.
+	*/
+	UFUNCTION(BlueprintCallable)
+		FAIBehaviorOption SelectBehavior_GroupVersion(const TArray<UAIObjective*>& availableObjectives, bool currentBehaviorRunning);
 
 	/*
 		Starts the inputted behavior's cooldown. 
@@ -96,6 +104,15 @@ private:
 	// Behaviors of the AI.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced, meta=(AllowPrivateAccess=true))
 		TArray<TObjectPtr<UAIBehavior>> behaviors;
+
+	// ****** Behavior Groups (Temp) ******
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced, Category = "Behavior Groups (Temp)", meta = (AllowPrivateAccess = true))
+		TObjectPtr<UAIBehaviorGroup> highPriorityBehaviorGroup;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced, Category = "Behavior Groups (Temp)", meta = (AllowPrivateAccess = true))
+		TMap<FString, TObjectPtr<UAIBehaviorGroup>> behaviorGroups;
+
+	// ************************************
 
 	/*
 		Collection of behaviors (names) and the last time (seconds) they're cooldown started. 

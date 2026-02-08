@@ -76,6 +76,11 @@ FAIBehaviorOption UAIBehaviorSelectorComponent::SelectBehavior(const TArray<UAIO
 	return FAIBehaviorOption(defaultBehavior);
 }
 
+FAIBehaviorOption UAIBehaviorSelectorComponent::SelectBehavior_GroupVersion(const TArray<UAIObjective*>& availableObjectives, bool currentBehaviorRunning)
+{
+	return FAIBehaviorOption();
+}
+
 void UAIBehaviorSelectorComponent::StartBehaviorCooldown(const FAIBehaviorOption& behaviorOption)
 {
 	if (behaviorOption.behavior == nullptr)
