@@ -25,23 +25,21 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		bool AreStartingConditionsMet(AActor* aiActor, const TArray<UAIObjective*>& availableObjectives);
 
-	bool GetValidBehaviorOptions(
-		TArray<FAIBehaviorOption>& validBehaviorOptions,
-		const TObjectPtr<AActor>& aiActor, 
-		const TArray<UAIObjective*>& availableObjectives) const;
+	FORCEINLINE const TMap<FString, TObjectPtr<UAIBehavior>>& GetBehaviors() const { return behaviors; }
+	FORCEINLINE const TMap<FString, TObjectPtr<UAIBehaviorGroup>>& GetSubGroups() const { return subGroups; }
 
 protected:
 	// Name of the behavior group.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Behavior Group")
-		FString behaviorName;
+		FString behaviorGroupName;
 
 	// List of behaviors in group.
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Behavior Group")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced, Category="Behavior Group")
 		TMap<FString, TObjectPtr<UAIBehavior>> behaviors;
 
 	// List of behavior groups in group.
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Behavior Group")
-		TMap<FString, TObjectPtr<UAIBehaviorGroup>> behaviorGroups;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced, Category="Behavior Group")
+		TMap<FString, TObjectPtr<UAIBehaviorGroup>> subGroups;
 
 	// Cooldown time between when this behavior group can be selected again.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Behavior Group")

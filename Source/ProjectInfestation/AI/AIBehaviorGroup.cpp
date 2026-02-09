@@ -8,7 +8,3 @@ UAIBehaviorGroup::UAIBehaviorGroup()
 
 }
 
-bool UAIBehaviorGroup::GetValidBehaviorOptions(TArray<FAIBehaviorOption>& validBehaviorOptions, const TObjectPtr<AActor>& aiActor, const TArray<UAIObjective*>& availableObjectives) const
-{
-	return false;
-}

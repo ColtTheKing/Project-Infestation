@@ -74,6 +74,15 @@ private:
 		const TArray<TObjectPtr<UAIBehavior>>& behaviors,
 		const TArray<UAIObjective*>& availableObjectives);
 
+	// ****** Behavior Groups (Temp) ******
+
+	bool GetValidBehaviorOptions_GroupVersion(
+		TArray<FAIBehaviorOption>& validBehaviorOptions,
+		const TObjectPtr<UAIBehaviorGroup>& behaviorGroup,
+		const TArray<UAIObjective*>& availableObjectives);
+
+	// ************************************
+
 	/*
 		Helper functions for better readability in SelectBehavior function. Returns the index of 
 		the behavior option with the highest score. If multiple have the highest score, the returned

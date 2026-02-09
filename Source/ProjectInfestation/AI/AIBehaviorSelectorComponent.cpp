@@ -78,7 +78,29 @@ FAIBehaviorOption UAIBehaviorSelectorComponent::SelectBehavior(const TArray<UAIO
 
 FAIBehaviorOption UAIBehaviorSelectorComponent::SelectBehavior_GroupVersion(const TArray<UAIObjective*>& availableObjectives, bool currentBehaviorRunning)
 {
-	return FAIBehaviorOption();
+	if (currentBehaviorRunning && !currentBehaviorOption.behavior->IsInterruptible())
+	{
+		UE_LOG(LogInfestationAISystem, Display, TEXT("%s: Current running behavior %s is unable to be interrupted."), *this->GetFName().ToString(), *currentBehaviorOption.behavior->GetBehaviorName());
+		return FAIBehaviorOption();
+	}
+
+	// Find all valid high priority behavior options and return best one.
+	TArray<FAIBehaviorOption> validBehaviorOptions;
+	GetValidBehaviorOptions_GroupVersion(validBehaviorOptions, highPriorityBehaviorGroup, availableObjectives);
+
+	if (validBehaviorOptions.Num() == 1)
+	{
+		return validBehaviorOptions[0];
+	}
+	else if (validBehaviorOptions.Num() > 1)
+	{
+		size_t bestBehaviorOptionIndex = GetBestBehaviorOptionIndex(validBehaviorOptions);
+		if (bestBehaviorOptionIndex < 0) return FAIBehaviorOption(); // Function failed, will already log issue.
+		return validBehaviorOptions[bestBehaviorOptionIndex];
+	}
+
+	// No valid behavior options found
+	return FAIBehaviorOption(defaultBehavior);
 }
 
 void UAIBehaviorSelectorComponent::StartBehaviorCooldown(const FAIBehaviorOption& behaviorOption)
@@ -139,6 +161,50 @@ bool UAIBehaviorSelectorComponent::GetValidBehaviorOptions(
 			validBehaviorOptions.Add(bestBehaviorOption);
 		}
 	}
+	return true;
+}
+
+bool UAIBehaviorSelectorComponent::GetValidBehaviorOptions_GroupVersion(
+	TArray<FAIBehaviorOption>& validBehaviorOptions, 
+	const TObjectPtr<UAIBehaviorGroup>& behaviorGroup, 
+	const TArray<UAIObjective*>& availableObjectives)
+{
+	// Error checking
+	AAIController* ownerController = Cast<AAIController>(GetOwner());
+	if (ownerController == nullptr)
+	{
+		UE_LOG(LogInfestationAISystem, Error, TEXT("%s: Owner actor is not a controller."), *this->GetFName().ToString());
+		return false;
+	}
+
+	AActor* ownerActor = ownerController->GetPawn();
+	if (ownerActor == nullptr)
+	{
+		UE_LOG(LogInfestationAISystem, Error, TEXT("%s: Function called in BeginPlay (before OnPossess call) or controller doesn't have controlled pawn."), *this->GetFName().ToString());
+		return false;
+	}
+
+	// Get valid behaviors from sub groups
+	for (const auto& [subGroupKey, subGroup] : behaviorGroup->GetSubGroups())
+	{
+		if (subGroup != nullptr &&
+			subGroup->AreStartingConditionsMet(ownerActor, availableObjectives))
+		{
+			GetValidBehaviorOptions_GroupVersion(validBehaviorOptions, subGroup, availableObjectives);
+		}
+	}
+
+	// Get valid behaviors from group
+	for (const auto& [behaviorKey, behavior] : behaviorGroup->GetBehaviors())
+	{
+		if (behavior != nullptr &&
+			behavior->AreStartingConditionsMet(ownerActor, availableObjectives))
+		{
+			auto bestBehaviorOption = behavior->GetBestBehaviorOption(ownerActor, availableObjectives);
+			validBehaviorOptions.Add(bestBehaviorOption);
+		}
+	}
+
 	return true;
 }
 
