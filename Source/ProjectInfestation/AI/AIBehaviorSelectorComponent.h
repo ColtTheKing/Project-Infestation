@@ -76,9 +76,10 @@ private:
 
 	// ****** Behavior Groups (Temp) ******
 
-	bool GetValidBehaviorOptions_GroupVersion(
+	void GetValidBehaviorOptions_GroupVersion(
 		TArray<FAIBehaviorOption>& validBehaviorOptions,
 		const TObjectPtr<UAIBehaviorGroup>& behaviorGroup,
+		const TObjectPtr<AActor>& ownerActor,
 		const TArray<UAIObjective*>& availableObjectives);
 
 	// ************************************
