@@ -5,8 +5,11 @@
 // Sets default values
 AMyPlayerCharacter::AMyPlayerCharacter() : Super()
 {
-	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame
 	PrimaryActorTick.bCanEverTick = true;
+
+	// Set AsyncPhysicsTickActor to be called as well
+	bAsyncPhysicsTickEnabled = true;
 
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -44,7 +47,6 @@ void AMyPlayerCharacter::BeginPlay()
 void AMyPlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 	ThrusterTick(DeltaTime);
 
 	// If the weapon attack button is being held down, try to do it every frame
@@ -68,7 +70,6 @@ void AMyPlayerCharacter::ThrusterTick(float DeltaTime)
 	// Deal with thrust movement if currently thrusting
 	if (currentlyThrusting)
 	{
-		AddMovementInput(thrustDirection, 1);
 		timeSinceStartingThrust += DeltaTime;
 
 		//If still thrusting after startup, drain energy over time and increase acceleration
@@ -83,19 +84,20 @@ void AMyPlayerCharacter::ThrusterTick(float DeltaTime)
 			}
 			else
 			{
-				GetCharacterMovement()->MaxWalkSpeed += postStartupAcceleration * DeltaTime;
-				//GetCharacterMovement()->MaxAcceleration += accelerationMagnitude * DeltaTime;
+				GetCharacterMovement()->AddForce(thrustDirection * postStartupAcceleration);
+				//GetCharacterMovement()->MaxWalkSpeed += postStartupAcceleration * DeltaTime;
 				
 				if (GEngine)
-					GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Speed = %f"), GetCharacterMovement()->MaxWalkSpeed));
+					GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Speed = %f,%f,%f"), thrustDirection.X * postStartupAcceleration, thrustDirection.Y * postStartupAcceleration, thrustDirection.Z * postStartupAcceleration));
 			}
 		}
 		else //Ramp up speed faster while still in startup
 		{
-			GetCharacterMovement()->MaxWalkSpeed += startupAcceleration * DeltaTime;
+			GetCharacterMovement()->AddForce(thrustDirection * startupAcceleration);
+			//GetCharacterMovement()->MaxWalkSpeed += startupAcceleration * DeltaTime;
 
 			if (GEngine)
-				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Speed = %f"), GetCharacterMovement()->MaxWalkSpeed));
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Velocity = %f,%f,%f"), thrustDirection.X * postStartupAcceleration, thrustDirection.Y * postStartupAcceleration, thrustDirection.Z * postStartupAcceleration));
 		}
 	}// Regenerate energy if missing any while not thrusting
 	else if (currentEnergy < maxEnergy)
@@ -206,8 +208,8 @@ void AMyPlayerCharacter::ActivateThruster()
 	thrustDirection = direction;
 	timeSinceStartingThrust = 0;
 	shouldDeactivateThrusterLater = false;
-	GetCharacterMovement()->MaxWalkSpeed = startingThrustSpeed;
-	GetCharacterMovement()->MaxAcceleration = thrusterMaxAcceleration;
+	//GetCharacterMovement()->MaxWalkSpeed = startingThrustSpeed;
+	//GetCharacterMovement()->MaxAcceleration = thrusterMaxAcceleration;
 	GetCharacterMovement()->AirControl = 1.0f;
 
 	if (GEngine)
@@ -231,8 +233,8 @@ void AMyPlayerCharacter::StartDecelerating()
 {
 	shouldDeactivateThrusterLater = false;
 	currentlyThrusting = false;
-	GetCharacterMovement()->MaxWalkSpeed = 600.0f;
-	GetCharacterMovement()->MaxAcceleration = 2048.0f;
+	//GetCharacterMovement()->MaxWalkSpeed = 600.0f;
+	//GetCharacterMovement()->MaxAcceleration = 2048.0f;
 	GetCharacterMovement()->AirControl = 0.2f;
 }
 
