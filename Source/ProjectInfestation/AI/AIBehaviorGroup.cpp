@@ -8,3 +8,16 @@ UAIBehaviorGroup::UAIBehaviorGroup()
 
 }
 
+void UAIBehaviorGroup::PostInitProperties()
+{
+	Super::PostInitProperties();
+
+	// Set parent group in child behavior
+	for (const auto& [behaviorKey, behavior] : behaviors)
+	{
+		if (behavior != nullptr)
+		{
+			behavior->SetParentGroup(this);
+		}
+	}
+}
