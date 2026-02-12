@@ -48,18 +48,24 @@ public:
 		FAIBehaviorOption SelectBehavior_GroupVersion(const TArray<UAIObjective*>& availableObjectives, bool currentBehaviorRunning);
 
 	/*
-		Starts the inputted behavior's cooldown. 
+		Starts the inputted behavior's and it's parent groups cooldown. 
 		
 		If the function fails, it will log the error and return without doing anything.
 	*/
 	UFUNCTION(BlueprintCallable)
-		void StartBehaviorCooldown(const FAIBehaviorOption& behaviorOption);
+		void StartCooldownForBehaviorAndParentGroups(const FAIBehaviorOption& behaviorOption);
 
 	/*
 		Checks the cooldown system to see if the inputted behavior is currently cooling down. 
 	*/
 	UFUNCTION(BlueprintCallable)
 		bool IsBehaviorCoolingDown(UAIBehavior* behavior);
+
+	/*
+		Checks the cooldown system to see if the inputted behavior group is currently cooling down.
+	*/
+	UFUNCTION(BlueprintCallable)
+		bool IsBehaviorGroupCoolingDown(UAIBehaviorGroup* behaviorGroup);
 
 	FORCEINLINE UAIBehavior* GetDefaultBehavior() { return defaultBehavior; }
 
@@ -129,4 +135,11 @@ private:
 		Used for the behavior's cooldown system.
 	*/
 	TMap<FString, double> lastTimeBehaviorsCooldownStarted;
+
+	/*
+		Collection of behavior groups (names) and the last time (seconds) they're cooldown started.
+		Used for the behavior's cooldown system.
+	*/
+	TMap<FString, double> lastTimeGroupsCooldownStarted;
+
 };

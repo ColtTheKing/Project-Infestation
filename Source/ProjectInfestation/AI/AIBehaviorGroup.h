@@ -30,6 +30,7 @@ public:
 	FORCEINLINE const FString GetGroupName() const { return groupName; }
 	FORCEINLINE const TMap<FString, TObjectPtr<UAIBehavior>>& GetBehaviors() const { return behaviors; }
 	FORCEINLINE const TMap<FString, TObjectPtr<UAIBehaviorGroup>>& GetSubGroups() const { return subGroups; }
+	FORCEINLINE const double GetCooldownTime() const { return cooldownTime; }
 
 protected:
 	// Name of the behavior group.

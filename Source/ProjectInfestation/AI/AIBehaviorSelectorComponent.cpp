@@ -101,7 +101,8 @@ FAIBehaviorOption UAIBehaviorSelectorComponent::SelectBehavior_GroupVersion(cons
 
 	// Find all valid high priority behavior options and return best one.
 	TArray<FAIBehaviorOption> validBehaviorOptions;
-	if (highPriorityBehaviorGroup != nullptr)
+	if (highPriorityBehaviorGroup != nullptr 
+		&& !IsBehaviorGroupCoolingDown(highPriorityBehaviorGroup))
 		GetValidBehaviorOptions_GroupVersion(validBehaviorOptions, highPriorityBehaviorGroup, ownerActor, availableObjectives);
 
 	if (validBehaviorOptions.Num() == 1)
@@ -119,6 +120,7 @@ FAIBehaviorOption UAIBehaviorSelectorComponent::SelectBehavior_GroupVersion(cons
 	for (const auto& [groupKey, group] : behaviorGroups)
 	{
 		if (group != nullptr &&
+			!IsBehaviorGroupCoolingDown(group) &&
 			group->AreStartingConditionsMet(ownerActor, availableObjectives))
 		{
 			GetValidBehaviorOptions_GroupVersion(validBehaviorOptions, group, ownerActor, availableObjectives);
@@ -140,7 +142,7 @@ FAIBehaviorOption UAIBehaviorSelectorComponent::SelectBehavior_GroupVersion(cons
 	return FAIBehaviorOption(defaultBehavior);
 }
 
-void UAIBehaviorSelectorComponent::StartBehaviorCooldown(const FAIBehaviorOption& behaviorOption)
+void UAIBehaviorSelectorComponent::StartCooldownForBehaviorAndParentGroups(const FAIBehaviorOption& behaviorOption)
 {
 	if (behaviorOption.behavior == nullptr)
 	{
@@ -148,11 +150,23 @@ void UAIBehaviorSelectorComponent::StartBehaviorCooldown(const FAIBehaviorOption
 		return;
 	}
 
+	// Cooldown for behavior
 	FString behaviorName = behaviorOption.behavior->GetBehaviorName();
 	if (lastTimeBehaviorsCooldownStarted.Find(behaviorName) == nullptr)
 		lastTimeBehaviorsCooldownStarted.Add(behaviorName);
 
 	lastTimeBehaviorsCooldownStarted[behaviorName] = GetWorld()->GetTimeSeconds();
+
+	// Cooldown for parent behavior group
+	auto parentGroup = behaviorOption.behavior->GetParentGroup();
+	if (parentGroup == nullptr)
+		return;
+
+	FString groupName = parentGroup->GetGroupName();
+	if (lastTimeGroupsCooldownStarted.Find(groupName) == nullptr)
+		lastTimeGroupsCooldownStarted.Add(groupName);
+
+	lastTimeGroupsCooldownStarted[groupName] = GetWorld()->GetTimeSeconds();
 }
 
 bool UAIBehaviorSelectorComponent::IsBehaviorCoolingDown(UAIBehavior* behavior)
@@ -162,10 +176,20 @@ bool UAIBehaviorSelectorComponent::IsBehaviorCoolingDown(UAIBehavior* behavior)
 	if (lastTimeBehaviorsCooldownStarted.Find(behaviorName) == nullptr)
 		return false;
 
-	const double TimePassed = (GetWorld()->GetTimeSeconds() - lastTimeBehaviorsCooldownStarted[behaviorName]);
-	return TimePassed < behavior->CooldownTime();
+	const double timePassed = (GetWorld()->GetTimeSeconds() - lastTimeBehaviorsCooldownStarted[behaviorName]);
+	return timePassed < behavior->GetCooldownTime();
 }
 
+bool UAIBehaviorSelectorComponent::IsBehaviorGroupCoolingDown(UAIBehaviorGroup* behaviorGroup)
+{
+	// Behavior group has never been selected before.
+	FString groupName = behaviorGroup->GetGroupName();
+	if (lastTimeGroupsCooldownStarted.Find(groupName) == nullptr)
+		return false;
+
+	const double timePassed = (GetWorld()->GetTimeSeconds() - lastTimeGroupsCooldownStarted[groupName]);
+	return timePassed < behaviorGroup->GetCooldownTime();
+}
 
 bool UAIBehaviorSelectorComponent::GetValidBehaviorOptions(
 	TArray<FAIBehaviorOption>& validBehaviorOptions, 
@@ -211,6 +235,7 @@ void UAIBehaviorSelectorComponent::GetValidBehaviorOptions_GroupVersion(
 	for (const auto& [subGroupKey, subGroup] : behaviorGroup->GetSubGroups())
 	{
 		if (subGroup != nullptr &&
+			!IsBehaviorGroupCoolingDown(subGroup) &&
 			subGroup->AreStartingConditionsMet(ownerActor, availableObjectives))
 		{
 			GetValidBehaviorOptions_GroupVersion(validBehaviorOptions, subGroup, ownerActor, availableObjectives);
@@ -221,6 +246,7 @@ void UAIBehaviorSelectorComponent::GetValidBehaviorOptions_GroupVersion(
 	for (const auto& [behaviorKey, behavior] : behaviorGroup->GetBehaviors())
 	{
 		if (behavior != nullptr &&
+			!IsBehaviorCoolingDown(behavior) &&
 			behavior->AreStartingConditionsMet(ownerActor, availableObjectives))
 		{
 			auto bestBehaviorOption = behavior->GetBestBehaviorOption(ownerActor, availableObjectives);

@@ -90,15 +90,15 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void UpdateExternalBlackboard(UBlackboardComponent* blackboardComp, const FAIBehaviorOption& behaviorOption = FAIBehaviorOption());
 
-	FORCEINLINE const UBehaviorTree* GetBehaviorTree() const { return behaviorTree; }
+	FORCEINLINE UBehaviorTree* GetBehaviorTree() const { return behaviorTree; }
 
-	FORCEINLINE const UBlackboardData* GetBlackboardAsset() const { return behaviorTree->GetBlackboardAsset(); }
+	FORCEINLINE UBlackboardData* GetBlackboardAsset() const { return behaviorTree->GetBlackboardAsset(); }
 
-	FORCEINLINE const FString GetBehaviorName() const { return behaviorName; }
+	FORCEINLINE FString GetBehaviorName() const { return behaviorName; }
 
-	FORCEINLINE const bool IsInterruptible() const { return isInterruptible; }
+	FORCEINLINE bool IsInterruptible() const { return isInterruptible; }
 
-	FORCEINLINE const double CooldownTime() const { return cooldownTime; }
+	FORCEINLINE double GetCooldownTime() const { return cooldownTime; }
 
 	FORCEINLINE const UAIBehaviorGroup* GetParentGroup() const { return parentGroup; }
 
