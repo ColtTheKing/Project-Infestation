@@ -159,16 +159,17 @@ void UAIBehaviorSelectorComponent::StartCooldownForBehaviorAndParentGroups(const
 
 	lastTimeBehaviorsCooldownStarted[behaviorName] = GetWorld()->GetTimeSeconds();
 
-	// Cooldown for parent behavior group
+	// Cooldown for parent behavior groups
 	auto parentGroup = behaviorOption.behavior->GetParentGroup();
-	if (parentGroup == nullptr)
-		return;
+	while (parentGroup != nullptr)
+	{
+		FString groupName = parentGroup->GetGroupName();
+		if (lastTimeGroupsCooldownStarted.Find(groupName) == nullptr)
+			lastTimeGroupsCooldownStarted.Add(groupName);
 
-	FString groupName = parentGroup->GetGroupName();
-	if (lastTimeGroupsCooldownStarted.Find(groupName) == nullptr)
-		lastTimeGroupsCooldownStarted.Add(groupName);
-
-	lastTimeGroupsCooldownStarted[groupName] = GetWorld()->GetTimeSeconds();
+		lastTimeGroupsCooldownStarted[groupName] = GetWorld()->GetTimeSeconds();
+		parentGroup = parentGroup->GetParentGroup();
+	}
 }
 
 bool UAIBehaviorSelectorComponent::IsBehaviorCoolingDown(UAIBehavior* behavior)
