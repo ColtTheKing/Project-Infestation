@@ -31,6 +31,13 @@ public:
 	FORCEINLINE const TMap<FString, TObjectPtr<UAIBehavior>>& GetBehaviors() const { return behaviors; }
 	FORCEINLINE const TMap<FString, TObjectPtr<UAIBehaviorGroup>>& GetSubGroups() const { return subGroups; }
 	FORCEINLINE const double GetCooldownTime() const { return cooldownTime; }
+	FORCEINLINE const UAIBehaviorGroup* GetParentGroup() const { return parentGroup; }
+
+	// Should only be called by this group's parent.  
+	FORCEINLINE void SetParentGroup(TObjectPtr<UAIBehaviorGroup> behaviorGroup)
+	{
+		parentGroup = behaviorGroup;
+	}
 
 protected:
 	// Name of the behavior group.
@@ -48,4 +55,12 @@ protected:
 	// Cooldown time between when this behavior group can be selected again.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Behavior Group")
 		double cooldownTime;
+
+	/*
+		Parent group of this behavior group. 
+
+		Null if root group. Set only by parent group.
+	*/
+	UPROPERTY(BlueprintReadOnly, Category = "Behavior")
+		TObjectPtr<UAIBehaviorGroup> parentGroup;
 };

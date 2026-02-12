@@ -101,9 +101,11 @@ FAIBehaviorOption UAIBehaviorSelectorComponent::SelectBehavior_GroupVersion(cons
 
 	// Find all valid high priority behavior options and return best one.
 	TArray<FAIBehaviorOption> validBehaviorOptions;
-	if (highPriorityBehaviorGroup != nullptr 
-		&& !IsBehaviorGroupCoolingDown(highPriorityBehaviorGroup))
+	if (highPriorityBehaviorGroup != nullptr &&
+		!IsBehaviorGroupCoolingDown(highPriorityBehaviorGroup))
+	{
 		GetValidBehaviorOptions_GroupVersion(validBehaviorOptions, highPriorityBehaviorGroup, ownerActor, availableObjectives);
+	}
 
 	if (validBehaviorOptions.Num() == 1)
 	{

@@ -149,6 +149,11 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Behavior")
 		double cooldownTime;
 
+	/*
+		Parent group of this behavior.
+
+		Null if not part of group. Set only by parent group.
+	*/
 	UPROPERTY(BlueprintReadOnly, Category="Behavior")
 		TObjectPtr<UAIBehaviorGroup> parentGroup;
 };

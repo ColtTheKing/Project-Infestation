@@ -20,4 +20,13 @@ void UAIBehaviorGroup::PostInitProperties()
 			behavior->SetParentGroup(this);
 		}
 	}
+
+	// Set parent group in sub groups
+	for (const auto& [subGroupKey, subGroup] : subGroups)
+	{
+		if (subGroup != nullptr)
+		{
+			subGroup->SetParentGroup(this);
+		}
+	}
 }
