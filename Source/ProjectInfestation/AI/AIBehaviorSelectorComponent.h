@@ -39,13 +39,6 @@ public:
 	*/ 
 	UFUNCTION(BlueprintCallable)
 		FAIBehaviorOption SelectBehavior(const TArray<UAIObjective*>& availableObjectives, bool currentBehaviorRunning);
-	
-	/*
-		Temp function for selecting behaviors with behavior groups. Will replace SelectBehavior once
-		properly implemented and tested.
-	*/
-	UFUNCTION(BlueprintCallable)
-		FAIBehaviorOption SelectBehavior_GroupVersion(const TArray<UAIObjective*>& availableObjectives, bool currentBehaviorRunning);
 
 	/*
 		Starts the inputted behavior's and it's parent groups cooldown. 
@@ -75,20 +68,11 @@ private:
 		are valid and then stores the valid behaviors with their objectives (in behavior options) 
 		in the inputted list.  
 	*/
-	bool GetValidBehaviorOptions(
-		TArray<FAIBehaviorOption>& validBehaviorOptions, 
-		const TArray<TObjectPtr<UAIBehavior>>& behaviors,
-		const TArray<UAIObjective*>& availableObjectives);
-
-	// ****** Behavior Groups (Temp) ******
-
-	void GetValidBehaviorOptions_GroupVersion(
+	void GetValidBehaviorOptions(
 		TArray<FAIBehaviorOption>& validBehaviorOptions,
 		const TObjectPtr<UAIBehaviorGroup>& behaviorGroup,
 		const TObjectPtr<AActor>& ownerActor,
 		const TArray<UAIObjective*>& availableObjectives);
-
-	// ************************************
 
 	/*
 		Helper functions for better readability in SelectBehavior function. Returns the index of 
@@ -113,22 +97,13 @@ private:
 	UPROPERTY(BlueprintReadWrite, meta=(AllowPrivateAccess=true))
 		FAIBehaviorOption currentBehaviorOption;
 
-	// Behaviors of the AI that should always run when valid.
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced, meta = (AllowPrivateAccess = true))
-		TArray<TObjectPtr<UAIBehavior>> highPriorityBehaviors;
-
-	// Behaviors of the AI.
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced, meta=(AllowPrivateAccess=true))
-		TArray<TObjectPtr<UAIBehavior>> behaviors;
-
-	// ****** Behavior Groups (Temp) ******
+	// Behaviors and groups of the AI that should always run when valid.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced, Category = "Behavior Groups (Temp)", meta = (AllowPrivateAccess = true))
 		TObjectPtr<UAIBehaviorGroup> highPriorityBehaviorGroup;
 
+	// Behavior and groups of the AI.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced, Category = "Behavior Groups (Temp)", meta = (AllowPrivateAccess = true))
 		TMap<FString, TObjectPtr<UAIBehaviorGroup>> behaviorGroups;
-
-	// ************************************
 
 	/*
 		Collection of behaviors (names) and the last time (seconds) they're cooldown started. 
