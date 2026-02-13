@@ -13,6 +13,8 @@
 
 #include "AIBehavior.generated.h"
 
+class UAIBehaviorGroup;
+
 /*
 	BTExecutionMode in BehaviorTreeTypes isn't a UENUM and thus can't be a UPROPERTY.
 	This acts as a one-to-one representation of it that can be mapped to the original.
@@ -89,14 +91,26 @@ public:
 	void UpdateExternalBlackboard(UBlackboardComponent* blackboardComp, const FAIBehaviorOption& behaviorOption = FAIBehaviorOption());
 
 	FORCEINLINE UBehaviorTree* GetBehaviorTree() const { return behaviorTree; }
+
 	FORCEINLINE UBlackboardData* GetBlackboardAsset() const { return behaviorTree->GetBlackboardAsset(); }
+
 	FORCEINLINE FString GetBehaviorName() const { return behaviorName; }
+
 	FORCEINLINE bool IsInterruptible() const { return isInterruptible; }
-	FORCEINLINE double CooldownTime() const { return cooldownTime; }
+
+	FORCEINLINE double GetCooldownTime() const { return cooldownTime; }
+
+	FORCEINLINE const UAIBehaviorGroup* GetParentGroup() const { return parentGroup; }
 
 	FORCEINLINE EBTExecutionMode::Type GetExecutionMode() const
 	{
 		return (executionMode == BehaviorExecutionMode::SingleRun) ? EBTExecutionMode::SingleRun : EBTExecutionMode::Looped;
+	}
+
+	// Should only be called by the group the behavior is attached to.
+	FORCEINLINE void SetParentGroup(TObjectPtr<UAIBehaviorGroup> behaviorGroup)
+	{
+		parentGroup = behaviorGroup;
 	}
 
 	// From IGameplayTagAssetInterface
@@ -134,4 +148,12 @@ protected:
 	// Cooldown time between when this behavior can be selected again.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Behavior")
 		double cooldownTime;
+
+	/*
+		Parent group of this behavior.
+
+		Null if not part of group. Set only by parent group.
+	*/
+	UPROPERTY(BlueprintReadOnly, Category="Behavior")
+		TObjectPtr<UAIBehaviorGroup> parentGroup;
 };

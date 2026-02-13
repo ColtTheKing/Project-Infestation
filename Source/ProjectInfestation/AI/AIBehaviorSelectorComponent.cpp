@@ -41,10 +41,28 @@ FAIBehaviorOption UAIBehaviorSelectorComponent::SelectBehavior(const TArray<UAIO
 		return FAIBehaviorOption();
 	}
 
+	// Error checking
+	AAIController* ownerController = Cast<AAIController>(GetOwner());
+	if (ownerController == nullptr)
+	{
+		UE_LOG(LogInfestationAISystem, Error, TEXT("%s: Owner actor is not a controller."), *this->GetFName().ToString());
+		return FAIBehaviorOption();
+	}
+
+	AActor* ownerActor = ownerController->GetPawn();
+	if (ownerActor == nullptr)
+	{
+		UE_LOG(LogInfestationAISystem, Error, TEXT("%s: Function called in BeginPlay (before OnPossess call) or controller doesn't have controlled pawn."), *this->GetFName().ToString());
+		return FAIBehaviorOption();
+	}
+
 	// Find all valid high priority behavior options and return best one.
 	TArray<FAIBehaviorOption> validBehaviorOptions;
-	if (!GetValidBehaviorOptions(validBehaviorOptions, highPriorityBehaviors, availableObjectives)) 
-		return FAIBehaviorOption(); // Function failed, will already log issue.
+	if (highPriorityBehaviorGroup != nullptr &&
+		!IsBehaviorGroupCoolingDown(highPriorityBehaviorGroup))
+	{
+		GetValidBehaviorOptions(validBehaviorOptions, highPriorityBehaviorGroup, ownerActor, availableObjectives);
+	}
 
 	if (validBehaviorOptions.Num() == 1)
 	{
@@ -58,8 +76,15 @@ FAIBehaviorOption UAIBehaviorSelectorComponent::SelectBehavior(const TArray<UAIO
 	}
 
 	// Find all valid normal priority behavior options and return best one.
-	if (!GetValidBehaviorOptions(validBehaviorOptions, behaviors, availableObjectives))
-		return FAIBehaviorOption();
+	for (const auto& [groupKey, group] : behaviorGroups)
+	{
+		if (group != nullptr &&
+			!IsBehaviorGroupCoolingDown(group) &&
+			group->AreStartingConditionsMet(ownerActor, availableObjectives))
+		{
+			GetValidBehaviorOptions(validBehaviorOptions, group, ownerActor, availableObjectives);
+		}
+	}
 
 	if (validBehaviorOptions.Num() == 1)
 	{
@@ -72,11 +97,11 @@ FAIBehaviorOption UAIBehaviorSelectorComponent::SelectBehavior(const TArray<UAIO
 		return validBehaviorOptions[bestBehaviorOptionIndex];
 	}
 
-	// No valid behavior options found.
+	// No valid behavior options found
 	return FAIBehaviorOption(defaultBehavior);
 }
 
-void UAIBehaviorSelectorComponent::StartBehaviorCooldown(const FAIBehaviorOption& behaviorOption)
+void UAIBehaviorSelectorComponent::StartCooldownForBehaviorAndParentGroups(const FAIBehaviorOption& behaviorOption)
 {
 	if (behaviorOption.behavior == nullptr)
 	{
@@ -84,11 +109,24 @@ void UAIBehaviorSelectorComponent::StartBehaviorCooldown(const FAIBehaviorOption
 		return;
 	}
 
+	// Cooldown for behavior
 	FString behaviorName = behaviorOption.behavior->GetBehaviorName();
 	if (lastTimeBehaviorsCooldownStarted.Find(behaviorName) == nullptr)
 		lastTimeBehaviorsCooldownStarted.Add(behaviorName);
 
 	lastTimeBehaviorsCooldownStarted[behaviorName] = GetWorld()->GetTimeSeconds();
+
+	// Cooldown for parent behavior groups
+	auto parentGroup = behaviorOption.behavior->GetParentGroup();
+	while (parentGroup != nullptr)
+	{
+		FString groupName = parentGroup->GetGroupName();
+		if (lastTimeGroupsCooldownStarted.Find(groupName) == nullptr)
+			lastTimeGroupsCooldownStarted.Add(groupName);
+
+		lastTimeGroupsCooldownStarted[groupName] = GetWorld()->GetTimeSeconds();
+		parentGroup = parentGroup->GetParentGroup();
+	}
 }
 
 bool UAIBehaviorSelectorComponent::IsBehaviorCoolingDown(UAIBehavior* behavior)
@@ -98,35 +136,42 @@ bool UAIBehaviorSelectorComponent::IsBehaviorCoolingDown(UAIBehavior* behavior)
 	if (lastTimeBehaviorsCooldownStarted.Find(behaviorName) == nullptr)
 		return false;
 
-	const double TimePassed = (GetWorld()->GetTimeSeconds() - lastTimeBehaviorsCooldownStarted[behaviorName]);
-	return TimePassed < behavior->CooldownTime();
+	const double timePassed = (GetWorld()->GetTimeSeconds() - lastTimeBehaviorsCooldownStarted[behaviorName]);
+	return timePassed < behavior->GetCooldownTime();
 }
 
+bool UAIBehaviorSelectorComponent::IsBehaviorGroupCoolingDown(UAIBehaviorGroup* behaviorGroup)
+{
+	// Behavior group has never been selected before.
+	FString groupName = behaviorGroup->GetGroupName();
+	if (lastTimeGroupsCooldownStarted.Find(groupName) == nullptr)
+		return false;
 
-bool UAIBehaviorSelectorComponent::GetValidBehaviorOptions(
+	const double timePassed = (GetWorld()->GetTimeSeconds() - lastTimeGroupsCooldownStarted[groupName]);
+	return timePassed < behaviorGroup->GetCooldownTime();
+}
+
+void UAIBehaviorSelectorComponent::GetValidBehaviorOptions(
 	TArray<FAIBehaviorOption>& validBehaviorOptions, 
-	const TArray<TObjectPtr<UAIBehavior>>& behaviorList, 
+	const TObjectPtr<UAIBehaviorGroup>& behaviorGroup, 
+	const TObjectPtr<AActor>& ownerActor,
 	const TArray<UAIObjective*>& availableObjectives)
 {
-	// Error checking
-	AAIController* ownerController = Cast<AAIController>(GetOwner());
-	if (ownerController == nullptr)
+	// Get valid behaviors from sub groups
+	for (const auto& [subGroupKey, subGroup] : behaviorGroup->GetSubGroups())
 	{
-		UE_LOG(LogInfestationAISystem, Error, TEXT("%s: Owner actor is not a controller."), *this->GetFName().ToString());
-		return false;
+		if (subGroup != nullptr &&
+			!IsBehaviorGroupCoolingDown(subGroup) &&
+			subGroup->AreStartingConditionsMet(ownerActor, availableObjectives))
+		{
+			GetValidBehaviorOptions(validBehaviorOptions, subGroup, ownerActor, availableObjectives);
+		}
 	}
 
-	AActor* ownerActor = ownerController->GetPawn();
-	if (ownerActor == nullptr)
+	// Get valid behaviors from group
+	for (const auto& [behaviorKey, behavior] : behaviorGroup->GetBehaviors())
 	{
-		UE_LOG(LogInfestationAISystem, Error, TEXT("%s: Function called in BeginPlay (before OnPossess call) or controller doesn't have controlled pawn."), *this->GetFName().ToString());
-		return false;
-	}
-
-	// Get valid behaviors
-	for (TObjectPtr<UAIBehavior> behavior : behaviorList)
-	{
-		if (behavior != nullptr && 
+		if (behavior != nullptr &&
 			!IsBehaviorCoolingDown(behavior) &&
 			behavior->AreStartingConditionsMet(ownerActor, availableObjectives))
 		{
@@ -134,7 +179,6 @@ bool UAIBehaviorSelectorComponent::GetValidBehaviorOptions(
 			validBehaviorOptions.Add(bestBehaviorOption);
 		}
 	}
-	return true;
 }
 
 size_t UAIBehaviorSelectorComponent::GetBestBehaviorOptionIndex(const TArray<FAIBehaviorOption>& validBehaviorOptions)
