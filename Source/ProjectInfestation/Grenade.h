@@ -38,6 +38,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Mesh")
 		FHeldGrenade heldGrenade;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Grenade)
+		UStaticMeshComponent* spawnPosition;
+
 	// Sets default values for this actor's properties
 	AGrenade();
 
