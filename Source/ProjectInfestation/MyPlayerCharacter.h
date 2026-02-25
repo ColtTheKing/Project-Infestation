@@ -71,12 +71,6 @@ public:
 		float postStartupAcceleration;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Thruster", meta = (AllowPrivateAccess))
-		float startingThrustSpeed;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Thruster", meta = (AllowPrivateAccess))
-		float thrusterMaxAcceleration;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Thruster", meta = (AllowPrivateAccess))
 		float percentControlDuringThrust;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Thruster", meta = (AllowPrivateAccess))
@@ -96,6 +90,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Thruster", meta = (AllowPrivateAccess))
 		float minEnergyRequiredToThrust;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Thruster")
+		float currentEnergy;
 
 	UFUNCTION(BlueprintCallable, Category = Ammo)
 		void RestoreAmmo(FName ammoType, int ammo);
@@ -151,9 +147,6 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		float currentEnergy;
-
 	bool shouldDeactivateThrusterLater; //true when player lets go of thrust key, to wait for initial thrust to finish
 	bool currentlyThrusting;
 	float timeSinceStartingThrust;

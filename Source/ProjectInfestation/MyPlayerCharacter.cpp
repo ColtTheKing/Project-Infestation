@@ -208,9 +208,12 @@ void AMyPlayerCharacter::ActivateThruster()
 	thrustDirection = direction;
 	timeSinceStartingThrust = 0;
 	shouldDeactivateThrusterLater = false;
-	//GetCharacterMovement()->MaxWalkSpeed = startingThrustSpeed;
-	//GetCharacterMovement()->MaxAcceleration = thrusterMaxAcceleration;
+
+	//Change movement settings while thrusting
 	GetCharacterMovement()->AirControl = 1.0f;
+	GetCharacterMovement()->GroundFriction = 0;
+	GetCharacterMovement()->BrakingFrictionFactor = 0;
+	GetCharacterMovement()->BrakingDecelerationWalking = 0;
 
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Direction = %f, %f"), direction.X, direction.Y));
@@ -233,9 +236,12 @@ void AMyPlayerCharacter::StartDecelerating()
 {
 	shouldDeactivateThrusterLater = false;
 	currentlyThrusting = false;
-	//GetCharacterMovement()->MaxWalkSpeed = 600.0f;
-	//GetCharacterMovement()->MaxAcceleration = 2048.0f;
+
+	//Revert movement settings after thrusting
 	GetCharacterMovement()->AirControl = 0.2f;
+	GetCharacterMovement()->GroundFriction = 8.0f;
+	GetCharacterMovement()->BrakingFrictionFactor = 2.0f;
+	GetCharacterMovement()->BrakingDecelerationWalking = 2048.0f;
 }
 
 void AMyPlayerCharacter::StartCrouching()
