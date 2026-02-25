@@ -42,7 +42,9 @@ void UArsenalComponent::SetupWeapons(USceneComponent* attachTo)
 		gunList.Add(myGun);
 	}
 
-	AActor* grenadeActor = GetWorld()->SpawnActor(grenadeBP, &localToWorld);
+	// Unsure why it was changed to this, if it causes issues change back.
+	// AActor* grenadeActor = GetWorld()->SpawnActor(grenadeBP, &localToWorld);
+	AActor* grenadeActor = GetWorld()->SpawnActor(grenadeBP, &location, &rotation);
 	grenadeActor->AttachToComponent(attachTo, FAttachmentTransformRules::KeepRelativeTransform);
 
 	grenade = Cast<AWeapon>(grenadeActor);

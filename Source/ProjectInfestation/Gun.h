@@ -14,6 +14,7 @@ class PROJECTINFESTATION_API AGun : public AWeapon
 	GENERATED_BODY()
 	
 public:
+	// Visual only - where the bullets/lasers appear when firing the gun
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gun)
 		UStaticMeshComponent* shotPosition;
 	
