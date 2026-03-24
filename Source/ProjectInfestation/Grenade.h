@@ -7,6 +7,10 @@
 #include "Engine/StaticMesh.h"
 #include "Grenade.generated.h"
 
+/*
+	Unknown if the struct is needed but it could be useful for switching grenade 
+	types later in development. Going to leave it for now.
+*/
 USTRUCT()
 struct FHeldGrenade
 {
@@ -15,14 +19,6 @@ struct FHeldGrenade
 	// Grenade actor to spawn when using grenade
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<AActor> grenadeBP;
-
-	// Mesh of currently held grenade 
-	UPROPERTY(EditAnywhere)
-		UStaticMesh* grenadeMesh;
-
-	// Size of currently held grenade
-	UPROPERTY(EditAnywhere)
-		FVector meshScale;
 };
 
 /**
@@ -35,10 +31,10 @@ class PROJECTINFESTATION_API AGrenade : public AWeapon
 
 public:
 	// Currently held grenade
-	UPROPERTY(EditAnywhere, Category = "Mesh")
+	UPROPERTY(EditAnywhere, Category = "Grenade")
 		FHeldGrenade heldGrenade;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Grenade)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Grenade")
 		UStaticMeshComponent* spawnPosition;
 
 	// Sets default values for this actor's properties
@@ -60,7 +56,7 @@ protected:
 	void BeginPlay() override;
 
 private:
-	UPROPERTY(EditAnywhere, Category = "Logic")
+	UPROPERTY(EditAnywhere, Category = "Grenade")
 		float throwStrength;
 
 	// Handle throwing logic

@@ -13,12 +13,6 @@ AGrenade::AGrenade() : Super()
 void AGrenade::BeginPlay() 
 {
 	Super::BeginPlay();
-
-	// Setup weapon mesh with held grenade
-	// Note: Unsure what this did, it's possible it worked before the arsenal system was updated 
-	//       but now it just breaks stuff.
-	// weaponMesh->SetStaticMesh(heldGrenade.grenadeMesh);
-	// weaponMesh->SetWorldScale3D(heldGrenade.meshScale);
 }
 
 void AGrenade::Tick(float DeltaTime) 
