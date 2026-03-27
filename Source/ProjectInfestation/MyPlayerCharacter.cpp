@@ -154,6 +154,13 @@ void AMyPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	PlayerInputComponent->BindAction("Pause", IE_Pressed, this, &AMyPlayerCharacter::PauseGame).bExecuteWhenPaused = true;
 }
 
+void AMyPlayerCharacter::Jump()
+{
+	//Don't allow jumping while thrusting
+	if (!currentlyThrusting)
+		Super::Jump();
+}
+
 void AMyPlayerCharacter::MoveForward(float axis)
 {
 	const FRotator rotation = Controller->GetControlRotation();
@@ -210,7 +217,6 @@ void AMyPlayerCharacter::ActivateThruster()
 	shouldDeactivateThrusterLater = false;
 
 	//Change movement settings while thrusting
-	GetCharacterMovement()->AirControl = 1.0f;
 	GetCharacterMovement()->GroundFriction = 0;
 	GetCharacterMovement()->BrakingFrictionFactor = 0;
 	GetCharacterMovement()->BrakingDecelerationWalking = 0;
@@ -238,7 +244,6 @@ void AMyPlayerCharacter::StartDecelerating()
 	currentlyThrusting = false;
 
 	//Revert movement settings after thrusting
-	GetCharacterMovement()->AirControl = 0.2f;
 	GetCharacterMovement()->GroundFriction = 8.0f;
 	GetCharacterMovement()->BrakingFrictionFactor = 2.0f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2048.0f;
