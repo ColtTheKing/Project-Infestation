@@ -30,7 +30,7 @@ void AGrenade::ThrowGrenade()
 {
 	// Spawn Grenade
 	FVector grenadeLocation = spawnPosition->GetComponentLocation();
-	FRotator grenadeRotation = FRotator::ZeroRotator;
+	FRotator grenadeRotation = spawnPosition->GetComponentRotation();
 	TWeakObjectPtr<AActor> spawnedGrenade = Cast<AActor>(GetWorld()->SpawnActor(heldGrenade.grenadeBP, &grenadeLocation, &grenadeRotation));
 	
 	// Add impluse
@@ -39,4 +39,5 @@ void AGrenade::ThrowGrenade()
 		UPrimitiveComponent* comp = Cast<UPrimitiveComponent>(spawnedGrenade->FindComponentByClass<UPrimitiveComponent>());
 		comp->AddImpulse(GetActorForwardVector() * throwStrength, FName("None"), true);
 	}
-}
+} 
+
