@@ -61,6 +61,49 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = UI)
 		bool playerUIOpen;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess))
+		int maxNumberOfAttackers;
+		
+	//Acceleration for the short initial portion of the thrust (should be higher than post startup)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Thruster", meta = (AllowPrivateAccess))
+		float startupAcceleration;
+
+		//Acceleration for the rest of the thrust after startup (should be lower than startup)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Thruster", meta = (AllowPrivateAccess))
+		float postStartupAcceleration;
+
+	//Affects how much the player is able to turn to either side while thrusting
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Thruster", meta = (AllowPrivateAccess))
+		float percentControlDuringThrust;
+
+	//How long the player stays in "startup acceleration" and how long they have to wait before stopping the thrust
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Thruster", meta = (AllowPrivateAccess))
+		float startupDuration;
+
+	//Max energy capacity
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Thruster", meta = (AllowPrivateAccess))
+		float maxEnergy;
+
+	//How much energy you regain per second
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Thruster", meta = (AllowPrivateAccess))
+		float energyRegenRate;
+
+	//How much energy is consumed when pressing thrust initially
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Thruster", meta = (AllowPrivateAccess))
+		float thrustInitalEnergyCost;
+
+	//How much energy is consumed per second when continuing to thrust after the startup
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Thruster", meta = (AllowPrivateAccess))
+		float thrustEnergyCostPerSecond;
+
+	//The minimum amount of energy you need to have to be allowed to start a thrust
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Thruster", meta = (AllowPrivateAccess))
+		float minEnergyRequiredToThrust;
+
+	//Current energy made visible for debugging
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Thruster")
+		float currentEnergy;
+
 	UFUNCTION(BlueprintCallable, Category = Ammo)
 		void RestoreAmmo(FName ammoType, int ammo);
 
@@ -72,12 +115,17 @@ public:
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	void ThrusterTick(float DeltaTime);
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	virtual void Jump() override;
 	void MoveForward(float axis);
 	void MoveRight(float axis);
+	void ActivateThruster();
+	void DeactivateThruster();
+	void StartDecelerating();
 	void StartCrouching();
 	void StopCrouching();
 	void Interact();
@@ -111,6 +159,8 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="AI", meta = (AllowPrivateAccess))
-		int maxNumberOfAttackers;
+	bool shouldDeactivateThrusterLater; //true when player lets go of thrust key, to wait for initial thrust to finish
+	bool currentlyThrusting;
+	float timeSinceStartingThrust;
+	FVector thrustDirection;
 };
