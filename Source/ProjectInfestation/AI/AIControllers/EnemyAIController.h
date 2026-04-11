@@ -9,9 +9,9 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Perception/AIPerceptionComponent.h"
 
-#include "AIObjectiveGenerationComponent.h"
-#include "AIBehaviorSelectorComponent.h"
-#include "AIBehavior.h"
+#include "../AIObjectiveGenerationComponent.h"
+#include "../AIBehaviorSelectorComponent.h"
+#include "../AIBehavior.h"
 
 #include "EnemyAIController.generated.h"
 

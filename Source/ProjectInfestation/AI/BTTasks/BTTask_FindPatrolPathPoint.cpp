@@ -4,7 +4,7 @@
 #include "BTTask_FindPatrolPathPoint.h"
 
 #include "../../EnemyCharacter.h"
-#include "../EnemyAIController.h"
+#include "../AIControllers/EnemyAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 UBTTask_FindPatrolPathPoint::UBTTask_FindPatrolPathPoint(FObjectInitializer const& objectInitializer)

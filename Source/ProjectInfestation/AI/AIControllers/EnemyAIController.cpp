@@ -7,10 +7,10 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Navigation/CrowdFollowingComponent.h"
 
-#include "../InfestationLogging.h"
-#include "../InfestationGameState.h"
-#include "../EnemyCharacter.h"
-#include "../CombatArea.h"
+#include "../../InfestationLogging.h"
+#include "../../InfestationGameState.h"
+#include "../../EnemyCharacter.h"
+#include "../../CombatArea.h"
 
 AEnemyAIController::AEnemyAIController(const FObjectInitializer& objectInitializer) 
 	: Super(objectInitializer.SetDefaultSubobjectClass<UCrowdFollowingComponent>(TEXT("PathFollowingComponent")))

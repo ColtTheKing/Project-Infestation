@@ -6,7 +6,7 @@
 #include "GameFramework/Info.h"
 #include "InfestationGameState.h"
 #include "EnemyCharacter.h"
-#include "AI/EnemyAIController.h"
+#include "AI/AIControllers/EnemyAIController.h"
 #include "CombatManager.generated.h"
 
 USTRUCT()

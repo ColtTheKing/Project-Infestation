@@ -6,7 +6,7 @@
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
 
-#include "../EnemyCharacter.h"
+#include "../../EnemyCharacter.h"
 
 ASwarmerAIController::ASwarmerAIController(const FObjectInitializer& objectInitializer) : Super(objectInitializer)
 {

@@ -4,7 +4,7 @@
 
 #include "NavigationSystem.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "../EnemyAIController.h"
+#include "../AIControllers/EnemyAIController.h"
 
 UBTTask_FindRandomLocation::UBTTask_FindRandomLocation()
 {
