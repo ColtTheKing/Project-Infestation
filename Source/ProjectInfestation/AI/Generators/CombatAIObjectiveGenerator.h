@@ -16,11 +16,11 @@ class PROJECTINFESTATION_API UCombatAIObjectiveGenerator : public UBaseAIObjecti
 
 protected:
 	UPROPERTY(BlueprintReadWrite)
-		TArray<AActor*> attackTargets;
+		TArray<AActor*> chaseTargets;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat AI Objective Generator")
-		float searchRadius;
+		float chaseSearchRadius;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat AI Objective Generator")
-		TArray<TEnumAsByte<EObjectTypeQuery>> attackTargetTypes;
+		TArray<TEnumAsByte<EObjectTypeQuery>> combatTargetTypes;
 };
