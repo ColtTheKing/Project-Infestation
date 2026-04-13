@@ -13,9 +13,6 @@ struct FAIObjectiveOption_MeleeTarget
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TWeakObjectPtr<AActor> targetActor = nullptr;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool isTargetInSight = false;
 };
 
 /**
