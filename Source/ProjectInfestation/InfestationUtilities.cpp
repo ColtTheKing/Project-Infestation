@@ -22,7 +22,7 @@ bool UInfestationUtilities::GetNormalisedMousePositionInGeometry(UObject* WorldC
 	return FMath::Min(Position.X, Position.Y) >= 0.f && FMath::Max(Position.X, Position.Y) <= 1.f;
 }
 
-TArray<AActor*> UInfestationUtilities::QuerySurroundingActors(
+TArray<AActor*> UInfestationUtilities::QuerySurroundingActorsFromActor(
 	AActor* originActor, float radius, 
 	const TArray<TEnumAsByte<EObjectTypeQuery>>& objectTypes, TArray<AActor*> actorsToIgnore, 
 	EDrawDebugTrace::Type drawDebugTrace, FLinearColor traceColor, FLinearColor traceHitColor, float drawTime)
@@ -36,6 +36,34 @@ TArray<AActor*> UInfestationUtilities::QuerySurroundingActors(
 	TArray<FHitResult> hitResults;
 	bool bhit = UKismetSystemLibrary::SphereTraceMultiForObjects(
 		originActor->GetWorld(), actorLocation, actorLocation, radius, objectTypes, false,
+		actorsToIgnore, drawDebugTrace, hitResults, true,
+		traceColor, traceHitColor, drawTime);
+
+	TArray<AActor*> queriedActors;
+	if (!bhit) // None of the objectTypes hit
+		return queriedActors;
+
+	for (const auto& hitResult : hitResults)
+	{
+		queriedActors.Add(hitResult.GetActor());
+	}
+	return queriedActors;
+}
+
+TArray<AActor*> UInfestationUtilities::QuerySurroundingActorsFromComponent(
+	USceneComponent* originComponent, float radius,
+	const TArray<TEnumAsByte<EObjectTypeQuery>>& objectTypes, TArray<AActor*> actorsToIgnore,
+	EDrawDebugTrace::Type drawDebugTrace, FLinearColor traceColor, FLinearColor traceHitColor, float drawTime)
+{
+	if (originComponent == nullptr)
+		return TArray<AActor*>();
+
+	FVector componentLocation = originComponent->GetComponentLocation();
+	actorsToIgnore.Add(originComponent->GetOwner());
+
+	TArray<FHitResult> hitResults;
+	bool bhit = UKismetSystemLibrary::SphereTraceMultiForObjects(
+		originComponent->GetWorld(), componentLocation, componentLocation, radius, objectTypes, false,
 		actorsToIgnore, drawDebugTrace, hitResults, true,
 		traceColor, traceHitColor, drawTime);
 

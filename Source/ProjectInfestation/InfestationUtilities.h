@@ -22,9 +22,17 @@ public:
 		static bool GetNormalisedMousePositionInGeometry(UObject* WorldContextObject, FGeometry Geometry, FVector2D& Position);
 
 	UFUNCTION(BlueprintCallable, Category = AI, meta=(AutoCreateRefTerm = "actorsToIgnore"))
-		static TArray<AActor*> QuerySurroundingActors(
+		static TArray<AActor*> QuerySurroundingActorsFromActor(
 			AActor* originActor, float radius, 
 			const TArray<TEnumAsByte<EObjectTypeQuery>>& objectTypes, TArray<AActor*> actorsToIgnore,
 			EDrawDebugTrace::Type drawDebugTrace = EDrawDebugTrace::None, FLinearColor traceColor = FLinearColor::Red,
 			FLinearColor traceHitColor = FLinearColor::Green, float drawTime = 5.0f);
+
+	UFUNCTION(BlueprintCallable, Category = AI, meta = (AutoCreateRefTerm = "actorsToIgnore"))
+		static TArray<AActor*> QuerySurroundingActorsFromComponent(
+			USceneComponent* originComponent, float radius,
+			const TArray<TEnumAsByte<EObjectTypeQuery>>& objectTypes, TArray<AActor*> actorsToIgnore,
+			EDrawDebugTrace::Type drawDebugTrace = EDrawDebugTrace::None, FLinearColor traceColor = FLinearColor::Red,
+			FLinearColor traceHitColor = FLinearColor::Green, float drawTime = 5.0f);
+
 };
