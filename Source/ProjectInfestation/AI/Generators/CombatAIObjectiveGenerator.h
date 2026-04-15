@@ -18,6 +18,9 @@ protected:
 	UPROPERTY(BlueprintReadWrite)
 		TArray<AActor*> chaseTargets;
 
+	UPROPERTY(BlueprintReadWrite)
+		TArray<AActor*> meleeTargets;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat AI Objective Generator")
 		float chaseSearchRadius;
 

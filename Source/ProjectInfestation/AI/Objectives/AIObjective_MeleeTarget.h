@@ -25,5 +25,5 @@ class PROJECTINFESTATION_API UAIObjective_MeleeTarget : public UAIObjective
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TArray<FAIObjectiveOption_MeleeTarget> meleeTargetOptions = {};
+		TArray<FAIObjectiveOption_MeleeTarget> meleeOptions = {};
 };
