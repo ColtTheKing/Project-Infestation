@@ -25,5 +25,8 @@ protected:
 		float chaseSearchRadius;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat AI Objective Generator")
+		float meleeSearchRadius;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat AI Objective Generator")
 		TArray<TEnumAsByte<EObjectTypeQuery>> combatTargetTypes;
 };
