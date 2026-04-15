@@ -4,16 +4,15 @@
 
 AGrenade::AGrenade() : Super()
 {
-
+	// Add a mesh for where the grenade's will be spawned
+	spawnPosition = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Grenade Spawn Position"));
+	spawnPosition->SetupAttachment(weaponMesh);
+	spawnPosition->SetVisibility(false);
 }
 
 void AGrenade::BeginPlay() 
 {
 	Super::BeginPlay();
-
-	// Setup weapon mesh with held grenade
-	weaponMesh->SetStaticMesh(heldGrenade.grenadeMesh);
-	weaponMesh->SetWorldScale3D(heldGrenade.meshScale);
 }
 
 void AGrenade::Tick(float DeltaTime) 
@@ -30,8 +29,8 @@ void AGrenade::ConsumeAmmo(int ammo)
 void AGrenade::ThrowGrenade() 
 {
 	// Spawn Grenade
-	FVector grenadeLocation = GetActorLocation();
-	FRotator grenadeRotation = FRotator::ZeroRotator;
+	FVector grenadeLocation = spawnPosition->GetComponentLocation();
+	FRotator grenadeRotation = spawnPosition->GetComponentRotation();
 	TWeakObjectPtr<AActor> spawnedGrenade = Cast<AActor>(GetWorld()->SpawnActor(heldGrenade.grenadeBP, &grenadeLocation, &grenadeRotation));
 	
 	// Add impluse
@@ -40,4 +39,5 @@ void AGrenade::ThrowGrenade()
 		UPrimitiveComponent* comp = Cast<UPrimitiveComponent>(spawnedGrenade->FindComponentByClass<UPrimitiveComponent>());
 		comp->AddImpulse(GetActorForwardVector() * throwStrength, FName("None"), true);
 	}
-}
+} 
+
