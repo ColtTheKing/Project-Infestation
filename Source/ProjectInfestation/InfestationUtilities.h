@@ -25,5 +25,6 @@ public:
 		static TArray<AActor*> QuerySurroundingActors(
 			AActor* originActor, float radius, 
 			const TArray<TEnumAsByte<EObjectTypeQuery>>& objectTypes, TArray<AActor*> actorsToIgnore,
-			FLinearColor traceColor = FLinearColor::Red, FLinearColor traceHitColor = FLinearColor::Green, float drawTime = 5.0f);
+			EDrawDebugTrace::Type drawDebugTrace = EDrawDebugTrace::None, FLinearColor traceColor = FLinearColor::Red,
+			FLinearColor traceHitColor = FLinearColor::Green, float drawTime = 5.0f);
 };
