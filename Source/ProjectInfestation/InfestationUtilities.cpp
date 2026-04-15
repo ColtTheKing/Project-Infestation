@@ -25,7 +25,7 @@ bool UInfestationUtilities::GetNormalisedMousePositionInGeometry(UObject* WorldC
 TArray<AActor*> UInfestationUtilities::QuerySurroundingActors(
 	AActor* originActor, float radius, 
 	const TArray<TEnumAsByte<EObjectTypeQuery>>& objectTypes, TArray<AActor*> actorsToIgnore, 
-	FLinearColor traceColor, FLinearColor traceHitColor, float drawTime)
+	EDrawDebugTrace::Type drawDebugTrace, FLinearColor traceColor, FLinearColor traceHitColor, float drawTime)
 {
 	if (originActor == nullptr)
 		return TArray<AActor*>();
@@ -36,7 +36,7 @@ TArray<AActor*> UInfestationUtilities::QuerySurroundingActors(
 	TArray<FHitResult> hitResults;
 	bool bhit = UKismetSystemLibrary::SphereTraceMultiForObjects(
 		originActor->GetWorld(), actorLocation, actorLocation, radius, objectTypes, false,
-		actorsToIgnore, EDrawDebugTrace::ForDuration, hitResults, true,
+		actorsToIgnore, drawDebugTrace, hitResults, true,
 		traceColor, traceHitColor, drawTime);
 
 	TArray<AActor*> queriedActors;
