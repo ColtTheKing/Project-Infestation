@@ -61,6 +61,10 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="AI", meta=(DisplayName="Starting State", Categories="Enemy.State"))
 		FGameplayTag currentState;
 
+	// For melee objective generation, melee search location for querying surrounding actors
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AI|Combat")
+		UStaticMeshComponent* meleeSearchLocation;
+
 	// The patrol path the enemy follows
 	UPROPERTY(EditAnywhere, Category = "AI")
 		APatrolPath* patrolPath;

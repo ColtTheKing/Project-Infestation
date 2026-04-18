@@ -9,6 +9,10 @@ AEnemyCharacter::AEnemyCharacter() : Super()
 	PrimaryActorTick.bCanEverTick = true;
 
 	currentState = FGameplayTag::RequestGameplayTag("Enemy.State.Passive");
+
+	meleeSearchLocation = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Melee Search Location"));
+	meleeSearchLocation->SetupAttachment(GetRootComponent());
+	meleeSearchLocation->SetVisibility(false);
 }
 
 // Called when the game starts or when spawned
