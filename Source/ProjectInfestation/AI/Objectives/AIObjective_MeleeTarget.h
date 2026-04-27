@@ -13,6 +13,13 @@ struct FAIObjectiveOption_MeleeTarget
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TWeakObjectPtr<AActor> targetActor = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool isTargetPlayer = false;
+
+	// How far the attack can reach. From melee search radius.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float maxMeleeRange = 0.0f;
 };
 
 /**
