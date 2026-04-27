@@ -67,7 +67,7 @@ struct FAIBehaviorOption
 		int associatedObjectiveOptionIndex = -1;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float score = 0;
+		float score = -FLT_MAX;
 };
 
 UCLASS(BlueprintType, Blueprintable, EditInlineNew, DefaultToInstanced)
@@ -142,8 +142,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Behavior")
 		bool isInterruptible;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Behavior")
-		float weight;
+	// How much to priortize over other behaviors.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Behavior", meta = (ClampMin = "0.0", ClampMax = "1.0"))
+		float behaviorWeight;
 
 	// Cooldown time between when this behavior can be selected again.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Behavior")

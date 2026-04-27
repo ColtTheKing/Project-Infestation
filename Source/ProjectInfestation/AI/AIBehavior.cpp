@@ -6,7 +6,7 @@
 UAIBehavior::UAIBehavior()
 {
 	executionMode = BehaviorExecutionMode::Looped;
-	weight = 1;
+	behaviorWeight = 1;
 }
 
 void UAIBehavior::GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const

@@ -15,7 +15,11 @@ struct FAIObjectiveOption_ChaseTarget
 		TWeakObjectPtr<AActor> targetActor = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool isTargetInSight = false;
+		bool isTargetPlayer = false;
+
+	// Distance before target is no longer considered. From chase search radius.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float maxTargetDistance = 0.0f;
 };
 
 /**
